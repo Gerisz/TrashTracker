@@ -17,7 +17,7 @@ namespace TrashTracker.Web.Models
         public String? UserId { get; set; }
         public virtual TrashTrackerUser? User { get; set; }
 
-        public Point? Location { get; set; } = null!;
+        public Point Location { get; set; } = null!;
 
         public Country? Country { get; set; }
         public String? Locality { get; set; }

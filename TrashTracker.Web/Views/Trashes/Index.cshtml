@@ -7,16 +7,13 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Új pont hozzáadása</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TrashoutId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.User)
+                Forrás
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Location)
@@ -55,13 +52,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.TrashoutId)
+                @(item.TrashoutId != null
+                ? @Html.DisplayFor(modelItem => item.TrashoutId)
+                : @Html.DisplayFor(modelItem => item.User!.UserName))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
+                @Html.DisplayFor(modelItem => item.Location.X)<br />
+                @Html.DisplayFor(modelItem => item.Location.Y)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Country)
