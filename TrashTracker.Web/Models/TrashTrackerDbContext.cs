@@ -1,6 +1,7 @@
-﻿using CleanTiszaMap.Data.Models;
+﻿using TrashTracker.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace TrashTracker.Web.Models
 {
@@ -17,6 +18,20 @@ namespace TrashTracker.Web.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+        }
+
+        /// <summary>
+        /// Returns the <see cref="DateTime"/> of the latest update of <see cref="Trashes">Trashes</see>
+        /// </summary>
+        /// <returns><see langword="null"/> if <see cref="Trashes">Trashes</see> is empty;
+        /// otherwise, the <see cref="DateTime"/> of the latest update of <see cref="Trashes">Trashes</see></returns>
+        public DateTime? LatestUpdate()
+        {
+            if (Trashes.IsNullOrEmpty())
+            {
+                return null;
+            }
+            return Trashes.OrderByDescending(o => o.UpdateTime).FirstOrDefault()!.UpdateTime;
         }
     }
 }

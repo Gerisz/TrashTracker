@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TrashTracker.Web.Models;
 
-namespace CleanTiszaMap.Data.Models
+namespace TrashTracker.Data.Models
 {
     public class TrashImage
     {

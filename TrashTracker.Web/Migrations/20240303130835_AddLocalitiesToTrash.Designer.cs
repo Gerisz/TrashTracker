@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using TrashTracker.Web.Models;
@@ -12,9 +13,11 @@ using TrashTracker.Web.Models;
 namespace TrashTracker.Web.Migrations
 {
     [DbContext(typeof(TrashTrackerDbContext))]
-    partial class TrashTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240303130835_AddLocalitiesToTrash")]
+    partial class AddLocalitiesToTrash
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

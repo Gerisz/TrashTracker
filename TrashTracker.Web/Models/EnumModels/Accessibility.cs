@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace CleanTiszaMap.Data.Models.EnumModels
+﻿namespace TrashTracker.Data.Models.EnumModels
 {
 
     /// <summary>

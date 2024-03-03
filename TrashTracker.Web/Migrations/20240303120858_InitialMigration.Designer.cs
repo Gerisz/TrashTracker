@@ -29,7 +29,7 @@ namespace TrashTracker.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CleanTiszaMap.Data.Models.TrashImage", b =>
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -311,7 +311,7 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("CleanTiszaMap.Data.Models.TrashImage", b =>
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
                 {
                     b.HasOne("TrashTracker.Web.Models.Trash", "Trash")
                         .WithMany("Images")
