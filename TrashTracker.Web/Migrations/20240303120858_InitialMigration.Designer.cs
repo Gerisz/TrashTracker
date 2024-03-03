@@ -13,7 +13,7 @@ using TrashTracker.Web.Models;
 namespace TrashTracker.Web.Migrations
 {
     [DbContext(typeof(TrashTrackerDbContext))]
-    [Migration("20240221133903_InitialMigration")]
+    [Migration("20240303120858_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -28,6 +28,35 @@ namespace TrashTracker.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CleanTiszaMap.Data.Models.TrashImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("TrashId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrashId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrashImages");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -135,30 +164,6 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TrashTracker.Web.Models.EnumModels.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Value = "Hungary"
-                        });
-                });
-
             modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
                 {
                     b.Property<int>("Id")
@@ -167,22 +172,49 @@ namespace TrashTracker.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CountryId")
+                    b.Property<int>("Accessibilities")
                         .HasColumnType("int");
+
+                    b.Property<int?>("Country")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<Point>("Location")
                         .HasColumnType("geography");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TrashoutId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Types")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CountryId");
+                    b.Property<bool?>("UpdateNeeded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("TrashoutId")
                         .IsUnique()
                         .HasFilter("[TrashoutId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Trashes");
                 });
@@ -279,6 +311,23 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("CleanTiszaMap.Data.Models.TrashImage", b =>
+                {
+                    b.HasOne("TrashTracker.Web.Models.Trash", "Trash")
+                        .WithMany("Images")
+                        .HasForeignKey("TrashId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Trash");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("TrashTracker.Web.Models.TrashTrackerIdentityRole", null)
@@ -332,13 +381,16 @@ namespace TrashTracker.Web.Migrations
 
             modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
                 {
-                    b.HasOne("TrashTracker.Web.Models.EnumModels.Country", "Country")
+                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
                         .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Country");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
