@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using TrashTracker.Web.Models;
@@ -12,9 +13,11 @@ using TrashTracker.Web.Models;
 namespace TrashTracker.Web.Migrations
 {
     [DbContext(typeof(TrashTrackerDbContext))]
-    partial class TrashTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240303120858_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,6 +28,35 @@ namespace TrashTracker.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("TrashId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrashId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrashImages");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -132,35 +164,6 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("TrashId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrashId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TrashImages");
-                });
-
             modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
                 {
                     b.Property<int>("Id")
@@ -178,9 +181,6 @@ namespace TrashTracker.Web.Migrations
                     b.Property<DateTime?>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Locality")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Point>("Location")
                         .HasColumnType("geography");
 
@@ -192,9 +192,6 @@ namespace TrashTracker.Web.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("SubLocality")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TrashoutId")
                         .HasColumnType("int");
@@ -314,6 +311,23 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
+                {
+                    b.HasOne("TrashTracker.Web.Models.Trash", "Trash")
+                        .WithMany("Images")
+                        .HasForeignKey("TrashId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Trash");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("TrashTracker.Web.Models.TrashTrackerIdentityRole", null)
@@ -363,23 +377,6 @@ namespace TrashTracker.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
-                {
-                    b.HasOne("TrashTracker.Web.Models.Trash", "Trash")
-                        .WithMany("Images")
-                        .HasForeignKey("TrashId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Trash");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>

@@ -13,8 +13,8 @@ using TrashTracker.Web.Models;
 namespace TrashTracker.Web.Migrations
 {
     [DbContext(typeof(TrashTrackerDbContext))]
-    [Migration("20240221133903_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240303130835_AddLocalitiesToTrash")]
+    partial class AddLocalitiesToTrash
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,7 +135,7 @@ namespace TrashTracker.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TrashTracker.Web.Models.EnumModels.Country", b =>
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,20 +143,25 @@ namespace TrashTracker.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Value")
-                        .IsRequired()
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("TrashId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.HasIndex("TrashId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Value = "Hungary"
-                        });
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TrashImages");
                 });
 
             modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
@@ -167,22 +172,55 @@ namespace TrashTracker.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CountryId")
+                    b.Property<int>("Accessibilities")
                         .HasColumnType("int");
+
+                    b.Property<int?>("Country")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Locality")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Point>("Location")
                         .HasColumnType("geography");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubLocality")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("TrashoutId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("Types")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CountryId");
+                    b.Property<bool?>("UpdateNeeded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("TrashoutId")
                         .IsUnique()
                         .HasFilter("[TrashoutId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Trashes");
                 });
@@ -330,15 +368,35 @@ namespace TrashTracker.Web.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
+            modelBuilder.Entity("TrashTracker.Data.Models.TrashImage", b =>
                 {
-                    b.HasOne("TrashTracker.Web.Models.EnumModels.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
+                    b.HasOne("TrashTracker.Web.Models.Trash", "Trash")
+                        .WithMany("Images")
+                        .HasForeignKey("TrashId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Country");
+                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Trash");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
+                {
+                    b.HasOne("TrashTracker.Web.Models.TrashTrackerUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TrashTracker.Web.Models.Trash", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

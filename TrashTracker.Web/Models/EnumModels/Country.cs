@@ -1,15 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TrashTracker.Web.Models.EnumModels
+﻿namespace TrashTracker.Web.Models.EnumModels
 {
-    public enum CountryEnum
+    public enum Country
     {
         Hungary = 1
-    }
-
-    public class Country : EnumTable
-    {
-        [NotMapped]
-        public static Type EnumType { get; } = typeof(CountryEnum);
     }
 }

@@ -52,19 +52,6 @@ namespace TrashTracker.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Countries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -177,24 +164,54 @@ namespace TrashTracker.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TrashoutId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Location = table.Column<Point>(type: "geography", nullable: true),
-                    CountryId = table.Column<int>(type: "int", nullable: false)
+                    Country = table.Column<int>(type: "int", nullable: true),
+                    CreateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdateNeeded = table.Column<bool>(type: "bit", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<int>(type: "int", nullable: false),
+                    Types = table.Column<int>(type: "int", nullable: false),
+                    Accessibilities = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trashes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Trashes_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
+                        name: "FK_Trashes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrashImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    TrashId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrashImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TrashImages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TrashImages_Trashes_TrashId",
+                        column: x => x.TrashId,
+                        principalTable: "Trashes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                table: "Countries",
-                columns: new[] { "Id", "Value" },
-                values: new object[] { 1, "Hungary" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -236,16 +253,26 @@ namespace TrashTracker.Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Trashes_CountryId",
-                table: "Trashes",
-                column: "CountryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Trashes_TrashoutId",
                 table: "Trashes",
                 column: "TrashoutId",
                 unique: true,
                 filter: "[TrashoutId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Trashes_UserId",
+                table: "Trashes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrashImages_TrashId",
+                table: "TrashImages",
+                column: "TrashId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TrashImages_UserId",
+                table: "TrashImages",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -267,16 +294,16 @@ namespace TrashTracker.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Trashes");
+                name: "TrashImages");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Trashes");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "AspNetUsers");
         }
     }
 }
