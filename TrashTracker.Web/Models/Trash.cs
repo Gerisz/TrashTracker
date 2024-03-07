@@ -1,11 +1,9 @@
-﻿using TrashTracker.Data.Models;
-using TrashTracker.Data.Models.EnumModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
-using System.ComponentModel.DataAnnotations;
-using TrashTracker.Web.Models.EnumModels;
-using TrashTracker.Web.DTOs.In;
 using NetTopologySuite.Geometries.Utilities;
+using System.ComponentModel.DataAnnotations;
+using TrashTracker.Web.DTOs.In;
+using TrashTracker.Web.Models.Enums;
 
 namespace TrashTracker.Web.Models
 {

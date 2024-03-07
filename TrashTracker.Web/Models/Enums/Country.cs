@@ -1,4 +1,4 @@
-﻿namespace TrashTracker.Web.Models.EnumModels
+﻿namespace TrashTracker.Web.Models.Enums
 {
     public enum Country
     {

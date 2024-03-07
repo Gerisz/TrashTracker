@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TrashTracker.Data.Models.EnumModels
+﻿namespace TrashTracker.Web.Models.Enums
 {
 
     /// <summary>

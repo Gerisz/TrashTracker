@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TrashTracker.Web.Models;
 
-namespace TrashTracker.Data.Models
+namespace TrashTracker.Web.Models
 {
     public class TrashImage
     {

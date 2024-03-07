@@ -1,4 +1,4 @@
-﻿namespace TrashTracker.Data.Models.EnumModels
+﻿namespace TrashTracker.Web.Models.Enums
 {
 
     /// <summary>
