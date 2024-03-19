@@ -2,17 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<link rel="stylesheet" href="~/lib/openlayers/ol.css" />
 <style>
     .map {
         height: 400px;
         width: 100%;
     }
 </style>
-<script src="~/lib/openlayers/dist/ol.js"></script>
 
 <div id="map" class="map"></div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/ol@v9.0.0/dist/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.0.0/ol.css">
 <script type="text/javascript">
     var map = new ol.Map({
         target: 'map',
