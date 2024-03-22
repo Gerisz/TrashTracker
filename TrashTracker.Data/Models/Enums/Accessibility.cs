@@ -1,8 +1,8 @@
-﻿namespace TrashTracker.Web.Models.Enums
+﻿namespace TrashTracker.Data.Models.Enums
 {
 
     /// <summary>
-    /// Trash's accessibilities, starting from 1
+    /// Trash's accessibilities
     /// </summary>
     public enum Accessibility
     {

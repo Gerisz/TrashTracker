@@ -1,11 +1,9 @@
 ﻿using NetTopologySuite.Geometries;
-using System.Linq;
 using System.Linq.Expressions;
-using TrashTracker.Web.DTOs.Query;
-using TrashTracker.Web.Models;
-using TrashTracker.Web.Models.Enums;
+using TrashTracker.Data.Models.DTOs.Query;
+using TrashTracker.Data.Models.Enums;
 
-namespace TrashTracker.Web.DTOs.Out
+namespace TrashTracker.Data.Models.DTOs.Out
 {
     public class OnMap
     {

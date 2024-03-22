@@ -2,15 +2,6 @@
 
 namespace TrashTracker.Web
 {
-    /// <summary>
-    /// Contains the default roles in ascending order by hierarchy
-    /// </summary>
-    public enum DefaultRoles
-    {
-        User,
-        Admin,
-        Superadmin
-    }
     
     /// <summary>
     /// A builder for hierarchy between roles with policies

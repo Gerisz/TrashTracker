@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using NetTopologySuite.Geometries;
 
 #nullable disable
 
-namespace TrashTracker.Web.Migrations
+namespace TrashTracker.Data.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration

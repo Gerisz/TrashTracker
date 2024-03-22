@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using TrashTracker.Web.DTOs.Out;
-using TrashTracker.Web.Models;
+using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Controllers
@@ -41,7 +41,7 @@ namespace TrashTracker.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new Error { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

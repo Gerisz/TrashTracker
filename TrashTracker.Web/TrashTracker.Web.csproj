@@ -34,4 +34,8 @@
     <Folder Include="wwwroot\data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TrashTracker.Data\TrashTracker.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TrachTracker.Web.Services;
+using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.Defaults;
 using TrashTracker.Web;
-using TrashTracker.Web.Models;
 using TrashTracker.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +39,7 @@ builder.Services.AddIdentity<TrashTrackerUser, TrashTrackerIdentityRole>(options
 .AddEntityFrameworkStores<TrashTrackerDbContext>()
 .AddDefaultTokenProviders();
 
-PolicyBuilder.BuildPolicies<DefaultRoles>(builder);
+PolicyBuilder.BuildPolicies<Roles>(builder);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -89,7 +90,6 @@ using (var serviceScope = app.Services.CreateScope())
     // Seed the database with the default roles and users
     await DbInitializer.SeedRolesAsync(serviceScope.ServiceProvider.GetRequiredService<RoleManager<TrashTrackerIdentityRole>>());
     await DbInitializer.SeedUsersAsync(serviceScope.ServiceProvider.GetRequiredService<UserManager<TrashTrackerUser>>());
-
 }
 
 app.Run();

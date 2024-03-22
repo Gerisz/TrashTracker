@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TrashTracker.Web.Models;
+using TrashTracker.Data.Models;
 
 namespace TrashTracker.Web.Controllers
 {

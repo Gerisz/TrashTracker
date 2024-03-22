@@ -1,9 +1,7 @@
 ﻿using System.Linq.Expressions;
-using TrashTracker.Web.DTOs.Out;
-using TrashTracker.Web.Models;
-using TrashTracker.Web.Models.Enums;
+using TrashTracker.Data.Models.Enums;
 
-namespace TrashTracker.Web.DTOs.Query
+namespace TrashTracker.Data.Models.DTOs.Query
 {
     public class TrashQuery
     {

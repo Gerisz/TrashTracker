@@ -2,9 +2,9 @@
 using NuGet.Protocol;
 using System.Data;
 using System.Text;
-using TrashTracker.Web.DTOs.In;
-using TrashTracker.Web.Models;
-using TrashTracker.Web.Models.Enums;
+using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.Enums;
 using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Services

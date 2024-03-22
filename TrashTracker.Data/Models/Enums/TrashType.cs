@@ -1,8 +1,8 @@
-﻿namespace TrashTracker.Web.Models.Enums
+﻿namespace TrashTracker.Data.Models.Enums
 {
 
     /// <summary>
-    /// Types of possible trash, starting from 1
+    /// Types of possible trash
     /// </summary>
     public enum TrashType
     {

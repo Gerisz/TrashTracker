@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TrashTracker.Web.Migrations
+namespace TrashTracker.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddLocalitiesToTrash : Migration

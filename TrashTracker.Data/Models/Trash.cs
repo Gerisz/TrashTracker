@@ -2,10 +2,10 @@
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using System.ComponentModel.DataAnnotations;
-using TrashTracker.Web.DTOs.In;
-using TrashTracker.Web.Models.Enums;
+using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.Enums;
 
-namespace TrashTracker.Web.Models
+namespace TrashTracker.Data.Models
 {
     [Index(nameof(TrashoutId), IsUnique = true)]
     public class Trash

@@ -1,4 +1,4 @@
-﻿namespace TrashTracker.Web.DTOs.In
+﻿namespace TrashTracker.Data.Models.DTOs.In
 {
     public class TrashFromTrashout
     {

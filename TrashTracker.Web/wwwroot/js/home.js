@@ -44,7 +44,7 @@ var trashTrackerMap = new ol.Map({
                                     color: '#000000',
                                     width: 1
                                 }),
-                                radius: 8
+                                radius: 10
                             }),
                             text: new ol.style.Text({
                                 text: size != 1 ? size.toString() : "",
