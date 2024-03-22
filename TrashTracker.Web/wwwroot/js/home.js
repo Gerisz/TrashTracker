@@ -1,20 +1,9 @@
 ﻿const defaultCenter = ol.proj.transform([19.503736, 47.180086], 'EPSG:4326', 'EPSG:3857');
-const statusFills = {
-    Cleaned: new ol.style.Fill({
-        color: '#0000FF'
-    }),
-    Less: new ol.style.Fill({
-        color: '#00FF00'
-    }),
-    More: new ol.style.Fill({
-        color: '#FF0000'
-    }),
-    StillHere: new ol.style.Fill({
-        color: '#FFFF00'
-    })
-};
+const fillStatuses = { Cleaned: '#198754', Less: '#FFC107', More: '#DC3545', StillHere: '#FD7E14' };
+const sizeRadiuses = { Bag: 6, Wheelbarrow: 8, Car: 10 };
+const styleCache = {};
 
-var map = new ol.Map({
+var trashTrackerMap = new ol.Map({
     controls: ol.control.defaults.defaults()
         .extend([new ol.control.FullScreen()]),
     layers: [
@@ -22,29 +11,38 @@ var map = new ol.Map({
             source: new ol.source.OSM()
         }),
         new ol.layer.Vector({
-            source: new ol.source.Vector({
-                format: new ol.format.GeoJSON(),
-                url: './OnMap'
+            source: new ol.source.Cluster({
+                source: new ol.source.Vector({
+                    format: new ol.format.GeoJSON(),
+                    url: './OnMap'
+                })
             }),
-            style: new ol.style.Style({
-                image: new ol.style.Circle({
-                    fill: new ol.style.Fill({
-                        color: 'rgba(255,255,255,0.5)'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: '#00FFFF',
-                        width: 1.25,
-                    }),
-                    radius: 5,
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(255,255,255,0.5)'
-                }),
-                stroke: new ol.style.Stroke({
-                    color: '#00FFFF',
-                    width: 1.25,
-                }),
-            })
+            style: function (feature) {
+                const size = feature.get('features').length;
+                let style = styleCache[size];
+                if (!style) {
+                    style = new ol.style.Style({
+                        image: new ol.style.Circle({
+                            fill: new ol.style.Fill({
+                                color: '#888888'
+                            }),
+                            stroke: new ol.style.Stroke({
+                                color: '#000000',
+                                width: 1
+                            }),
+                            radius: 8
+                        }),
+                        text: new ol.style.Text({
+                            text: size != 1 ? size.toString() : "",
+                            fill: new ol.style.Fill({
+                                color: '#FFFFFF',
+                            }),
+                        })
+                    });
+                    styleCache[size] = style;
+                }
+                return style;
+            }
         })
     ],
     target: 'map',
@@ -53,3 +51,5 @@ var map = new ol.Map({
         zoom: 7,
     }),
 });
+
+;
