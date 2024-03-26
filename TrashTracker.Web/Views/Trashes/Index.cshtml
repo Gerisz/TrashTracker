@@ -6,9 +6,6 @@
 
 <div class="container">
     <h1>Index</h1>
-    <div class="d-grid gap-2 d-md-flex justify-content-sm-end">
-        <a asp-action="Create" class="btn btn-success"><i class="fa-solid fa-plus"></i> Új</a>
-    </div>
     <table class="table">
         <thead>
             <tr>
@@ -28,52 +25,54 @@
                     @Html.DisplayNameFor(model => model.UpdateTime)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UpdateNeeded)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Note)
                 </th>
-                <th></th>
+                <th id="add">
+                    <a asp-action="Create" class="btn btn-success">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
+                @Html.HiddenFor(_ => item.UpdateNeeded)
                 <tr>
                     <td>
                         @(item.TrashoutId != null
-                            ? @Html.DisplayFor(modelItem => item.TrashoutId)
-                            : @Html.DisplayFor(modelItem => item.User!.UserName))
+                            ? @Html.DisplayFor(_ => item.TrashoutId)
+                            : @Html.DisplayFor(_ => item.User!.UserName))
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Location.X)<br />
-                        @Html.DisplayFor(modelItem => item.Location.Y)
+                        @Html.DisplayFor(_ => item.Location.X)<br />
+                        @Html.DisplayFor(_ => item.Location.Y)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Country)
+                        @Html.DisplayFor(_ => item.Country)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CreateTime)
+                        @Html.DisplayFor(_ => item.CreateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UpdateTime)
+                        @Html.DisplayFor(_ => item.UpdateTime)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.UpdateNeeded)
+                        @Html.DisplayFor(_ => item.Note)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Note)
-                    </td>
-                    <td class="btn-group">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
-                            <i class="fa-solid fa-info"></i>
-                        </a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </a>
+                        <div class="btn-group btn-group-table">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </a>
+                            @(item.TrashoutId != null
+                                ? "" : Html.Raw("<a asp-action=\"Edit\" asp-route-id=\"@item.Id\"" +
+                                "class=\"btn btn-warning\">" +
+                                "<i class=\"fa-solid fa-pen-to-square\"></i></a>"))
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>
             }

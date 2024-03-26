@@ -20,10 +20,14 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            @Html.ActionLink("Home", "Index", "Home", new(), new { @class = "nav-link" })
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">
+                                <i class="fa-solid fa-map-location-dot"></i> Térkép
+                            </a>
                         </li>
                         <li class="nav-item">
-                            @Html.ActionLink("Privacy", "Index", "Privacy", new(), new { @class = "nav-link" })
+                            <a asp-controller="Trashes" asp-action="Index" asp-route-size="500" class="nav-link">
+                                <i class="fa-solid fa-list"></i> Lista
+                            </a>
                         </li>
                     </ul>
                 </div>

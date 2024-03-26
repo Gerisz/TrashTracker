@@ -83,5 +83,3 @@ var trashTrackerMap = new ol.Map({
         zoom: 7,
     }),
 });
-
-;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;

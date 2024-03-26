@@ -14,11 +14,15 @@ namespace TrashTracker.Web.Controllers
             _context = context;
         }
 
-        // GET: Trashes
-        public async Task<IActionResult> Index()
+        // GET: Trashes/5
+        public async Task<IActionResult> Index(Int32 id, Int32 size)
         {
-            var trashTrackerDbContext = _context.Trashes.Include(t => t.User);
-            return View(await trashTrackerDbContext.ToListAsync());
+            var trashes = _context.Trashes
+                .Take((id - 1) * size + size)
+                .Include(t => t.User)
+                .AsEnumerable();
+            trashes = trashes.Skip((id - 1) * size);
+            return View(trashes);
         }
 
         // GET: Trashes/Details/5
