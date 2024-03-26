@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" id="html">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,8 +12,10 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0">
             <div class="container-fluid">
-                @Html.ActionLink("TrashTracker", "Index", "Home", new(), new { @class = "navbar-brand" })
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                @Html.ActionLink("TrashTracker", "Index", "Home", new(),
+                         new { @class = "navbar-brand" })
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -25,7 +27,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Trashes" asp-action="Index" asp-route-size="500" class="nav-link">
+                            <a asp-controller="Trashes" asp-action="Index" asp-route-id="1"
+                               asp-route-size="500" class="nav-link">
                                 <i class="fa-solid fa-list"></i> Lista
                             </a>
                         </li>
@@ -35,7 +38,8 @@
                             <div class="d-inline-flex">
                                 <div class="form-text m-1"><i class="fa-solid fa-moon"></i></div>
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox">
+                                    <input class="form-check-input" id="theme-switch"
+                                           type="checkbox">
                                 </div>
                                 <div class="form-text m-1"><i class="fa-solid fa-sun"></i></div>
                             </div>
