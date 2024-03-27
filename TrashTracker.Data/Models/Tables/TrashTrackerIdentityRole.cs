@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace TrashTracker.Data.Models
+namespace TrashTracker.Data.Models.Tables
 {
     public class TrashTrackerIdentityRole : IdentityRole
     {

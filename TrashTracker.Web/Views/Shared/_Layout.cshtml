@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="~/TrashTracker.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-0">
+    <header class="sticky-top">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-body border-bottom box-shadow">
             <div class="container-fluid">
                 @Html.ActionLink("TrashTracker", "Index", "Home", new(),
                          new { @class = "navbar-brand" })
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <button class="navbar-toggler text-end" type="button" data-bs-toggle="collapse"
                         data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -35,13 +35,13 @@
                     </ul>
                     <ul class="navbar-nav flex-grow-1 justify-content-end">
                         <li class="nav-item">
-                            <div class="d-inline-flex">
-                                <div class="form-text m-1"><i class="fa-solid fa-moon"></i></div>
-                                <div class="form-check form-switch">
+                            <div class="d-inline-flex align-items-center">
+                                <i class="fa-solid fa-moon"></i>
+                                <div class="form-check form-switch ms-2">
                                     <input class="form-check-input" id="theme-switch"
                                            type="checkbox">
                                 </div>
-                                <div class="form-text m-1"><i class="fa-solid fa-sun"></i></div>
+                                <i class="fa-solid fa-sun"></i>
                             </div>
                         </li>
                     </ul>

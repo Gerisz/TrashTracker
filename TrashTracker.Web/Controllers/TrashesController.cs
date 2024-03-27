@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Web.Controllers
 {
@@ -17,11 +19,20 @@ namespace TrashTracker.Web.Controllers
         // GET: Trashes/5
         public async Task<IActionResult> Index(Int32 id, Int32 size)
         {
-            var trashes = _context.Trashes
+            var count = _context.Trashes.Count();
+            var trashesFromStart = _context.Trashes
+                .OrderBy(x => x.Id)
                 .Take((id - 1) * size + size)
+                .OrderByDescending(x => x.Id);
+            var trashesFromEnd = trashesFromStart.Count() != count
+                ? trashesFromStart.Take(size)
+                : trashesFromStart.Take(count % ((id - 1) * size));
+            var trashes = trashesFromEnd.OrderBy(x => x.Id)
                 .Include(t => t.User)
                 .AsEnumerable();
-            trashes = trashes.Skip((id - 1) * size);
+            ViewData["id"] = id;
+            ViewData["size"] = size;
+            ViewData["max"] = (Int32)Math.Ceiling(_context.Trashes.Count() / (Double)size);
             return View(trashes);
         }
 
@@ -47,8 +58,7 @@ namespace TrashTracker.Web.Controllers
         // GET: Trashes/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            return View(new TrashFromUser());
         }
 
         // POST: Trashes/Create
@@ -56,16 +66,15 @@ namespace TrashTracker.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,TrashoutId,UserId,Location,Country,CreateTime,UpdateTime,UpdateNeeded,Note,Status,Size,Types,Accessibilities")] Trash trash)
+        public async Task<IActionResult> Create(TrashFromUser trashFromUser)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(trash);
+                _context.Add(new Trash(trashFromUser));
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", trash.UserId);
-            return View(trash);
+            return View(trashFromUser);
         }
 
         // GET: Trashes/Edit/5

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using TrachTracker.Web.Services;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.Defaults;
+using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web;
 using TrashTracker.Web.Services;
 

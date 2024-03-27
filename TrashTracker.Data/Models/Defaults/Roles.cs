@@ -6,7 +6,7 @@
     public enum Roles
     {
         User,
-        Admin,
-        Superadmin
+        Moderator,
+        Admin
     }
 }

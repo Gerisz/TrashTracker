@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TrashTracker.Data.Models.Defaults;
+using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models
 {

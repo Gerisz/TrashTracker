@@ -1,87 +1,74 @@
-﻿@model TrashTracker.Data.Models.Trash
+﻿@using TrashTracker.Data.Models.Enums
+@using TrashTracker.Web.Utils
+@model TrashFromUser
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h1>Create</h1>
-
-<h4>Trash</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TrashoutId" class="control-label"></label>
-                <input asp-for="TrashoutId" class="form-control" />
-                <span asp-validation-for="TrashoutId" class="text-danger"></span>
+<div class="container">
+    <h4>Új hulladékpont bejelentése</h4>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    @Html.TextBoxFor(_ => Model.Lat, "", new { @class = "form-control" })
+                    @Html.LabelFor(_ => Model.Lat)
+                </div>
+                <div class="col">
+                    @Html.TextBoxFor(_ => Model.Long, "", new { @class = "form-control" })
+                    @Html.LabelFor(_ => Model.Long)
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Country" class="control-label"></label>
-                <input asp-for="Country" class="form-control" />
-                <span asp-validation-for="Country" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreateTime" class="control-label"></label>
-                <input asp-for="CreateTime" class="form-control" />
-                <span asp-validation-for="CreateTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdateTime" class="control-label"></label>
-                <input asp-for="UpdateTime" class="form-control" />
-                <span asp-validation-for="UpdateTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdateNeeded" class="control-label"></label>
-                <input asp-for="UpdateNeeded" class="form-control" />
-                <span asp-validation-for="UpdateNeeded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Note" class="control-label"></label>
-                <textarea asp-for="Note" class="form-control"></textarea>
-                <span asp-validation-for="Note" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <select asp-for="Size" class="form-control"></select>
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Types" class="control-label"></label>
-                <select asp-for="Types" class="form-control"></select>
-                <span asp-validation-for="Types" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Accessibilities" class="control-label"></label>
-                <select asp-for="Accessibilities" class="form-control"></select>
-                <span asp-validation-for="Accessibilities" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+        </div>
+        <div class="form-group">
+            @foreach (var value in Enum.GetValues<Size>())
+            {
+                @Html.RadioButtonFor(m => m.Size, value, new { @class = "btn-check" })
+                var displayValue = EnumHelper<Size>
+                .GetDisplayValue(value);
+                var displayIconClass = EnumHelper<Size>
+                .GetDisplayIconClass(value);
+                @Html.IconLabel(displayValue, displayIconClass,
+                         new { @class = "btn btn-primary" })
+            }
+        </div>
+        <div class="form-group">
+            @foreach (var value in Model.Accessibilities)
+            {
+                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                var displayValue = EnumHelper<Accessibility>
+                .GetDisplayValue(value.Accessibility);
+                var displayIconClass = EnumHelper<Accessibility>
+                .GetDisplayIconClass(value.Accessibility);
+                @Html.IconLabel(displayValue, displayIconClass,
+                         new { @class = "btn btn-primary" })
+            }
+        </div>
+        <div class="form-group">
+            @foreach (var value in Model.Types)
+            {
+                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                var displayValue = EnumHelper<TrashType>
+                .GetDisplayValue(value.Type);
+                var displayIconClass = EnumHelper<TrashType>
+                .GetDisplayIconClass(value.Type);
+                @Html.IconLabel(displayValue, displayIconClass,
+                         new { @class = "btn btn-primary" })
+            }
+        </div>
+        <div class="form-group">
+            @Html.TextAreaFor(m => m.Note, new { @class = "form-control" })
+            @Html.LabelFor(m => m.Note)
+            @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group justify-content-right">
+            <input type="submit" value="Bejelentés" class="btn btn-primary" />
+        </div>
+    }
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

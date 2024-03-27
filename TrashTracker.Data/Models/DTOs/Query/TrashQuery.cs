@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using TrashTracker.Data.Models.Enums;
+using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.Query
 {

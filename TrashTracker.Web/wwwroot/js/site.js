@@ -9,24 +9,18 @@
         currentTheme = document.getElementById('html').getAttribute('data-bs-theme');
 
     if (currentTheme == 'light')
-        toggler.removeAttribute('checked');
-    else
         toggler.checked = 'true';
+    else
+        toggler.removeAttribute('checked');
 
     root.setAttribute('data-bs-theme', currentTheme);
 
     toggler.addEventListener('change', toggleTheme);
 
     function toggleTheme() {
-        if (this.checked) {
-            root.setAttribute('data-bs-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-        }
-
-        else {
+        if (this.checked)
             root.setAttribute('data-bs-theme', 'light');
-            localStorage.setItem('theme', 'light');
-
-        }
+        else
+            root.setAttribute('data-bs-theme', 'dark');
     }
 })();

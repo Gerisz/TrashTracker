@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
+using TrashTracker.Data.Models.Tables;
 
-namespace TrashTracker.Data.Models
+namespace TrashTracker.Data.Models.Tables
 {
     [Index(nameof(TrashoutId), IsUnique = true)]
     public class Trash
@@ -77,6 +77,33 @@ namespace TrashTracker.Data.Models
                 .Select(i => new TrashImage(i.FullDownloadUrl!))
                 .ToList();
 
+        }
+
+        public Trash(TrashFromUser trashFromUser)
+        {
+            var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID);
+
+            TrashoutId = null;
+            UserId = null;
+
+            Location = (Point)GeometryFixer.Fix(gf.CreatePoint(new Coordinate((Double)trashFromUser.Long, (Double)trashFromUser.Lat)));
+            Country = Enums.Country.Hungary;
+            Locality = trashFromUser.Locality;
+            SubLocality = trashFromUser.SubLocality;
+            CreateTime = DateTime.UtcNow;
+            UpdateTime = DateTime.UtcNow;
+            UpdateNeeded = false;
+            Note = trashFromUser.Note;
+            Status = Status.StillHere;
+            Size = trashFromUser.Size;
+
+            trashFromUser.Accessibilities
+                .Where(a => a.IsSelected)
+                .Select(a => Accessibilities |= a.Accessibility);
+
+            trashFromUser.Types
+                .Where(a => a.IsSelected)
+                .Select(a => Types |= a.Type);
         }
 
         private const int WGS_SRID = 4326;

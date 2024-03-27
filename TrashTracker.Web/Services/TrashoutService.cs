@@ -5,6 +5,7 @@ using System.Text;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
+using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Services

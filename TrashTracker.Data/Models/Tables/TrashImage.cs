@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using TrashTracker.Data.Models.Tables;
 
-namespace TrashTracker.Data.Models
+namespace TrashTracker.Data.Models.Tables
 {
     public class TrashImage
     {
