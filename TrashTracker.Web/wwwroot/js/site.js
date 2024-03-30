@@ -3,6 +3,9 @@
 
 // Write your JavaScript code.
 
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 (function () {
     var toggler = document.querySelector('#theme-switch'),
         root = document.getElementById('html'),

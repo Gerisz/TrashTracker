@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
-using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.Tables
 {
@@ -16,22 +16,34 @@ namespace TrashTracker.Data.Models.Tables
         public String? UserId { get; set; }
         public virtual TrashTrackerUser? User { get; set; }
 
+        [DisplayName("Koordináták")]
         public Point Location { get; set; } = null!;
 
+        [DisplayName("Ország")]
         public Country? Country { get; set; }
+        [DisplayName("Település")]
         public String? Locality { get; set; }
+        [DisplayName("Településrész")]
         public String? SubLocality { get; set; }
 
+        [DisplayName("Bejelentés ideje")]
         public DateTime? CreateTime { get; set; }
+        [DisplayName("Legutóbbi frissítés ideje")]
         public DateTime? UpdateTime { get; set; }
+        [DisplayName("Frissítésre szorul-e")]
         public Boolean? UpdateNeeded { get; set; }
 
         [DataType(DataType.MultilineText)]
+        [DisplayName("Megjegyzés")]
         public String? Note { get; set; } = null!;
 
+        [DisplayName("Állapot")]
         public Status Status { get; set; }
+        [DisplayName("Mennyiség")]
         public Size Size { get; set; }
+        [DisplayName("Szeméttípusok")]
         public TrashType Types { get; set; }
+        [DisplayName("Hozzáférhetőség")]
         public Accessibility Accessibilities { get; set; }
 
         public virtual List<TrashImage> Images { get; set; } = new();

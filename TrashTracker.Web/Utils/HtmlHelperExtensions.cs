@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Linq.Expressions;
 using System.Text.Encodings.Web;
 
 namespace TrashTracker.Web.Utils
@@ -31,7 +28,8 @@ namespace TrashTracker.Web.Utils
             }));
             if (htmlAttributes != null)
                 foreach (var prop in htmlAttributes.GetType().GetProperties())
-                    link.MergeAttribute(prop.Name, prop.GetValue(htmlAttributes).ToString());
+                    link.MergeAttribute(prop.Name.Replace("_", "-"),
+                        prop.GetValue(htmlAttributes)!.ToString());
             return link;
         }
 
@@ -53,7 +51,8 @@ namespace TrashTracker.Web.Utils
             label.InnerHtml.AppendHtml($"{icon} {labelText}");
             if (htmlAttributes != null)
                 foreach (var prop in htmlAttributes.GetType().GetProperties())
-                    label.MergeAttribute(prop.Name, prop.GetValue(htmlAttributes).ToString());
+                    label.MergeAttribute(prop.Name.Replace("_", "-"),
+                        prop.GetValue(htmlAttributes)!.ToString());
             return label;
         }
 
@@ -82,7 +81,8 @@ namespace TrashTracker.Web.Utils
             linkTag.InnerHtml.AppendHtml($"{icon} {span}");
             if (htmlAttributes != null)
                 foreach (var prop in htmlAttributes.GetType().GetProperties())
-                    linkTag.MergeAttribute(prop.Name, prop.GetValue(htmlAttributes).ToString());
+                    linkTag.MergeAttribute(prop.Name.Replace("_", "-"),
+                        prop.GetValue(htmlAttributes)!.ToString());
             return linkTag;
         }
     }
