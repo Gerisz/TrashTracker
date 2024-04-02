@@ -1,4 +1,4 @@
-html {
+﻿html {
     font-size: 14px;
 }
 
@@ -39,6 +39,15 @@ body {
     .map .ol-rotate {
         top: 3em;
     }
+
+.rotate-north {
+    top: 65px;
+    left: .5em;
+}
+
+.ol-touch .rotate-north {
+    top: 80px;
+}
 
 .content {
     background-color: Orange;
