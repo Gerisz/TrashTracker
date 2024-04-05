@@ -6,24 +6,28 @@
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
-(function () {
-    var toggler = document.querySelector('#theme-switch'),
-        root = document.getElementById('html'),
-        currentTheme = document.getElementById('html').getAttribute('data-bs-theme');
+var toggler = document.getElementById('theme-switch'),
+    theme = window.localStorage.getItem('data-bs-theme');
 
-    if (currentTheme == 'light')
-        toggler.checked = 'true';
-    else
-        toggler.removeAttribute('checked');
+if (theme)
+    document.documentElement.setAttribute('data-bs-theme', theme);
 
-    root.setAttribute('data-bs-theme', currentTheme);
+toggler.checked = theme == 'dark' ? false : true;
 
-    toggler.addEventListener('change', toggleTheme);
-
-    function toggleTheme() {
-        if (this.checked)
-            root.setAttribute('data-bs-theme', 'light');
-        else
-            root.setAttribute('data-bs-theme', 'dark');
+toggler.addEventListener('change', function () {
+    if (this.checked) {
+        document.documentElement.setAttribute('data-bs-theme', 'light');
+        window.localStorage.setItem('data-bs-theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-bs-theme', 'dark');
+        window.localStorage.setItem('data-bs-theme', 'dark');
     }
-})();
+});
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        // TODO: navigatior not supported, display a message handling the error
+    }
+}

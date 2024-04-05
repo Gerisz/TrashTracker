@@ -23,12 +23,51 @@ const overlay = new ol.Overlay({
 });
 const sizeRadiuses = { Bag: 6, Wheelbarrow: 8, Car: 10 };
 const styleCache = {};
-
-/*closer.onclick = function () {
-    overlay.setPosition(undefined);
-    closer.blur();
-    return false;
-};*/
+const shownStyle = function (feature) {
+    const size = feature.get('features').length;
+    let style = styleCache[size];
+    if (size > 1) {
+        if (!style) {
+            style = new ol.style.Style({
+                image: new ol.style.Circle({
+                    fill: new ol.style.Fill({
+                        color: '#888888'
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: '#000000',
+                        width: 1
+                    }),
+                    radius: 10
+                }),
+                text: new ol.style.Text({
+                    text: size != 1 ? size.toString() : "",
+                    fill: new ol.style.Fill({
+                        color: '#FFFFFF',
+                    }),
+                })
+            });
+            styleCache[size] = style;
+        }
+        return style;
+    }
+    const point = feature.get('features')[0];
+    return new ol.style.Style({
+        image: new ol.style.Circle({
+            fill: fillStatuses[point.get('status')],
+            stroke: new ol.style.Stroke({
+                color: '#000000',
+                width: 1
+            }),
+            radius: sizeRadiuses[point.get('size')]
+        }),
+        text: new ol.style.Text({
+            text: size != 1 ? size.toString() : "",
+            fill: new ol.style.Fill({
+                color: '#FFFFFF',
+            }),
+        })
+    });
+};
 
 class RotateNorthControl extends ol.control.Control {
     /**
@@ -57,6 +96,11 @@ class RotateNorthControl extends ol.control.Control {
     }
 }
 
+let points = new ol.source.Vector({
+    format: new ol.format.GeoJSON(),
+    url: './OnMap'
+});
+
 let map = new ol.Map({
     controls: ol.control.defaults.defaults()
         .extend([
@@ -69,56 +113,9 @@ let map = new ol.Map({
         }),
         new ol.layer.Vector({
             source: new ol.source.Cluster({
-                source: new ol.source.Vector({
-                    format: new ol.format.GeoJSON(),
-                    url: './OnMap'
-                })
+                source: points
             }),
-            style: function (feature) {
-                const size = feature.get('features').length;
-                let style = styleCache[size];
-                if (size > 1) {
-                    if (!style) {
-                        style = new ol.style.Style({
-                            image: new ol.style.Circle({
-                                fill: new ol.style.Fill({
-                                    color: '#888888'
-                                }),
-                                stroke: new ol.style.Stroke({
-                                    color: '#000000',
-                                    width: 1
-                                }),
-                                radius: 10
-                            }),
-                            text: new ol.style.Text({
-                                text: size != 1 ? size.toString() : "",
-                                fill: new ol.style.Fill({
-                                    color: '#FFFFFF',
-                                }),
-                            })
-                        });
-                        styleCache[size] = style;
-                    }
-                    return style;
-                }
-                const point = feature.get('features')[0];
-                return new ol.style.Style({
-                    image: new ol.style.Circle({
-                        fill: fillStatuses[point.get('status')],
-                        stroke: new ol.style.Stroke({
-                            color: '#000000',
-                            width: 1
-                        }),
-                        radius: sizeRadiuses[point.get('size')]
-                    }),
-                    text: new ol.style.Text({
-                        text: size != 1 ? size.toString() : "",
-                        fill: new ol.style.Fill({
-                            color: '#FFFFFF',
-                        }),
-                    })
-                });
-            }
+            style: shownStyle
         })
     ],
     overlays: [overlay],
@@ -128,6 +125,8 @@ let map = new ol.Map({
         zoom: 7,
     }),
 });
+
+let pointsCopy = points;
 
 const element = overlay.getElement();
 map.on('click', function (evt) {
@@ -162,3 +161,27 @@ map.on('click', function (evt) {
         popover.show();
     }
 });
+
+function filter() {
+    let accessibilities = Array.from(document.getElementsByClassName('accessibility'))
+        .filter(e => e.checked)
+        .map(e => e.id);
+    let sizes = Array.from(document.getElementsByClassName('size'))
+        .filter(e => e.checked)
+        .map(e => e.id);
+    let statuses = Array.from(document.getElementsByClassName('status'))
+        .filter(e => e.checked)
+        .map(e => e.id);
+    let types = Array.from(document.getElementsByClassName('type'))
+        .filter(e => e.checked)
+        .map(e => e.id);
+    map.getAllLayers()[1].setSource(new ol.source.Cluster({
+        source: new ol.source.Vector({
+            features: pointsCopy.getFeatures()
+                .filter(p => accessibilities.filter((a) => p.get('accessibilities').includes(a)))
+                .filter(p => sizes.includes(p.get('size')))
+                .filter(p => statuses.includes(p.get('status')))
+                .filter(p => types.filter((t) => p.get('types').includes(t)))
+        })
+    }));
+}

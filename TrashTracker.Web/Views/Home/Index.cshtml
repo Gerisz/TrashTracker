@@ -1,4 +1,5 @@
-﻿@{
+﻿@using TrashTracker.Data.Models.Enums
+@{
     ViewData["Title"] = "Kezdőlap";
 }
 
@@ -18,26 +19,75 @@
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div class="offcanvas-body">
-            <div>
-                Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+            <div class="row">
+                <div class="col-md-6">
+                    <fieldset>
+                        <legend>Hozzáférhetőség <sub><i>logikai vagy</i></sub></legend>
+                        @foreach (var value in Enum.GetValues<Accessibility>())
+                        {
+                            <input type="checkbox" class="btn-check accessibility" id="@value"
+                                   checked onclick="filter()">
+                            <label class="btn btn-outline-primary" for="@value">
+                                <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                            </label>
+                        }
+                    </fieldset>
+                </div>
+                <div class="col-md-6">
+                    <fieldset>
+                        <legend>Méret <sub><i>logikai vagy</i></sub></legend>
+                        @foreach (var value in Enum.GetValues<Size>())
+                        {
+                            <input type="checkbox" class="btn-check size" id="@value"
+                                   checked onclick="filter()">
+                            <label class="btn btn-outline-primary" for="@value">
+                                <i class="@(EnumHelper<Size>.GetDisplayIconClass(value))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<Size>.GetDisplayValue(value))
+                            </label>
+                        }
+                    </fieldset>
+                </div>
             </div>
-            <div class="dropdown mt-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Dropdown button
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <fieldset>
+                        <legend>Állapot <sub><i>logikai és</i></sub></legend>
+                        @foreach (var value in Enum.GetValues<Status>())
+                        {
+                            <input type="checkbox" class="btn-check status" id="@value"
+                                   checked onclick="filter()">
+                            <label class="btn btn-outline-primary" for="@value">
+                                <i class="@(EnumHelper<Status>.GetDisplayIconClass(value))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<Status>.GetDisplayValue(value))
+                            </label>
+                        }
+                    </fieldset>
+                </div>
+                <div class="col-md-8">
+                    <fieldset>
+                        <legend>Típus <sub><i>logikai és</i></sub></legend>
+                        @foreach (var value in Enum.GetValues<TrashType>())
+                        {
+                            <input type="checkbox" class="btn-check type" id="@value"
+                                   checked onclick="filter()">
+                            <label class="btn btn-outline-primary" for="@value">
+                                <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                            </label>
+                        }
+                    </fieldset>
+                </div>
             </div>
         </div>
     </aside>
 </div>
 
-
-
-<script type="module" src="main.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/ol@v9.0.0/dist/ol.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/home.js"></script>

@@ -63,3 +63,7 @@ body {
 td {
     vertical-align: middle;
 }
+
+a:hover {
+    pointer-events: auto;
+}

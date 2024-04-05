@@ -109,26 +109,38 @@
                                          data_bs_toggle = "tooltip",
                                          data_bs_title = "Részletek"
                                      })
-                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit", "Trashes",
-                                     new { id = item.Id },
-                                     item.TrashoutId != null
-                                     ? new { @class = "btn btn-warning disabled" }
-                                     : new
-                                     {
-                                         @class = "btn btn-warning",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Módosítás"
-                                     })
-                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete", "Trashes",
-                                     new { id = item.Id },
-                                     item.TrashoutId != null
-                                     ? new { @class = "btn btn-danger disabled" }
-                                     : new
-                                     {
-                                         @class = "btn btn-danger",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Törlés"
-                                     })
+                            <span class="d-inline-block btn-group btn-group-table"
+                                  data-bs-title="@(item.TrashoutId != null
+                                    ? "Nem módosítható" : "")"
+                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                  data-bs-trigger="hover focus">
+                                @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit", "Trashes",
+                                         new { id = item.Id },
+                                         item.TrashoutId != null
+                                         ? new { @class = "btn btn-warning disabled" }
+                                         : new
+                                         {
+                                             @class = "btn btn-warning",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Módosítás"
+                                         })
+                            </span>
+                            <span class="d-inline-block btn-group btn-group-table"
+                                  data-bs-title="@(item.TrashoutId != null
+                                    ? "Nem törölhető" : "")"
+                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                  data-bs-trigger="hover focus">
+                                @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete", "Trashes",
+                                         new { id = item.Id },
+                                         item.TrashoutId != null
+                                         ? new { @class = "btn btn-danger disabled" }
+                                         : new
+                                         {
+                                             @class = "btn btn-danger",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Törlés"
+                                         })
+                            </span>
                         </div>
                     </td>
                 </tr>
