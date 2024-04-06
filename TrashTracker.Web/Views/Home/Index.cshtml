@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <fieldset>
-                        <legend>Hozzáférhetőség <sub><i>logikai vagy</i></sub></legend>
+                        <legend>Hozzáférhetőség</legend>
                         @foreach (var value in Enum.GetValues<Accessibility>())
                         {
                             <input type="checkbox" class="btn-check accessibility" id="@value"
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-md-6">
                     <fieldset>
-                        <legend>Méret <sub><i>logikai vagy</i></sub></legend>
+                        <legend>Méret</legend>
                         @foreach (var value in Enum.GetValues<Size>())
                         {
                             <input type="checkbox" class="btn-check size" id="@value"
@@ -55,7 +55,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <fieldset>
-                        <legend>Állapot <sub><i>logikai és</i></sub></legend>
+                        <legend>Állapot</legend>
                         @foreach (var value in Enum.GetValues<Status>())
                         {
                             <input type="checkbox" class="btn-check status" id="@value"
@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-md-8">
                     <fieldset>
-                        <legend>Típus <sub><i>logikai és</i></sub></legend>
+                        <legend>Típus</legend>
                         @foreach (var value in Enum.GetValues<TrashType>())
                         {
                             <input type="checkbox" class="btn-check type" id="@value"

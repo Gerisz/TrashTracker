@@ -1,4 +1,5 @@
-﻿@model Trash
+﻿@using TrashTracker.Data.Models.Enums
+@model Trash
 
 @{
     ViewData["Title"] = "Részletek";
@@ -62,13 +63,33 @@
             @Html.DisplayNameFor(model => model.Types)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Types)
+            @foreach (var value in Enum.GetValues<TrashType>())
+            {
+                if ((Model.Types & value) == value)
+                {
+                    <span class="badge text-bg-primary">
+                        <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                        <br />
+                        @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                    </span>
+                }
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Accessibilities)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Accessibilities)
+            @foreach (var value in Enum.GetValues<Accessibility>())
+            {
+                if ((Model.Accessibilities & value) == value)
+                {
+                    <span class="badge text-bg-primary">
+                        <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                        <br />
+                        @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                    </span>
+                }
+            }
         </dd>
     </dl>
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"

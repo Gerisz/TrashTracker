@@ -69,33 +69,6 @@ const shownStyle = function (feature) {
     });
 };
 
-class RotateNorthControl extends ol.control.Control {
-    /**
-     * @param {Object} [opt_options] Control options.
-     */
-    constructor(opt_options) {
-        const options = opt_options || {};
-
-        const button = document.createElement('button');
-        button.innerHTML = 'N';
-
-        const element = document.createElement('div');
-        element.className = 'rotate-north ol-unselectable ol-control';
-        element.appendChild(button);
-
-        super({
-            element: element,
-            target: options.target,
-        });
-
-        button.addEventListener('click', this.handleRotateNorth.bind(this), false);
-    }
-
-    handleRotateNorth() {
-        this.getMap().getView().setRotation(0);
-    }
-}
-
 let points = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
     url: './OnMap'
@@ -104,8 +77,11 @@ let points = new ol.source.Vector({
 let map = new ol.Map({
     controls: ol.control.defaults.defaults()
         .extend([
-            new ol.control.FullScreen(),
-            new RotateNorthControl()
+            new ol.control.FullScreen()
+        ]),
+    interactions: ol.interaction.defaults.defaults()
+        .extend([
+            new ol.interaction.DragRotateAndZoom()
         ]),
     layers: [
         new ol.layer.Tile({
@@ -126,8 +102,6 @@ let map = new ol.Map({
     }),
 });
 
-let pointsCopy = points;
-
 const element = overlay.getElement();
 map.on('click', function (evt) {
     let features;
@@ -144,7 +118,6 @@ map.on('click', function (evt) {
         if (popover)
             popover.dispose();
         popover = new bootstrap.Popover(element, {
-            animation: false,
             container: element,
             content: `<p>
                           ${hdms}
@@ -177,11 +150,11 @@ function filter() {
         .map(e => e.id);
     map.getAllLayers()[1].setSource(new ol.source.Cluster({
         source: new ol.source.Vector({
-            features: pointsCopy.getFeatures()
-                .filter(p => accessibilities.filter((a) => p.get('accessibilities').includes(a)))
+            features: points.getFeatures()
+                .filter(p => accessibilities.some(a => p.get('accessibilities').includes(a)))
                 .filter(p => sizes.includes(p.get('size')))
                 .filter(p => statuses.includes(p.get('status')))
-                .filter(p => types.filter((t) => p.get('types').includes(t)))
+                .filter(p => types.some(t => p.get('types').includes(t)))
         })
     }));
 }
