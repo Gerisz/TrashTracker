@@ -63,15 +63,22 @@
             @Html.DisplayNameFor(model => model.Types)
         </dt>
         <dd class="col-sm-10">
-            @foreach (var value in Enum.GetValues<TrashType>())
+            @if (Model.Types == 0)
             {
-                if ((Model.Types & value) == value)
+                <i><small>nincs megadva</small></i>
+            }
+            else
+            {
+                @foreach (var value in Enum.GetValues<TrashType>())
                 {
-                    <span class="badge text-bg-primary">
-                        <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
-                        <br />
-                        @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
-                    </span>
+                    if ((Model.Types & value) == value)
+                    {
+                        <span class="badge text-bg-primary">
+                            <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                            <br />
+                            @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                        </span>
+                    }
                 }
             }
         </dd>
@@ -79,23 +86,55 @@
             @Html.DisplayNameFor(model => model.Accessibilities)
         </dt>
         <dd class="col-sm-10">
-            @foreach (var value in Enum.GetValues<Accessibility>())
+            @if (Model.Accessibilities == 0)
             {
-                if ((Model.Accessibilities & value) == value)
-                {
-                    <span class="badge text-bg-primary">
-                        <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
-                        <br />
-                        @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
-                    </span>
-                }
+                <i><small>nincs megadva</small></i>
             }
+            else
+            {
+                @foreach (var value in Enum.GetValues<Accessibility>())
+                {
+                    if ((Model.Accessibilities & value) == value)
+                    {
+                        <span class="badge text-bg-primary">
+                            <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                            <br />
+                            @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                        </span>
+                    }
+                }}
         </dd>
     </dl>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning"
-       style="text-align: right">
-        <i class="fa-solid fa-pen-to-square"></i> Szerkesztés
-    </a>
+    <span data-bs-title="@(Model.TrashoutId != null
+                   ? "Nem módosítható" : "")"
+          data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
+          data-bs-trigger="hover focus">
+        @Html.IconActionLink("Módosítás", "fa-solid fa-pen-to-square", "Edit", "Trashes",
+                 new { id = Model.Id },
+                 Model.TrashoutId != null
+                 ? new { @class = "btn btn-warning disabled" }
+                 : new
+                 {
+                     @class = "btn btn-warning",
+                     data_bs_toggle = "tooltip",
+                     data_bs_title = "Módosítás"
+                 })
+    </span>
+    <span data-bs-title="@(Model.TrashoutId != null
+                   ? "Nem törölhető" : "")"
+          data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
+          data-bs-trigger="hover focus">
+        @Html.IconActionLink("Törlés", "fa-solid fa-trash-can", "Delete", "Trashes",
+                 new { id = Model.Id },
+                 Model.TrashoutId != null
+                 ? new { @class = "btn btn-danger disabled" }
+                 : new
+                 {
+                     @class = "btn btn-danger",
+                     data_bs_toggle = "tooltip",
+                     data_bs_title = "Törlés"
+                 })
+    </span>
 </div>
 <div class="row">
     <div class="col-sm-6">

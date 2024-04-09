@@ -134,18 +134,16 @@ namespace TrashTracker.Web.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var trash = await _context.Trashes
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trash == null)
-            {
-                return NotFound();
-            }
 
+            if (trash == null)
+                return NotFound();
+
+            ViewData["Reffer"] = Request.Headers.Referer.ToString();
             return View(trash);
         }
 
