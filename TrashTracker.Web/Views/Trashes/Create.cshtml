@@ -37,9 +37,9 @@
             {
                 @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
                 var displayValue = EnumHelper<Accessibility>
-                .GetDisplayValue(value.Accessibility);
+                .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<Accessibility>
-                .GetDisplayIconClass(value.Accessibility);
+                .GetDisplayIconClass(value.Value);
                 @Html.IconLabel(displayValue, displayIconClass,
                          new { @class = "btn btn-primary" })
             }
@@ -49,9 +49,9 @@
             {
                 @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
                 var displayValue = EnumHelper<TrashType>
-                .GetDisplayValue(value.Type);
+                .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<TrashType>
-                .GetDisplayIconClass(value.Type);
+                .GetDisplayIconClass(value.Value);
                 @Html.IconLabel(displayValue, displayIconClass,
                          new { @class = "btn btn-primary" })
             }

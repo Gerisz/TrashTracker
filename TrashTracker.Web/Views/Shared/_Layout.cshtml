@@ -22,15 +22,12 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a asp-controller="Home" asp-action="Index" class="nav-link">
-                                <i class="fa-solid fa-map-location-dot"></i> Térkép
-                            </a>
+                            @Html.IconActionLink("Térkép", "fa-solid fa-map", "Index", "Home",
+                                     new(), new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
-                            <a asp-controller="Trashes" asp-action="Index" asp-route-id="1"
-                               asp-route-size="500" class="nav-link">
-                                <i class="fa-solid fa-list"></i> Lista
-                            </a>
+                            @Html.IconActionLink("Lista", "fa-solid fa-list", "Index", "Trashes",
+                                     new(), new { @class = "nav-link" })
                         </li>
                     </ul>
                     <ul class="navbar-nav flex-grow-1 justify-content-end">

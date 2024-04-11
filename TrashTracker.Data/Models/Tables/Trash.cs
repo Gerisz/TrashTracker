@@ -111,11 +111,11 @@ namespace TrashTracker.Data.Models.Tables
 
             trashFromUser.Accessibilities
                 .Where(a => a.IsSelected)
-                .Select(a => Accessibilities |= a.Accessibility);
+                .Select(a => Accessibilities |= a.Value);
 
             trashFromUser.Types
                 .Where(a => a.IsSelected)
-                .Select(a => Types |= a.Type);
+                .Select(a => Types |= a.Value);
         }
 
         private const int WGS_SRID = 4326;

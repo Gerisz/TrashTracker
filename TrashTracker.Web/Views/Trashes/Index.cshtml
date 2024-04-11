@@ -1,42 +1,68 @@
-﻿@model IEnumerable<Trash>
+﻿@model PaginatedList<Trash>
 
 @{
     ViewData["Title"] = "Szemétpontok";
-    Int32 id = (Int32)ViewData["id"]!;
-    Int32 size = (Int32)ViewData["size"]!;
-    Int32 max = (Int32)ViewData["max"]!;
 }
 
 <div class="container">
     <h1>Szemétpontok</h1>
+    <form asp-action="Index" method="get">
+        <input type="text" class="form-control" value="@ViewData["searchString"]" />
+        <button type="submit" value="Search" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> Keresés
+        </button>
+        @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
+                 "Index", "Trashes", new(), new { @class = "btn btn-secondary" })
+    </form>
     <nav>
         <ul class="pagination justify-content-center flex-nowrap">
-            <li class="page-item @(id <= 1 ? "disabled" : "")">
+            <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
                 @Html.IconActionLink("", "fa-solid fa-angles-left", "Index", "Trashes",
-                         new { id = 1, size = size },
+                         new
+                         {
+                             pageNumber = 1,
+                             pageSize = Model.PageSize
+                         },
                          new { @class = "page-link" })
             </li>
-            <li class="page-item @(id <= 1 ? "disabled" : "")">
+            <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
                 @Html.IconActionLink("", "fa-solid fa-angle-left", "Index", "Trashes",
-                         new { id = Math.Max(1, id - 1), size = size },
+                         new
+                         {
+                             pageNumber = Math.Max(1, Model.PageNumber - 1),
+                             pageSize = Model.PageSize
+                         },
                          new { @class = "page-link" })
             </li>
-            @for (Int32 i = Math.Max(1, id - 2); i <= Math.Min(id + 2, max); i++)
+            @for (Int32 i = Math.Max(1, Model.PageNumber - 2);
+            i <= Math.Min(Model.PageNumber + 2, Model.TotalPages); i++)
             {
-                <li class="page-item  @(id == i ? "disabled" : "")">
+                <li class="page-item  @(Model.PageNumber == i ? "disabled" : "")">
                     @Html.ActionLink(i.ToString(), "Index", "Trashes",
-                             new { id = i, size = size },
+                             new
+                             {
+                                 pageNumber = i,
+                                 pageSize = Model.PageSize
+                             },
                              new { @class = "page-link" })
                 </li>
             }
-            <li class="page-item @(id >= max ? "disabled" : "")">
+            <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
                 @Html.IconActionLink("", "fa-solid fa-angle-right", "Index", "Trashes",
-                         new { id = Math.Min(id + 1, max), size = size },
+                         new
+                         {
+                             pageNumber = Math.Min(Model.PageNumber + 1, Model.TotalPages),
+                             pageSize = Model.PageSize
+                         },
                          new { @class = "page-link" })
             </li>
-            <li class="page-item @(id >= max ? "disabled" : "")">
+            <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
                 @Html.IconActionLink("", "fa-solid fa-angles-right", "Index", "Trashes",
-                         new { id = max, size = size },
+                         new
+                         {
+                             pageNumber = Model.TotalPages,
+                             pageSize = Model.PageSize
+                         },
                          new { @class = "page-link" })
             </li>
         </ul>
@@ -48,19 +74,19 @@
                     Forrás
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Location)
+                    @Html.DisplayNameFor(_ => new Trash().Location)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Country)
+                    @Html.DisplayNameFor(_ => new Trash().Country)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.CreateTime)
+                    @Html.DisplayNameFor(_ => new Trash().CreateTime)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.UpdateTime)
+                    @Html.DisplayNameFor(_ => new Trash().UpdateTime)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Note)
+                    @Html.DisplayNameFor(_ => new Trash().Note)
                 </th>
                 <th class="text-end">
                     @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),

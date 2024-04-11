@@ -7,6 +7,16 @@ namespace TrashTracker.Data.Models.DTOs.Query
     public class TrashQuery
     {
         public Int32 Id { get; set; }
+        public Int32? TrashoutId { get; set; }
+        public String? UserName { get; set; }
+
+        public Double Latitude { get; set; }
+        public Double Longitude { get; set; }
+
+        public DateTime? CreateTime { get; set; }
+        public DateTime? UpdateTime { get; set; }
+        public Boolean? UpdateNeeded { get; set; }
+
         public Int32 Accessibilities { get; set; }
         public Country? Country { get; set; }
         public Size Size { get; set; }
@@ -17,6 +27,13 @@ namespace TrashTracker.Data.Models.DTOs.Query
             = trash => new TrashQuery()
             {
                 Id = trash.Id,
+                TrashoutId = trash.TrashoutId,
+                UserName = trash.User != null ? trash.User.UserName : null,
+                Latitude = Math.Round(trash.Location.X, 6),
+                Longitude = Math.Round(trash.Location.Y, 6),
+                CreateTime = trash.CreateTime,
+                UpdateTime = trash.UpdateTime,
+                UpdateNeeded = trash.UpdateNeeded,
                 Accessibilities = (Int32)trash.Accessibilities,
                 Country = trash.Country,
                 Size = trash.Size,
