@@ -6,14 +6,32 @@
 
 <div class="container">
     <h1>Szemétpontok</h1>
-    <form asp-action="Index" method="get">
-        <input type="text" class="form-control" value="@ViewData["searchString"]" />
-        <button type="submit" value="Search" class="btn btn-primary">
-            <i class="fa-solid fa-magnifying-glass"></i> Keresés
-        </button>
-        @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
-                 "Index", "Trashes", new(), new { @class = "btn btn-secondary" })
-    </form>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        <div class="row">
+            <div class="col-md">
+                <input type="text" class="form-control" name="searchString"
+                       placeholder="Megjegyzés" value="@ViewData["currentFilter"]" />
+            </div>
+            <div class="col-md">
+                <select class="form-select" name="pageSize">
+                    <option value="50">50</option>
+                    <option value="100" selected>100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                </select>
+            </div>
+            <div class="col-md-auto">
+                @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
+                         "Index", "Trashes", new(), new { @class = "btn btn-secondary" })
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-magnifying-glass"></i> Keresés
+                </button>
+            </div>
+        </div>
+    }
+    <hr />
     <nav>
         <ul class="pagination justify-content-center flex-nowrap">
             <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
@@ -21,7 +39,8 @@
                          new
                          {
                              pageNumber = 1,
-                             pageSize = Model.PageSize
+                             pageSize = Model.PageSize,
+                             searchString = ViewData["currentFilter"]
                          },
                          new { @class = "page-link" })
             </li>
@@ -30,7 +49,8 @@
                          new
                          {
                              pageNumber = Math.Max(1, Model.PageNumber - 1),
-                             pageSize = Model.PageSize
+                             pageSize = Model.PageSize,
+                             searchString = ViewData["currentFilter"]
                          },
                          new { @class = "page-link" })
             </li>
@@ -42,7 +62,8 @@
                              new
                              {
                                  pageNumber = i,
-                                 pageSize = Model.PageSize
+                                 pageSize = Model.PageSize,
+                                 searchString = ViewData["currentFilter"]
                              },
                              new { @class = "page-link" })
                 </li>
@@ -52,7 +73,8 @@
                          new
                          {
                              pageNumber = Math.Min(Model.PageNumber + 1, Model.TotalPages),
-                             pageSize = Model.PageSize
+                             pageSize = Model.PageSize,
+                             searchString = ViewData["currentFilter"]
                          },
                          new { @class = "page-link" })
             </li>
@@ -61,7 +83,8 @@
                          new
                          {
                              pageNumber = Model.TotalPages,
-                             pageSize = Model.PageSize
+                             pageSize = Model.PageSize,
+                             searchString = ViewData["currentFilter"]
                          },
                          new { @class = "page-link" })
             </li>

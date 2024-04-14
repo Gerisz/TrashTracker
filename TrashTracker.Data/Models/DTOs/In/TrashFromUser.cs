@@ -1,17 +1,26 @@
-﻿using TrashTracker.Data.Models.Enums;
+﻿using System.ComponentModel;
+using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class TrashFromUser
+    public class TrashFromUser : RequestDTO
     {
+        [DisplayName("Szélesség")]
         public Double Lat { get; set; }
+        [DisplayName("Hosszúság")]
         public Double Long { get; set; }
+        [DisplayName("Település")]
         public String? Locality { get; set; }
+        [DisplayName("Településrész")]
         public String? SubLocality { get; set; }
+        [DisplayName("Hozzáférhetőség")]
         public List<TrashFromUserAccessibility> Accessibilities { get; set; } = [];
+        [DisplayName("Méret")]
         public Size Size { get; set; }
+        [DisplayName("Szeméttípus")]
         public List<TrashFromUserTrashType> Types { get; set; } = [];
+        [DisplayName("Megjegyzés")]
         public String? Note { get; set; }
 
         public TrashFromUser()

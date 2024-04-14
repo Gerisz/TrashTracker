@@ -57,7 +57,12 @@ namespace TrashTracker.Data.Models.Tables
             TrashoutId = trashFromTrashout.Id;
             UserId = null;
 
-            Location = (Point)GeometryFixer.Fix(gf.CreatePoint(new Coordinate((Double)trashFromTrashout.Gps.Long, (Double)trashFromTrashout.Gps.Lat)));
+            Location = (Point)GeometryFixer.Fix(gf.CreatePoint(
+                new Coordinate()
+                {
+                    X = Math.Round(trashFromTrashout.Gps.Long, 6),
+                    Y = Math.Round(trashFromTrashout.Gps.Lat, 6)
+                }));
             Country = Enum.Parse<Country>(trashFromTrashout.Gps.Area!.Country!, true);
             Locality = trashFromTrashout.Gps.Area != null ? trashFromTrashout.Gps.Area.Locality : "";
             SubLocality = trashFromTrashout.Gps.Area != null ? trashFromTrashout.Gps.Area.SubLocality : "";
@@ -98,7 +103,12 @@ namespace TrashTracker.Data.Models.Tables
             TrashoutId = null;
             UserId = null;
 
-            Location = (Point)GeometryFixer.Fix(gf.CreatePoint(new Coordinate((Double)trashFromUser.Long, (Double)trashFromUser.Lat)));
+            Location = (Point)GeometryFixer.Fix(gf.CreatePoint(
+                new Coordinate()
+                {
+                    X = Math.Round(trashFromUser.Long, 6),
+                    Y = Math.Round(trashFromUser.Lat, 6)
+                }));
             Country = Enums.Country.Hungary;
             Locality = trashFromUser.Locality;
             SubLocality = trashFromUser.SubLocality;

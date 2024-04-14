@@ -23,11 +23,3 @@ toggler.addEventListener('change', function () {
         window.localStorage.setItem('data-bs-theme', 'dark');
     }
 });
-
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        // TODO: navigatior not supported, display a message handling the error
-    }
-}

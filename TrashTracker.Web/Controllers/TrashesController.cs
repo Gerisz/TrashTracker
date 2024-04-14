@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.IdentityModel.Tokens;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
-using TrashTracker.Data.Models.DTOs.Out;
-using TrashTracker.Data.Models.DTOs.Query;
 using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web.Utils;
 
@@ -25,31 +22,24 @@ namespace TrashTracker.Web.Controllers
         public async Task<IActionResult> Index(String? sortOrder, String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize)
         {
-            if (searchString != null)
-                pageNumber = 1;
-            else
+            if (searchString.IsNullOrEmpty())
                 searchString = currentFilter;
 
             ViewData["currentFilter"] = searchString;
             var count = _context.Trashes.Count();
-            /*var trashesFromStart = _context.Trashes
-                .OrderBy(x => x.Id)
-                .Take((id - 1) * size + size)
-                .OrderByDescending(x => x.Id);
-            var trashesFromEnd = trashesFromStart.Count() != count
-                ? trashesFromStart.Take(size)
-                : trashesFromStart.Take(count % ((id - 1) * size));*/
             var trashes = _context.Trashes
-                .AsNoTracking()
-                .OrderBy(x => x.Id)
-                .Include(t => t.User);
+                .AsNoTracking();
             if (!searchString.IsNullOrEmpty())
-                trashes = (IIncludableQueryable<Trash, TrashTrackerUser?>)trashes
-                    .Where(t => !t.Note.IsNullOrEmpty() && t.Note!.Contains(searchString!));
-            ViewData["pageNumber"] = pageNumber;
-            ViewData["pageSize"] = pageSize;
-            return View(await PaginatedList<Trash>
-                .CreateAsync(trashes, pageNumber ?? 1, pageSize ?? 100));
+                trashes = trashes
+                    .Where(t => (t.Note != null || t.Note != "") && t.Note!.Contains(searchString!));
+            trashes = trashes.OrderBy(x => x.Id)
+                .Include(t => t.User);
+            var paginatedTrashes = await PaginatedList<Trash>
+                .CreateAsync(trashes, pageNumber ?? 1, pageSize ?? 100);
+            if (paginatedTrashes.Count() <= 0)
+                return View(await PaginatedList<Trash>
+                    .CreateAsync(trashes, 1, pageSize ?? 100));
+            return View(paginatedTrashes);
         }
 
         // GET: Trashes/Details/5
@@ -74,7 +64,10 @@ namespace TrashTracker.Web.Controllers
         // GET: Trashes/Create
         public IActionResult Create()
         {
-            return View(new TrashFromUser());
+            return View(new TrashFromUser()
+            {
+                PreviousPage = Request.Headers["Referer"].ToString()
+            });
         }
 
         // POST: Trashes/Create
