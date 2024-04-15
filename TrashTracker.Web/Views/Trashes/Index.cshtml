@@ -1,4 +1,5 @@
-﻿@model PaginatedList<Trash>
+﻿@using TrashTracker.Data.Models.Enums
+@model PaginatedList<Trash>
 
 @{
     ViewData["Title"] = "Szemétpontok";
@@ -100,13 +101,10 @@
                     @Html.DisplayNameFor(_ => new Trash().Location)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(_ => new Trash().Country)
-                </th>
-                <th>
                     @Html.DisplayNameFor(_ => new Trash().CreateTime)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(_ => new Trash().UpdateTime)
+                    Címkék
                 </th>
                 <th>
                     @Html.DisplayNameFor(_ => new Trash().Note)
@@ -137,13 +135,65 @@
                         @Html.DisplayFor(_ => item.Location.Y)
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.Country)
-                    </td>
-                    <td>
                         @Html.DisplayFor(_ => item.CreateTime)
+                        @if (item.CreateTime != item.UpdateTime)
+                        {
+                            var updateTimeDisplay =
+                            $"(frissítve: {@Html.DisplayFor(_ => item.UpdateTime)})";
+                            Html.Display(updateTimeDisplay);
+                        }
+
                     </td>
                     <td>
-                        @Html.DisplayFor(_ => item.UpdateTime)
+                        @if (item.Types == 0)
+                        {
+                            <i><small>típus nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            @foreach (var value in Enum.GetValues<TrashType>())
+                            {
+                                if ((item.Types & value) == value)
+                                {
+                                    <span class="badge text-bg-primary m-1">
+                                        <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                                        <br />
+                                        @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                                    </span>
+                                }
+                            }
+                        }
+                        <br />
+                        @if (item.Accessibilities == 0)
+                        {
+                            <i><small>hozzáférhetőség nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            @foreach (var value in Enum.GetValues<Accessibility>())
+                            {
+                                if ((item.Accessibilities & value) == value)
+                                {
+                                    <span class="badge text-bg-primary m-1">
+                                        <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                                        <br />
+                                        @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                                    </span>
+                                }
+                            }}
+                        <br />
+                        @if (item.Size == 0)
+                        {
+                            <i><small>méret nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-primary m-1">
+                                <i class="@(EnumHelper<Size>.GetDisplayIconClass(item.Size))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<Size>.GetDisplayValue(item.Size))
+                            </span>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(_ => item.Note)

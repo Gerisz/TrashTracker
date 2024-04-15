@@ -1,4 +1,8 @@
-﻿const defaultCenter = ol.proj.transform([19.503736, 47.180086], 'EPSG:4326', 'EPSG:3857');
+﻿const searchParams = new URLSearchParams(window.location.search);
+const defaultCenter = ol.proj.transform([
+    searchParams.get("lat") ?? 19.503736,
+    searchParams.get("lon") ?? 47.180086
+], 'EPSG:4326', 'EPSG:3857');
 const fillStatuses = {
     Cleaned: new ol.style.Fill({
         color: '#198754'
@@ -23,51 +27,6 @@ const overlay = new ol.Overlay({
 });
 const sizeRadiuses = { Bag: 6, Wheelbarrow: 8, Car: 10 };
 const styleCache = {};
-const shownStyle = function (feature) {
-    const size = feature.get('features').length;
-    let style = styleCache[size];
-    if (size > 1) {
-        if (!style) {
-            style = new ol.style.Style({
-                image: new ol.style.Circle({
-                    fill: new ol.style.Fill({
-                        color: '#888888'
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: '#000000',
-                        width: 1
-                    }),
-                    radius: 10
-                }),
-                text: new ol.style.Text({
-                    text: size != 1 ? size.toString() : "",
-                    fill: new ol.style.Fill({
-                        color: '#FFFFFF',
-                    }),
-                })
-            });
-            styleCache[size] = style;
-        }
-        return style;
-    }
-    const point = feature.get('features')[0];
-    return new ol.style.Style({
-        image: new ol.style.Circle({
-            fill: fillStatuses[point.get('status')],
-            stroke: new ol.style.Stroke({
-                color: '#000000',
-                width: 1
-            }),
-            radius: sizeRadiuses[point.get('size')]
-        }),
-        text: new ol.style.Text({
-            text: size != 1 ? size.toString() : "",
-            fill: new ol.style.Fill({
-                color: '#FFFFFF',
-            }),
-        })
-    });
-};
 
 let points = new ol.source.Vector({
     format: new ol.format.GeoJSON(),
@@ -89,16 +48,62 @@ let map = new ol.Map({
         }),
         new ol.layer.Vector({
             source: new ol.source.Cluster({
+                distance: 50,
+                minDistance: 10,
                 source: points
             }),
-            style: shownStyle
+            style: function (feature) {
+                const size = feature.get('features').length;
+                let style = styleCache[size];
+                if (size > 1) {
+                    if (!style) {
+                        style = new ol.style.Style({
+                            image: new ol.style.Circle({
+                                fill: new ol.style.Fill({
+                                    color: '#888888'
+                                }),
+                                stroke: new ol.style.Stroke({
+                                    color: '#000000',
+                                    width: 1
+                                }),
+                                radius: 10
+                            }),
+                            text: new ol.style.Text({
+                                text: size != 1 ? size.toString() : "",
+                                fill: new ol.style.Fill({
+                                    color: '#FFFFFF',
+                                }),
+                            })
+                        });
+                        styleCache[size] = style;
+                    }
+                    return style;
+                }
+                const point = feature.get('features')[0];
+                return new ol.style.Style({
+                    image: new ol.style.Circle({
+                        fill: fillStatuses[point.get('status')],
+                        stroke: new ol.style.Stroke({
+                            color: '#000000',
+                            width: 1
+                        }),
+                        radius: sizeRadiuses[point.get('size')]
+                    }),
+                    text: new ol.style.Text({
+                        text: size != 1 ? size.toString() : "",
+                        fill: new ol.style.Fill({
+                            color: '#FFFFFF',
+                        }),
+                    })
+                });
+            }
         })
     ],
     overlays: [overlay],
     target: 'map',
     view: new ol.View({
         center: defaultCenter,
-        zoom: 7,
+        zoom: (searchParams.get("lat"), searchParams.get("lon")) != (null, null) ? 13 : 8
     }),
 });
 

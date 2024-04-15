@@ -28,8 +28,11 @@ namespace TrashTracker.Web.Controllers
             return Ok(json);
         }
 
-        public IActionResult Index()
+        public IActionResult Index(Int32? lat, Int32? lon)
         {
+            // TODO: implement zoom to coord when parameters are fully given
+            if (lat == null || lon == null)
+                return View();
             return View();
         }
 

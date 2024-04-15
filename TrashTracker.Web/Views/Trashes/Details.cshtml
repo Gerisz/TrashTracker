@@ -1,4 +1,5 @@
-﻿@using TrashTracker.Data.Models.Enums
+﻿@using Microsoft.AspNetCore.Html
+@using TrashTracker.Data.Models.Enums
 @model Trash
 
 @{
@@ -13,8 +14,14 @@
         </dt>
         <dd class="col-sm-10">
             @(Model.TrashoutId != null
-                ? "Trashout/" + Model.TrashoutId
-                : @Html.DisplayFor(_ => Model.User!.UserName))
+                ? Html.IconActionLink($"Trashout/{Model.TrashoutId}",
+                "fa-solid fa-leaf",
+                $"https://admin.trashout.ngo/trash-management/detail/{Model.TrashoutId}",
+                new { @class = "btn btn-success" })
+                : Html.IconActionLink($"{Html.DisplayFor(_ => Model.User!.UserName)}",
+                "fa-solid fa-user",
+                $"https://admin.trashout.ngo/trash-management/detail/{Model.TrashoutId}",
+                new { @class = "btn btn-info" }))
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Location)
@@ -24,10 +31,10 @@
             @Html.DisplayFor(_ => Model.Location.Y)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
+            @Html.DisplayNameFor(model => model.Locality)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Country)
+            @Html.DisplayFor(model => model.Country);
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreateTime)
@@ -51,13 +58,35 @@
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
+            @if (Model.Status == 0)
+            {
+                <i><small>nincs megadva</small></i>
+            }
+            else
+            {
+                <span class="badge text-bg-primary">
+                    <i class="@(EnumHelper<Status>.GetDisplayIconClass(Model.Status))"></i>
+                    <br />
+                    @Html.Raw(EnumHelper<Status>.GetDisplayValue(Model.Status))
+                </span>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Size)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Size)
+            @if (Model.Size == 0)
+            {
+                <i><small>nincs megadva</small></i>
+            }
+            else
+            {
+                <span class="badge text-bg-primary">
+                    <i class="@(EnumHelper<Size>.GetDisplayIconClass(Model.Size))"></i>
+                    <br />
+                    @Html.Raw(EnumHelper<Size>.GetDisplayValue(Model.Size))
+                </span>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Types)
@@ -105,6 +134,9 @@
                 }}
         </dd>
     </dl>
+    @Html.IconActionLink("Megtekintés térképen", "fa-solid fa-map-location-dot", "Index", "Home",
+            new { lat = Model.Location.X, lon = Model.Location.Y, },
+            new { @class = "btn btn-info" })
     <span data-bs-title="@(Model.TrashoutId != null
                    ? "Nem módosítható" : "")"
           data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"

@@ -12,6 +12,22 @@ namespace TrashTracker.Web.Utils
             this IHtmlHelper helper,
             String linkText,
             String iconClass,
+            String href,
+            Object htmlAttributes)
+        {
+            var link = IconActionLink(linkText, iconClass, htmlAttributes);
+            link.MergeAttribute("href", href);
+            if (htmlAttributes != null)
+                foreach (var prop in htmlAttributes.GetType().GetProperties())
+                    link.MergeAttribute(prop.Name.Replace("_", "-"),
+                        prop.GetValue(htmlAttributes)!.ToString());
+            return link;
+        }
+
+        public static IHtmlContent IconActionLink(
+            this IHtmlHelper helper,
+            String linkText,
+            String iconClass,
             String actionName,
             String controllerName,
             Object routeValues,
