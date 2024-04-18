@@ -32,7 +32,7 @@ namespace TrashTracker.Web.Controllers
             return Ok(json);
         }
 
-        [HttpGet("OnMapDetails")]
+        [HttpGet("OnMapDetails/{id}")]
         public async Task<IActionResult> GetPointByIdOnMapDetailsAsync(Int32 id)
         {
             var trash = await _context.Trashes.FindAsync(id);

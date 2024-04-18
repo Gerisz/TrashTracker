@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Html
 @using TrashTracker.Data.Models.Enums
-@model Trash
+@model TrashDetails
 
 @{
     ViewData["Title"] = "Részletek";
@@ -8,6 +8,7 @@
 
 <div class="container">
     <h1>@Html.DisplayFor(_ => Model.Id). szemétpont</h1>
+    <hr />
     <dl class="row">
         <dt class="col-sm-2">
             Forrás
@@ -17,24 +18,38 @@
                 ? Html.IconActionLink($"Trashout/{Model.TrashoutId}",
                 "fa-solid fa-leaf",
                 $"https://admin.trashout.ngo/trash-management/detail/{Model.TrashoutId}",
-                new { @class = "btn btn-success" })
-                : Html.IconActionLink($"{Html.DisplayFor(_ => Model.User!.UserName)}",
+                new
+                {
+                    @class = "btn btn-success",
+                    data_bs_toggle = "tooltip",
+                    data_bs_title = "Megtekintés Trashout-on"
+                })
+                : Html.IconActionLink($"{Html.DisplayFor(_ => Model.UserName)}",
                 "fa-solid fa-user",
-                $"https://admin.trashout.ngo/trash-management/detail/{Model.TrashoutId}",
-                new { @class = "btn btn-info" }))
+                $"",
+                new { @class = "btn btn-info disabled" }))
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
+            Koordináták
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(_ => Model.Location.X)<br />
-            @Html.DisplayFor(_ => Model.Location.Y)
+            @Html.IconActionLink($"{Model.Latitude}, {Model.Longitude}",
+                     "fa-solid fa-map-location-dot", "Index", "Home",
+                     new { lat = Model.Latitude, lon = Model.Longitude, },
+                     new
+                     {
+                         @class = "btn btn-info",
+                         data_bs_toggle = "tooltip",
+                         data_bs_title = "Megtekintés térképen"
+                     })
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Locality)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Country);
+            @Html.DisplayFor(_ => Model.Country),
+            @Html.DisplayFor(_ => Model.Locality),
+            @Html.DisplayFor(_ => Model.SubLocality)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreateTime)
@@ -47,12 +62,6 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdateTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Note)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Note)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Status)
@@ -133,12 +142,36 @@
                     }
                 }}
         </dd>
+        @if (Model.Note != null && Model.Note != "")
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Note)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Note)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Images)
+        </dt>
+        <dd class="col-sm-10">
+            @for (Int32 i = 0; i < Model.Images.Count(); i++)
+            {
+                <div class="row">
+                    @foreach (var image in Model.Images.Skip(i * 3).Take(3))
+                    {
+                        <div class="col-md-4">
+                            <img src="@image" class="img-fluid img-thumbnail"
+                                 onclick="window.open(this.src)" />
+                        </div>
+                    }
+                </div>
+            }
+        </dd>
     </dl>
-    @Html.IconActionLink("Megtekintés térképen", "fa-solid fa-map-location-dot", "Index", "Home",
-            new { lat = Model.Location.X, lon = Model.Location.Y, },
-            new { @class = "btn btn-info" })
+    <hr />
     <span data-bs-title="@(Model.TrashoutId != null
-                   ? "Nem módosítható" : "")"
+      ? "Nem módosítható" : "")"
           data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
           data-bs-trigger="hover focus">
         @Html.IconActionLink("Módosítás", "fa-solid fa-pen-to-square", "Edit", "Trashes",
@@ -153,7 +186,7 @@
                  })
     </span>
     <span data-bs-title="@(Model.TrashoutId != null
-                   ? "Nem törölhető" : "")"
+      ? "Nem törölhető" : "")"
           data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
           data-bs-trigger="hover focus">
         @Html.IconActionLink("Törlés", "fa-solid fa-trash-can", "Delete", "Trashes",
@@ -167,8 +200,4 @@
                      data_bs_title = "Törlés"
                  })
     </span>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-    </div>
 </div>

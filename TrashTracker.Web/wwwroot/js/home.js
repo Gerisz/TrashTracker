@@ -116,27 +116,21 @@ map.on('click', function (evt) {
     if (features.length == 1) {
         const feature = features[0];
         const coordinate = feature.getGeometry().getCoordinates();
-        const hdms = ol.coordinate.toStringHDMS(ol.proj.toLonLat(coordinate));
-        const id = feature.get('id');
         overlay.setPosition(coordinate);
-        let popover = bootstrap.Popover.getInstance(element);
-        if (popover)
-            popover.dispose();
-        popover = new bootstrap.Popover(element, {
-            container: element,
-            content: `<p>
-                          ${hdms}
-                      </p>
-                      <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
-                              href="/Trashes/Details/${id}">
-                          <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                          <span>Részletek</span>
-                      </a>`,
-            html: true,
-            placement: 'top',
-            title: `${id}. szemétpont`,
+        const id = feature.get('id');
+        $.getJSON(`./OnMapDetails/${id}`, function (data) {
+            let popover = bootstrap.Popover.getInstance(element);
+            if (popover)
+                popover.dispose();
+            popover = new bootstrap.Popover(element, {
+                container: element,
+                content: popoverContent(data),
+                html: true,
+                placement: 'top',
+                title: `${id}. szemétpont`,
+            });
+            popover.show();
         });
-        popover.show();
     }
 });
 
@@ -162,4 +156,34 @@ function filter() {
                 .filter(p => types.some(t => p.get('types').includes(t)))
         })
     }));
+}
+
+function popoverContent(data) {
+    return `
+        <div class="carousel slide">
+            <div class="carousel-inner">
+                ${data.images ? `
+                    <div class="carousel-item active">
+                        <img src="${data.images.shift()}" class="d-block w-100">
+                    </div>` : ``}
+                ${data.images.map(i => `
+                    <div class="carousel-item">
+                        <img src="${i}" class="d-block w-100">
+                    </div>`
+                )}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
+                   href="/Trashes/Details/${data.id}">
+               <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                   <span>Részletek</span>
+        </a>`;
 }

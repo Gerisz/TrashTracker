@@ -9,37 +9,35 @@
 <div class="container">
     <h1>Szemétpontok</h1>
     <hr />
-    @using (Html.BeginForm())
-    {
-        <div class="row">
-            <div class="col-md-auto d-flex align-items-center">
-                <div class="form-check form-switch">
-                    <input type="checkbox" class="form-check-input" name="showCleaned"
-                    @(showCleaned ? "checked" : "")/>
-                    <label class="form-check-label">Megtisztítottak listázása</label>
-                </div>
-            </div>
-            <div class="col-md">
-                <input type="text" class="form-control" name="searchString"
-                       placeholder="Megjegyzés" value="@ViewData["currentFilter"]" />
-            </div>
-            <div class="col-md">
-                <select class="form-select" name="pageSize">
-                    <option value="50">50</option>
-                    <option value="100" selected>100</option>
-                    <option value="200">200</option>
-                    <option value="500">500</option>
-                </select>
-            </div>
-            <div class="col-md-auto">
-                @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
-                         "Index", "Trashes", new(), new { @class = "btn btn-secondary" })
-                <button type="submit" class="btn btn-primary">
-                    <i class="fa-solid fa-magnifying-glass"></i> Keresés
-                </button>
+    <div class="row">
+        <div class="col-md-auto d-flex align-items-center">
+            <div class="form-check form-switch">
+                <input type="checkbox" class="form-check-input" id="showCleaned"
+                @(showCleaned ? "checked" : "") />
+                <label class="form-check-label">Megtisztítottak listázása</label>
             </div>
         </div>
-    }
+        <div class="col-md">
+            <input type="text" class="form-control" id="searchString"
+                   placeholder="Megjegyzés" value="@ViewData["currentFilter"]" />
+        </div>
+        <div class="col-md">
+            <select class="form-select" id="pageSize">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+            </select>
+
+        </div>
+        <div class="col-md-auto">
+            @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
+                     "Index", "Trashes", new(), new { @class = "btn btn-secondary" })
+            <a href="#" class="btn btn-primary" onclick="filter()">
+                <i class="fa-solid fa-magnifying-glass"></i> Keresés
+            </a>
+        </div>
+    </div>
     <hr />
     <nav>
         <ul class="pagination justify-content-center flex-nowrap">
@@ -260,3 +258,5 @@
         </tbody>
     </table>
 </div>
+
+<script src="~/js/index.js"></script>

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web.Utils;
@@ -14,13 +14,17 @@ namespace TrashTracker.Web.Controllers
     {
         private readonly TrashTrackerDbContext _context;
 
+        private string ImageDownloadURL => Url
+            .Action(action: "DownloadPlaceImage", controller: "Places",
+            values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
+
         public TrashesController(TrashTrackerDbContext context)
         {
             _context = context;
         }
 
         // GET: Trashes/5
-        public async Task<IActionResult> Index(String? sortOrder, String? searchString,
+        public async Task<IActionResult> Index(String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize, Boolean? showCleaned)
         {
             if (searchString.IsNullOrEmpty())
@@ -51,22 +55,20 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<ActionResult<TrashDetails>> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var trash = await _context.Trashes
                 .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (trash == null)
-            {
-                return NotFound();
-            }
 
-            return View(trash);
+            if (trash == null)
+                return NotFound();
+
+            return View(TrashDetails
+                .Create(trash, ImageDownloadURL, Request.Headers["Referer"].ToString()));
         }
 
         // GET: Trashes/Create
@@ -89,26 +91,24 @@ namespace TrashTracker.Web.Controllers
             {
                 _context.Add(new Trash(trashFromUser));
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return Redirect(trashFromUser.PreviousPage!);
             }
             return View(trashFromUser);
         }
 
         // GET: Trashes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Int32 id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var trash = await _context.Trashes.FindAsync(id);
+
             if (trash == null)
-            {
                 return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", trash.UserId);
-            return View(trash);
+
+            return View(new TrashEdit(trash)
+            {
+                PreviousPage = Request.Headers["Referer"].ToString()
+            });
         }
 
         // POST: Trashes/Edit/5
@@ -116,35 +116,35 @@ namespace TrashTracker.Web.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,TrashoutId,UserId,Location,Country,CreateTime,UpdateTime,UpdateNeeded,Note,Status,Size,Types,Accessibilities")] Trash trash)
+        public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit)
         {
-            if (id != trash.Id)
-            {
+            if (id != trashEdit.Id)
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(trash);
+                    var trash = await _context.Trashes.FindAsync(id);
+
+                    if (trash == null)
+                        return NotFound();
+
+                    _context.Trashes.Entry(trash).CurrentValues
+                        .SetValues(new Trash(trashEdit) { Id = trash.Id });
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TrashExists(trash.Id))
-                    {
+                    if (!TrashExists(trashEdit.Id))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return Redirect(trashEdit.PreviousPage!);
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", trash.UserId);
-            return View(trash);
+
+            return View(trashEdit);
         }
 
         // GET: Trashes/Delete/5

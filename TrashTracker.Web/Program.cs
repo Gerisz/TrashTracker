@@ -7,6 +7,7 @@ using TrashTracker.Data.Models.Defaults;
 using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web;
 using TrashTracker.Web.Services;
+using TrashTracker.Web.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 

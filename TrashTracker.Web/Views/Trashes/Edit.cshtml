@@ -5,11 +5,9 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Trash</h4>
-<hr />
 <div class="container">
+    <h1>@Html.DisplayFor(m => m.Id). szemétpont szerkesztése</h1>
+    <hr />
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.Id)
@@ -17,7 +15,7 @@
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.Lat, "",
+                        @Html.EditorFor(m => m.Lat, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -26,13 +24,13 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.Lat)
-                        @Html.ValidationMessageFor(_ => Model.Lat, "", new { @class = "text-danger" })
+                        @Html.LabelFor(m => m.Lat)
+                        @Html.ValidationMessageFor(m => m.Lat, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.Long, "",
+                        @Html.EditorFor(m => m.Long, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -41,8 +39,8 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.Long)
-                        @Html.ValidationMessageFor(_ => Model.Long, "", new { @class = "text-danger" })
+                        @Html.LabelFor(m => m.Long)
+                        @Html.ValidationMessageFor(m => m.Long, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-md-auto">
@@ -95,7 +93,7 @@
         </div>
         <div class="row">
             <div class="col form-group">
-                <a class="btn btn-danger" href="@ViewData["Reffer"]">
+                <a class="btn btn-danger" href="@Model.PreviousPage">
                     <i class="fa-solid fa-arrow-left"></i> Vissza
                 </a>
             </div>

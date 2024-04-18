@@ -4,7 +4,7 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class TrashFromUser : RequestDTO
+    public class TrashFromUser : NavigationUrls
     {
         [DisplayName("Szélesség")]
         public Double Lat { get; set; }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace TrashTracker.Web
+namespace TrashTracker.Web.Utils
 {
-    
+
     /// <summary>
     /// A builder for hierarchy between roles with policies
     /// </summary>
@@ -18,10 +18,10 @@ namespace TrashTracker.Web
         {
             foreach (var role in Enum.GetValues(typeof(TRoles)))
             {
-                List<String> superiorRoles = [];
+                List<string> superiorRoles = [];
 
                 foreach (var otherRole in Enum.GetValues(typeof(TRoles)))
-                    if ((Int32)role <= (Int32)otherRole)
+                    if ((int)role <= (int)otherRole)
                         superiorRoles.Add(otherRole.ToString()!);
 
                 if (!superiorRoles.IsNullOrEmpty())
