@@ -89,7 +89,7 @@ namespace TrashTracker.Data.Models.Tables
                     Accessibilities |= Accessibility.NotForGeneralCleanup;
             }
 
-            Images = (trashFromTrashout.Images ?? new())
+            Images = (trashFromTrashout.Images ?? [])
                 .Where(i => i.FullDownloadUrl != null)
                 .Select(i => new TrashImage(i.FullDownloadUrl!))
                 .ToList();

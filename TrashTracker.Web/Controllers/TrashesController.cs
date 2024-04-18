@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
 using TrashTracker.Web.Utils;
 
@@ -20,7 +21,7 @@ namespace TrashTracker.Web.Controllers
 
         // GET: Trashes/5
         public async Task<IActionResult> Index(String? sortOrder, String? searchString,
-            String currentFilter, Int32? pageNumber, Int32? pageSize)
+            String currentFilter, Int32? pageNumber, Int32? pageSize, Boolean? showCleaned)
         {
             if (searchString.IsNullOrEmpty())
                 searchString = currentFilter;
@@ -29,11 +30,18 @@ namespace TrashTracker.Web.Controllers
             var count = _context.Trashes.Count();
             var trashes = _context.Trashes
                 .AsNoTracking();
+
             if (!searchString.IsNullOrEmpty())
                 trashes = trashes
                     .Where(t => (t.Note != null || t.Note != "") && t.Note!.Contains(searchString!));
-            trashes = trashes.OrderBy(x => x.Id)
+
+            ViewData["showCleaned"] = showCleaned ?? false;
+            if (!showCleaned ?? false)
+                trashes = trashes.Where(t => t.Status != Status.Cleaned);
+
+            trashes = trashes.OrderByDescending(x => x.UpdateTime)
                 .Include(t => t.User);
+
             var paginatedTrashes = await PaginatedList<Trash>
                 .CreateAsync(trashes, pageNumber ?? 1, pageSize ?? 100);
             if (paginatedTrashes.Count() <= 0)
@@ -169,6 +177,25 @@ namespace TrashTracker.Web.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        /// <summary>
+        /// Gets the place image with the given id.
+        /// </summary>
+        /// <param name="id"> The id of the image. </param>
+        /// <response code="200">The image was returned successfully</response>
+        /// <response code="404">The place image was not found.</response>
+        [HttpGet("Image/{id}")]
+        public async Task<IActionResult> DownloadPlaceImageAsync(int id)
+        {
+            var image = await _context.TrashImages.FindAsync(id);
+
+            if (image == null || image.Image == null)
+                return NotFound();
+
+            var imageStream = new MemoryStream(image.Image);
+
+            return File(imageStream, image.ContentType!);
         }
 
         private bool TrashExists(int id)

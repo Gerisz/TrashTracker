@@ -12,6 +12,10 @@ namespace TrashTracker.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly TrashTrackerDbContext _context;
 
+        private string ImageDownloadURL => Url
+            .Action(action: "DownloadPlaceImage", controller: "Places",
+            values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
+
         public HomeController(ILogger<HomeController> logger, TrashTrackerDbContext context)
         {
             _logger = logger;
@@ -27,6 +31,16 @@ namespace TrashTracker.Web.Controllers
 
             return Ok(json);
         }
+
+        [HttpGet("OnMapDetails")]
+        public async Task<IActionResult> GetPointByIdOnMapDetailsAsync(Int32 id)
+        {
+            var trash = await _context.Trashes.FindAsync(id);
+            if (trash == null)
+                return NotFound();
+            return Ok(Serializer.Serialize(OnMapDetails.Create(trash, ImageDownloadURL)));
+        }
+
 
         public IActionResult Index(Int32? lat, Int32? lon)
         {
@@ -44,7 +58,10 @@ namespace TrashTracker.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new Error { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new Error
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
         }
     }
 }

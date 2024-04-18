@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+﻿using CleanTiszaMap.Data.Utils;
+using NetTopologySuite.Geometries;
 using System.Linq.Expressions;
 using TrashTracker.Data.Models.DTOs.Query;
 using TrashTracker.Data.Models.Enums;
@@ -35,7 +36,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
             = trash => new OnMapFeature()
             {
                 Geometry = trash.Location,
-                Properties = OnMapFeatureProperties.Create(TrashQuery.Create(trash))
+                Properties = OnMapFeatureProperties.Create(trash)
             };
 
         public static OnMapFeature Create(Trash trash)
@@ -45,28 +46,23 @@ namespace TrashTracker.Data.Models.DTOs.Out
     public class OnMapFeatureProperties
     {
         public Int32 Id { get; set; }
-        public List<String> Accessibilities { get; set; } = [];
         public Country? Country { get; set; }
+        public BitEnum<Accessibility> Accessibilities { get; set; } = [];
         public Size Size { get; set; }
         public Status Status { get; set; }
-        public List<String> Types { get; set; } = [];
-
-        public static Expression<Func<TrashQuery, OnMapFeatureProperties>> Projection { get; }
-            = trashQuery => new OnMapFeatureProperties()
+        public BitEnum<TrashType> Types { get; set; } = [];
+        public static Expression<Func<Trash, OnMapFeatureProperties>> Projection { get; }
+            = trash => new OnMapFeatureProperties()
             {
-                Id = trashQuery.Id,
-                Accessibilities = Enum.GetValues<Accessibility>()
-                    .Where(a => (a & (Accessibility)trashQuery.Accessibilities) != 0)
-                    .Select(a => a.ToString()).ToList(),
-                Country = trashQuery.Country,
-                Size = trashQuery.Size,
-                Status = trashQuery.Status,
-                Types = Enum.GetValues<TrashType>()
-                    .Where(t => (t & (TrashType)trashQuery.Types) != 0)
-                    .Select(t => t.ToString()).ToList()
+                Id = trash.Id,
+                Country = trash.Country,
+                Accessibilities = new BitEnum<Accessibility>(trash.Accessibilities),
+                Size = trash.Size,
+                Status = trash.Status,
+                Types = new BitEnum<TrashType>(trash.Types)
             };
 
-        public static OnMapFeatureProperties Create(TrashQuery trashQuery)
-            => Projection.Compile().Invoke(trashQuery);
+        public static OnMapFeatureProperties Create(Trash trash)
+            => Projection.Compile().Invoke(trash);
     }
 }

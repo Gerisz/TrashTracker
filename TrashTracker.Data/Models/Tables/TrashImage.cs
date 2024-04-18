@@ -13,6 +13,8 @@ namespace TrashTracker.Data.Models.Tables
         public String? UserId { get; set; }
         public virtual TrashTrackerUser? User { get; set; }
         public byte[]? Image { get; set; }
+        public String? ContentType { get; set; }
+
 
         public Int32 TrashId { get; set; }
         public virtual Trash? Trash { get; set; }
@@ -35,6 +37,7 @@ namespace TrashTracker.Data.Models.Tables
                 image.CopyTo(stream);
                 Image = stream.ToArray();
             }
+            ContentType = image.ContentType;
         }
     }
 }
