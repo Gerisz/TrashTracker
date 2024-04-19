@@ -159,31 +159,12 @@ function filter() {
 }
 
 function popoverContent(data) {
-    return `
-        <div class="carousel slide">
-            <div class="carousel-inner">
-                ${data.images ? `
-                    <div class="carousel-item active">
-                        <img src="${data.images.shift()}" class="d-block w-100">
-                    </div>` : ``}
-                ${data.images.map(i => `
-                    <div class="carousel-item">
-                        <img src="${i}" class="d-block w-100">
-                    </div>`
-                )}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
-                   href="/Trashes/Details/${data.id}">
-               <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                   <span>Részletek</span>
-        </a>`;
+    return `<img src="${data.images.shift()}" class="d-block w-100 mb-2">
+        <div class="row m-0">
+            <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
+                        href="/Trashes/Details/${data.id}">
+                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                        <span>Részletek</span>
+            </a>
+        </div>`;
 }

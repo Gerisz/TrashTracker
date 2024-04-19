@@ -40,6 +40,10 @@ body {
         top: 3em;
     }
 
+.popover{
+    min-width: 12vw;
+}
+
 .rotate-north {
     top: 65px;
     left: .5em;
