@@ -51,34 +51,56 @@
         <legend>@Html.LabelFor(m => m.Size)</legend>
         <div class="form-group">
             @Html.DropDownListFor(m => m.Size,
-                     new SelectList(((Size[])Enum.GetValues(typeof(Size)))
-                     .Select(s => EnumHelper<Size>.GetDisplayValue(s))),
+                     new List<SelectListItem>(((Size[])Enum.GetValues(typeof(Size)))
+                     .Select(s => new SelectListItem()
+        {
+            Value = s.ToString(),
+            Text = EnumHelper<Size>.GetDisplayValue(s)
+        })),
                      new { @class = "form-select" })
         </div>
         <legend>@Html.LabelFor(m => m.Accessibilities)</legend>
         <div class="form-group">
             @foreach (var value in Model.Accessibilities)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                @Html.CheckBoxFor(_ => value.IsSelected, new
+                    {
+                        @class = "btn-check",
+                        id = value.Value,
+                        name = value.Value
+                    })
                 var displayValue = EnumHelper<Accessibility>
                 .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<Accessibility>
                 .GetDisplayIconClass(value.Value);
-                @Html.IconLabelFor(_ => value.Value, displayValue, displayIconClass,
-                         new { @class = "btn btn-outline-primary" })
+                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary",
+                             @for = value.Value
+                         })
             }
         </div>
         <legend>@Html.LabelFor(m => m.Types)</legend>
         <div class="form-group">
             @foreach (var value in Model.Types)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                @Html.CheckBoxFor(_ => value.IsSelected, new
+                    {
+                        @class = "btn-check",
+                        id = value.Value,
+                        name = value.Value
+                    })
                 var displayValue = EnumHelper<TrashType>
                 .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<TrashType>
                 .GetDisplayIconClass(value.Value);
-                @Html.IconLabelFor(m => m.Size, displayValue, displayIconClass,
-                         new { @class = "btn btn-outline-primary" })
+                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary",
+                             @for = value.Value
+                         })
             }
         </div>
         <div class="form-group">
