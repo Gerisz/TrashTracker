@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<TrashTrackerUser> SignInManager
+@inject UserManager<TrashTrackerUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @using (Html.BeginForm("Logout", "Account", FormMethod.Post,
+        new { @class = "nav-link navbar-right" }))
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                @Html.IconActionLink(@UserManager.GetUserName(User)!, "fa-solid fa-user", "",
+                         new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                <button type="submit" class="btn nav-link text-dark">Log out</button>
+            </li>
+        </ul>
+    }
+
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @Html.ActionLink("Regisztráció", "Register", "Account", new(),
+                     new { @class = "nav-link" })
+        </li>
+        <li>
+            @Html.ActionLink("Bejelentkezés", "Login", "Account", new(),
+                     new { @class = "nav-link" })
+        </li>
+    </ul>
+}

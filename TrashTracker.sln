@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrashTracker.Web", "TrashTracker.Web\TrashTracker.Web.csproj", "{26B8CF90-A268-4EB3-80F8-A58C427949D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrashTracker.Data", "TrashTracker.Data\TrashTracker.Data.csproj", "{078936D0-A2AE-48C6-8CF4-40BF6236F370}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrashTracker.Data", "TrashTracker.Data\TrashTracker.Data.csproj", "{078936D0-A2AE-48C6-8CF4-40BF6236F370}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

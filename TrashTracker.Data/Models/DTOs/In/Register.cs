@@ -3,18 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class Register
+    public class Register : NavigationUrls
     {
         [DisplayName("Név")]
-        public string UserName { get; set; } = null!;
+        public String UserName { get; set; } = null!;
 
         [DisplayName("Jelszó")]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = null!;
+        public String Password { get; set; } = null!;
 
         [DisplayName("Jelszó megerősítése")]
         [DataType(DataType.Password)]
         [Compare("Password")]
-        public string PasswordRepeat { get; set; } = null!;
+        public String PasswordRepeat { get; set; } = null!;
     }
 }

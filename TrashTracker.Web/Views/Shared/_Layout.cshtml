@@ -30,7 +30,8 @@
                                      new(), new { @class = "nav-link" })
                         </li>
                     </ul>
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                    @await Html.PartialAsync("_LoginPartial")
+                    <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
                             <div class="d-inline-flex align-items-center">
                                 <i class="fa-solid fa-moon"></i>
