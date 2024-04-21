@@ -24,15 +24,16 @@ namespace TrashTracker.Data.Models
                     // then create a default user for that role
                     user = new TrashTrackerUser()
                     {
-                        UserName = role.ToString()!,
+                        UserName = role.ToString()!.ToLower(),
+                        Email = $"{role}@example.com",
                         EmailConfirmed = true
                     };
-                    await userManager.CreateAsync(user, role.ToString()!);
+                    await userManager.CreateAsync(user, role.ToString()!.ToLower());
                     await userManager.AddToRoleAsync(user, role.ToString()!);
                 }
                 else
                 {
-                    user.UserName = role.ToString();
+                    user.UserName = role.ToString()!.ToLower();
                     user.EmailConfirmed = true;
 
                     await userManager.UpdateAsync(user);

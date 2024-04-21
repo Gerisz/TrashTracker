@@ -5,16 +5,21 @@ namespace TrashTracker.Data.Models.DTOs.In
 {
     public class Register : NavigationUrls
     {
-        [DisplayName("Név")]
+        [DisplayName("Felhasználónév")]
         public String UserName { get; set; } = null!;
 
-        [DisplayName("Jelszó")]
+        [DataType(DataType.EmailAddress)]
+        [DisplayName("E-mail cím")]
+        [EmailAddress]
+        public String Email { get; set; } = null!;
+
         [DataType(DataType.Password)]
+        [DisplayName("Jelszó")]
         public String Password { get; set; } = null!;
 
-        [DisplayName("Jelszó megerősítése")]
-        [DataType(DataType.Password)]
         [Compare("Password")]
+        [DataType(DataType.Password)]
+        [DisplayName("Jelszó megerősítése")]
         public String PasswordRepeat { get; set; } = null!;
     }
 }

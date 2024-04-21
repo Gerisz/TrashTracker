@@ -1,7 +1,4 @@
-﻿const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-
-let toggler = document.getElementById('theme-switch'),
+﻿let toggler = document.getElementById('theme-switch'),
     theme = window.localStorage.getItem('data-bs-theme');
 
 if (theme)
@@ -18,3 +15,7 @@ toggler.addEventListener('change', function () {
         window.localStorage.setItem('data-bs-theme', 'dark');
     }
 });
+
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+

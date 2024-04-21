@@ -3,33 +3,48 @@
 @inject SignInManager<TrashTrackerUser> SignInManager
 @inject UserManager<TrashTrackerUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
-{
-    @using (Html.BeginForm("Logout", "Account", FormMethod.Post,
-        new { @class = "nav-link navbar-right" }))
-    {
-        <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item">
-                @Html.IconActionLink(@UserManager.GetUserName(User)!, "fa-solid fa-user", "",
-                         new { @class = "nav-link" })
-            </li>
-            <li class="nav-item">
-                <button type="submit" class="btn nav-link text-dark">Log out</button>
-            </li>
-        </ul>
-    }
 
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Regisztráció", "Register", "Account", new(),
-                     new { @class = "nav-link" })
-        </li>
-        <li>
-            @Html.ActionLink("Bejelentkezés", "Login", "Account", new(),
-                     new { @class = "nav-link" })
-        </li>
+<li class="nav-item dropdown">
+    @Html.IconActionLink(@UserManager.GetUserName(User) ?? "Nincs bejelentkezve",
+            "fa-solid fa-user", "",
+            new
+            {
+                aria_expanded = false,
+                @class = "nav-link dropdown-toggle",
+                data_bs_toggle = "dropdown",
+                role = "button"
+            })
+    <ul class="dropdown-menu">
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @using (Html.BeginForm("Logout", "User", FormMethod.Post,
+           new { @class = "nav-link navbar-right", id = "logoutForm" }))
+            {
+                <li>
+                    @Html.IconActionLink("Saját profil", "fa-solid fa-id-card",
+                             "Details", "User", new(), new { @class = "dropdown-item" })
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item"
+                       onclick="document.getElementById('logoutForm').submit();">
+                        <i class="fa-solid fa-right-from-bracket"></i> Kijelentkezés
+                    </a>
+                </li>
+            }
+        }
+        else
+        {
+            <li>
+                @Html.IconActionLink("Bejelentkezés", "fa-solid fa-right-to-bracket",
+                         "Login", "User", new(),
+                         new { @class = "dropdown-item" })
+            </li>
+            <li>
+                @Html.IconActionLink("Regisztráció", "fa-solid fa-user-plus",
+                         "Register", "User", new(),
+                         new { @class = "dropdown-item" })
+            </li>
+        }
     </ul>
-}
+</li>

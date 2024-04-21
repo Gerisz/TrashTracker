@@ -30,17 +30,15 @@
                                      new(), new { @class = "nav-link" })
                         </li>
                     </ul>
-                    @await Html.PartialAsync("_LoginPartial")
                     <ul class="navbar-nav navbar-right">
-                        <li class="nav-item">
-                            <div class="d-inline-flex align-items-center">
-                                <i class="fa-solid fa-moon"></i>
-                                <div class="form-check form-switch ms-2">
-                                    <input class="form-check-input" id="theme-switch"
-                                           type="checkbox">
-                                </div>
-                                <i class="fa-solid fa-sun"></i>
+                        @await Html.PartialAsync("_LoginPartial")
+                        <li class="nav-item d-inline-flex align-items-center ms-3">
+                            <i class="fa-solid fa-moon"></i>
+                            <div class="form-check form-switch ms-2">
+                                <input class="form-check-input" id="theme-switch"
+                                       type="checkbox">
                             </div>
+                            <i class="fa-solid fa-sun"></i>
                         </li>
                     </ul>
                 </div>

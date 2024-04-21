@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TrashTracker.Data.Models.DTOs.In;
+using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Web.Controllers
 {
-    public class AccountController : Controller
+    public class UserController : Controller
     {
         private readonly UserManager<TrashTrackerUser> _userManager;
         private readonly SignInManager<TrashTrackerUser> _signInManager;
 
-        public AccountController(UserManager<TrashTrackerUser> userManager,
+        public UserController(UserManager<TrashTrackerUser> userManager,
             SignInManager<TrashTrackerUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
+        #region Authorization
 
         [HttpGet]
         public IActionResult Login(String? returnUrl = null)
@@ -26,19 +29,22 @@ namespace TrashTracker.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Login vm, String? returnUrl = null)
+        public async Task<IActionResult> Login(Login login, String? returnUrl = null)
         {
             ViewData["returnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(vm.UserName);
+                var user = await _userManager.FindByNameAsync(login.UserName);
+
+                user ??= await _userManager.FindByEmailAsync(login.UserName);
+
                 if (user == null)
                 {
                     ModelState.AddModelError("", "Sikertelen bejelentkezés!");
-                    return View(vm);
+                    return View(login);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user, vm.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, false);
 
                 if (result.Succeeded)
                     return RedirectToLocal(returnUrl);
@@ -46,7 +52,7 @@ namespace TrashTracker.Web.Controllers
                 ModelState.AddModelError("", "Sikertelen bejelentkezés!");
             }
 
-            return View(vm);
+            return View(login);
         }
 
         [HttpGet]
@@ -58,13 +64,13 @@ namespace TrashTracker.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(Register vm, String? returnUrl = null)
+        public async Task<IActionResult> Register(Register register, String? returnUrl = null)
         {
             ViewData["returnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new TrashTrackerUser { UserName = vm.UserName };
-                var result = await _userManager.CreateAsync(user, vm.Password);
+                var user = new TrashTrackerUser(register);
+                var result = await _userManager.CreateAsync(user, register.Password);
 
                 if (result.Succeeded)
                 {
@@ -75,7 +81,7 @@ namespace TrashTracker.Web.Controllers
                 ModelState.AddModelError("", "Sikertelen regisztráció!");
             }
 
-            return View(vm);
+            return View(register);
         }
 
         [HttpPost]
@@ -83,15 +89,32 @@ namespace TrashTracker.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction(nameof(TrashesController.Index), nameof(TrashesController));
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
+
+        #endregion
+
+        #region Queries
+
+        [HttpGet]
+        public async Task<ActionResult<UserDetails>> Details(String userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+                return NotFound();
+
+            return View(UserDetails.Create(user, ""));
+        }
+
+        #endregion
 
         private IActionResult RedirectToLocal(String? returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             else
-                return RedirectToAction(nameof(TrashesController.Index), nameof(TrashesController));
+                return RedirectToAction(nameof(TrashesController.Index), "Trashes");
         }
     }
 }

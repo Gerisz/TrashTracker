@@ -5,11 +5,11 @@ namespace TrashTracker.Data.Models.DTOs.In
 {
     public class Login : NavigationUrls
     {
-        [DisplayName("Név")]
+        [DisplayName("Felhasználónév vagy E-mail cím")]
         public String UserName { get; set; } = null!;
 
-        [DisplayName("Jelszó")]
         [DataType(DataType.Password)]
+        [DisplayName("Jelszó")]
         public String Password { get; set; } = null!;
     }
 }
