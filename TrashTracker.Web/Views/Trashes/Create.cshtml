@@ -23,7 +23,8 @@
                                      }
                                  })
                         @Html.LabelFor(_ => Model.Lat)
-                        @Html.ValidationMessageFor(_ => Model.Lat, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(_ => Model.Lat, "",
+                                 new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col">
@@ -38,7 +39,8 @@
                                      }
                                  })
                         @Html.LabelFor(_ => Model.Long)
-                        @Html.ValidationMessageFor(_ => Model.Long, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(_ => Model.Long, "",
+                                 new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-md-auto">

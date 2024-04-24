@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TrashTracker.Data.Models;
@@ -14,8 +15,8 @@ namespace TrashTracker.Web.Controllers
     {
         private readonly TrashTrackerDbContext _context;
 
-        private string ImageDownloadURL => Url
-            .Action(action: "DownloadPlaceImage", controller: "Places",
+        private string ImageURL => Url
+            .Action(action: "Image", controller: "Trashes",
             values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
 
         public TrashesController(TrashTrackerDbContext context)
@@ -55,7 +56,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Details/5
-        public async Task<ActionResult<TrashDetails>> Details(int? id)
+        public async Task<ActionResult<TrashDetails>> Details(Int32? id)
         {
             if (id == null)
                 return NotFound();
@@ -68,10 +69,11 @@ namespace TrashTracker.Web.Controllers
                 return NotFound();
 
             return View(TrashDetails
-                .Create(trash, ImageDownloadURL, Request.Headers["Referer"].ToString()));
+                .Create(trash, ImageURL, Request.Headers["Referer"].ToString()));
         }
 
         // GET: Trashes/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View(new TrashFromUser()
@@ -83,6 +85,7 @@ namespace TrashTracker.Web.Controllers
         // POST: Trashes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TrashFromUser trashFromUser)
@@ -98,6 +101,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(Int32 id)
         {
             var trash = await _context.Trashes.FindAsync(id);
@@ -114,6 +118,7 @@ namespace TrashTracker.Web.Controllers
         // POST: Trashes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit)
@@ -148,7 +153,8 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> Delete(Int32? id)
         {
             if (id == null)
                 return NotFound();
@@ -165,9 +171,10 @@ namespace TrashTracker.Web.Controllers
         }
 
         // POST: Trashes/Delete/5
+        [Authorize(Policy = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Int32 id)
         {
             var trash = await _context.Trashes.FindAsync(id);
             if (trash != null)
@@ -185,8 +192,8 @@ namespace TrashTracker.Web.Controllers
         /// <param name="id"> The id of the image. </param>
         /// <response code="200">The image was returned successfully</response>
         /// <response code="404">The place image was not found.</response>
-        [HttpGet("Image/{id}")]
-        public async Task<IActionResult> DownloadPlaceImageAsync(int id)
+        [HttpGet("[controller]/Image/{id}")]
+        public async Task<IActionResult> ImageAsync(Int32 id)
         {
             var image = await _context.TrashImages.FindAsync(id);
 
@@ -198,7 +205,7 @@ namespace TrashTracker.Web.Controllers
             return File(imageStream, image.ContentType!);
         }
 
-        private bool TrashExists(int id)
+        private bool TrashExists(Int32 id)
         {
             return _context.Trashes.Any(e => e.Id == id);
         }

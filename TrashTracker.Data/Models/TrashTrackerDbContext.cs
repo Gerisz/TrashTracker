@@ -9,6 +9,7 @@ namespace TrashTracker.Data.Models
     {
         public DbSet<Trash> Trashes { get; set; } = null!;
         public DbSet<TrashImage> TrashImages { get; set; } = null!;
+        public DbSet<UserImage> UserImages { get; set; } = null!;
 
         public TrashTrackerDbContext() : base(new DbContextOptions<TrashTrackerDbContext>()) { }
 

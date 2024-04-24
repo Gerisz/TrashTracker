@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using TrashTracker.Data.Models.Attributes;
 using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
 
@@ -6,8 +7,10 @@ namespace TrashTracker.Data.Models.DTOs.In
 {
     public class TrashFromUser : NavigationUrls
     {
+        [Coordinate]
         [DisplayName("Szélesség")]
         public Double Lat { get; set; }
+        [Coordinate]
         [DisplayName("Hosszúság")]
         public Double Long { get; set; }
         [DisplayName("Település")]

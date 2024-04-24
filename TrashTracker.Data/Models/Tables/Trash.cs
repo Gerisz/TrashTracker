@@ -46,7 +46,7 @@ namespace TrashTracker.Data.Models.Tables
         [DisplayName("Hozzáférhetőség")]
         public Accessibility Accessibilities { get; set; }
 
-        public virtual List<TrashImage> Images { get; set; } = new();
+        public virtual List<TrashImage> Images { get; set; } = [];
 
         public Trash() { }
 

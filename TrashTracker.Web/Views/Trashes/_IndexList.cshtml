@@ -1,0 +1,226 @@
+﻿@using TrashTracker.Data.Models.Enums
+@model PaginatedList<Trash>
+
+
+@{
+    Boolean showCleaned = (Boolean)(ViewData["showCleaned"] ?? false);
+}
+
+<nav>
+    <ul class="pagination justify-content-center flex-nowrap">
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-left", "Index", "Trashes",
+                     new
+                     {
+                         pageNumber = 1,
+                         pageSize = Model.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-left", "Index", "Trashes",
+                     new
+                     {
+                         pageNumber = Math.Max(1, Model.PageNumber - 1),
+                         pageSize = Model.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        @for (Int32 i = Math.Max(1, Model.PageNumber - 2);
+        i <= Math.Min(Model.PageNumber + 2, Model.TotalPages); i++)
+        {
+            <li class="page-item  @(Model.PageNumber == i ? "disabled" : "")">
+                @Html.ActionLink(i.ToString(), "Index", "Trashes",
+                         new
+                         {
+                             pageNumber = i,
+                             pageSize = Model.PageSize,
+                             searchString = ViewData["currentFilter"],
+                             showCleaned = showCleaned
+                         },
+                         new { @class = "page-link" })
+            </li>
+        }
+        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-right", "Index", "Trashes",
+                     new
+                     {
+                         pageNumber = Math.Min(Model.PageNumber + 1, Model.TotalPages),
+                         pageSize = Model.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-right", "Index", "Trashes",
+                     new
+                     {
+                         pageNumber = Model.TotalPages,
+                         pageSize = Model.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+    </ul>
+</nav>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Forrás
+            </th>
+            <th>
+                @Html.DisplayNameFor(_ => new Trash().Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(_ => new Trash().CreateTime)
+            </th>
+            <th>
+                Címkék
+            </th>
+            <th>
+                @Html.DisplayNameFor(_ => new Trash().Note)
+            </th>
+            <th class="text-end">
+                @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),
+                         new
+                         {
+                             @class = "btn btn-success",
+                             data_bs_toggle = "tooltip",
+                             data_bs_title = "Hozzáadás"
+                         })
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            @Html.HiddenFor(_ => item.UpdateNeeded)
+            <tr>
+                <td>
+                    @(item.TrashoutId != null
+                        ? @Html.DisplayFor(_ => item.TrashoutId)
+                        : @Html.DisplayFor(_ => item.User!.UserName))
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.Location.X)<br />
+                    @Html.DisplayFor(_ => item.Location.Y)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.CreateTime)
+                    @if (item.CreateTime != item.UpdateTime)
+                    {
+                        var updateTimeDisplay =
+                        $"(frissítve: {@Html.DisplayFor(_ => item.UpdateTime)})";
+                        Html.Display(updateTimeDisplay);
+                    }
+
+                </td>
+                <td>
+                    @if (item.Types == 0)
+                    {
+                        <i><small>típus nincs megadva</small></i>
+                    }
+                    else
+                    {
+                        @foreach (var value in Enum.GetValues<TrashType>())
+                        {
+                            if ((item.Types & value) == value)
+                            {
+                                <span class="badge text-bg-primary m-1">
+                                    <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                                    <br />
+                                    @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                                </span>
+                            }
+                        }
+                    }
+                    <br />
+                    @if (item.Accessibilities == 0)
+                    {
+                        <i><small>hozzáférhetőség nincs megadva</small></i>
+                    }
+                    else
+                    {
+                        @foreach (var value in Enum.GetValues<Accessibility>())
+                        {
+                            if ((item.Accessibilities & value) == value)
+                            {
+                                <span class="badge text-bg-primary m-1">
+                                    <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                                    <br />
+                                    @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                                </span>
+                            }
+                        }}
+                    <br />
+                    @if (item.Size == 0)
+                    {
+                        <i><small>méret nincs megadva</small></i>
+                    }
+                    else
+                    {
+                        <span class="badge text-bg-primary m-1">
+                            <i class="@(EnumHelper<Size>.GetDisplayIconClass(item.Size))"></i>
+                            <br />
+                            @Html.Raw(EnumHelper<Size>.GetDisplayValue(item.Size))
+                        </span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.Note)
+                </td>
+                <td>
+                    <div class="btn-group btn-group-table">
+                        @Html.IconActionLink("", "fa-solid fa-circle-info", "Details", "Trashes",
+                                 new { id = item.Id },
+                                 new
+                                 {
+                                     @class = "btn btn-info",
+                                     data_bs_toggle = "tooltip",
+                                     data_bs_title = "Részletek"
+                                 })
+                        <span class="d-inline-block btn-group btn-group-table"
+                              data-bs-title="@(item.TrashoutId != null
+                       ? "Nem módosítható" : "")"
+                              data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                              data-bs-trigger="hover focus">
+                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit", "Trashes",
+                                     new { id = item.Id },
+                                     item.TrashoutId != null
+                                     ? new { @class = "btn btn-warning disabled" }
+                                     : new
+                                     {
+                                         @class = "btn btn-warning",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Módosítás"
+                                     })
+                        </span>
+                        <span class="d-inline-block btn-group btn-group-table"
+                              data-bs-title="@(item.TrashoutId != null
+                       ? "Nem törölhető" : "")"
+                              data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                              data-bs-trigger="hover focus">
+                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete", "Trashes",
+                                     new { id = item.Id },
+                                     item.TrashoutId != null
+                                     ? new { @class = "btn btn-danger disabled" }
+                                     : new
+                                     {
+                                         @class = "btn btn-danger",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Törlés"
+                                     })
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

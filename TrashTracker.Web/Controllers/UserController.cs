@@ -1,19 +1,29 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Data.Models.Tables;
+using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Controllers
 {
     public class UserController : Controller
     {
+        private readonly TrashTrackerDbContext _context;
         private readonly UserManager<TrashTrackerUser> _userManager;
         private readonly SignInManager<TrashTrackerUser> _signInManager;
 
-        public UserController(UserManager<TrashTrackerUser> userManager,
+        private string ImageURL => Url
+            .Action(action: "Image", controller: "User",
+            values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
+
+        public UserController(TrashTrackerDbContext context,
+            UserManager<TrashTrackerUser> userManager,
             SignInManager<TrashTrackerUser> signInManager)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -104,7 +114,24 @@ namespace TrashTracker.Web.Controllers
             if (user == null)
                 return NotFound();
 
-            return View(UserDetails.Create(user, ""));
+            return View(UserDetails.Create(user,
+                (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "",
+                ImageURL, await PaginatedList<Trash>.CreateAsync(
+                    _context.Trashes.Where(t => t.User != null && userName == t.User.UserName),
+                    1, 100)));
+        }
+
+        [HttpGet("[controller]/Image/{id}")]
+        public async Task<IActionResult> ImageAsync(Int32 id)
+        {
+            var image = await _context.UserImages.FindAsync(id);
+
+            if (image == null)
+                return NotFound();
+
+            var imageStream = new MemoryStream(image.Image ?? []);
+
+            return File(imageStream, image.ContentType!);
         }
 
         #endregion
@@ -116,5 +143,11 @@ namespace TrashTracker.Web.Controllers
             else
                 return RedirectToAction(nameof(TrashesController.Index), "Trashes");
         }
+
+        private Boolean IsCurrentUser(TrashTrackerUser user)
+            => User.FindFirstValue(ClaimTypes.NameIdentifier)! == user.Id;
+
+        private Boolean IsCurrentUserById(String userId)
+            => User.FindFirstValue(ClaimTypes.NameIdentifier)! == userId;
     }
 }

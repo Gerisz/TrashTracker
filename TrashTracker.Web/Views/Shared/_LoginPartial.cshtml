@@ -21,8 +21,9 @@
            new { @class = "nav-link navbar-right", id = "logoutForm" }))
             {
                 <li>
-                    @Html.IconActionLink("Saját profil", "fa-solid fa-id-card",
-                             "Details", "User", new(), new { @class = "dropdown-item" })
+                    @Html.IconActionLink("Saját profil", "fa-solid fa-id-card", "Details", "User",
+                             new { userName = User.Identity!.Name },
+                             new { @class = "dropdown-item" })
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>

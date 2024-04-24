@@ -1,27 +1,22 @@
-﻿@model UserDetails
+﻿@using TrashTracker.Web.Controllers
+@model UserDetails
 @{
     ViewData["title"] = "Profil";
 }
 
 <div class="container">
-    <h1>@ViewData["title"]</h1>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">@Html.DisplayNameFor(m => m.UserName)</dt>
-        <dd class="col-sm-10">@Html.DisplayFor(m => m.UserName)</dd>
-        <dt class="col-sm-2">@Html.DisplayNameFor(m => m.Email)</dt>
-        <dd class="col-sm-10">
-            @if (!Model.EmailConfirmed)
-            {
-                <i class="text-danger">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    @Html.DisplayFor(m => m.Email)
-                </i>
-            }
-            else
-            {
-                @Html.DisplayFor(m => m.Email)
-            }
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col-md-3">
+            <img src="@Model.Image" class="img-thumbnail" />
+        </div>
+        <div class="col-md-9 align-self-end">
+            <h1>@Model.UserName</h1>
+            @Html.IconActionLink(Model.Email, "fa-solid fa-envelope", $"mailto:{Model.Email}",
+                     Model.EmailConfirmed
+                     ? new { @class = "btn btn-info" }
+                     : new { @class = "btn btn-info", disabled = "" })
+            <hr />
+        </div>
+    </div>
+    @await Html.PartialAsync("../Trashes/_IndexList", Model.Trashes)
 </div>
