@@ -1,0 +1,129 @@
+﻿@using TrashTracker.Data.Models.Enums
+@model (PaginatedList<UserOnList> Users, RouteValueDictionary ParentRouteValue)
+
+@{
+    var parentAction = (String)Model.ParentRouteValue["action"]!;
+    var parentController = (String)Model.ParentRouteValue["controller"]!;
+    var users = Model.Users;
+}
+
+<nav>
+    <ul class="pagination justify-content-center flex-nowrap">
+        <li class="page-item @(!users.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-left", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = 1,
+                         pageSize = users.PageSize,
+                         searchString = ViewData["currentFilter"]
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!users.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-left", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = Math.Max(1, users.PageNumber - 1),
+                         pageSize = users.PageSize,
+                         searchString = ViewData["currentFilter"]
+                     },
+                     new { @class = "page-link" })
+        </li>
+        @for (Int32 i = Math.Max(1, users.PageNumber - 2);
+        i <= Math.Min(users.PageNumber + 2, users.TotalPages); i++)
+        {
+            <li class="page-item  @(users.PageNumber == i ? "disabled" : "")">
+                @Html.ActionLink(i.ToString(), parentAction, parentController,
+                         new
+                         {
+                             pageNumber = i,
+                             pageSize = users.PageSize,
+                             searchString = ViewData["currentFilter"]
+                         },
+                         new { @class = "page-link" })
+            </li>
+        }
+        <li class="page-item @(!users.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-right", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = Math.Min(users.PageNumber + 1, users.TotalPages),
+                         pageSize = users.PageSize,
+                         searchString = ViewData["currentFilter"]
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!users.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-right", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = users.TotalPages,
+                         pageSize = users.PageSize,
+                         searchString = ViewData["currentFilter"]
+                     },
+                     new { @class = "page-link" })
+        </li>
+    </ul>
+</nav>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(_ => new UserOnList().UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(_ => new UserOnList().Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(_ => new UserOnList().RegistrationTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in users)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(_ => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.RegistrationTime)
+                </td>
+                <td>
+                <td class="justify-content-end">
+                    <div class="btn-group btn-group-table">
+                            @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
+                                     parentController, new { UserName = item.UserName },
+                                     new
+                                     {
+                                         @class = "btn btn-info",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Profil"
+                                     })
+                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
+                                     parentController, new { UserName = item.UserName },
+                                     new
+                                     {
+                                         @class = "btn btn-warning",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Módosítás"
+                                     })
+                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
+                                     parentController, new { UserName = item.UserName },
+                                     new
+                                     {
+                                         @class = "btn btn-danger",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Törlés"
+                                     })
+                    </div>
+                </td>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

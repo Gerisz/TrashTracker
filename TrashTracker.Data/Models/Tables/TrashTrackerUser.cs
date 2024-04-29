@@ -8,6 +8,8 @@ namespace TrashTracker.Data.Models.Tables
         public Int32? ImageId { get; set; }
         public virtual UserImage? Image { get; set; }
 
+        public DateTime RegistrationTime { get; set; }
+
         public TrashTrackerUser() { }
         public TrashTrackerUser(Register register, Boolean? emailConfirmed = false)
         {
@@ -16,6 +18,7 @@ namespace TrashTracker.Data.Models.Tables
             EmailConfirmed = emailConfirmed ?? false;
             Image = register.Image != null
                 ? new UserImage(register.Image) : null;
+            RegistrationTime = DateTime.UtcNow;
         }
     }
 }

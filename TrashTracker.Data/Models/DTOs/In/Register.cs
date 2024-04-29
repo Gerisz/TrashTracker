@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class Register : NavigationUrls
+    public class Register 
     {
         [DisplayName("Felhasználónév")]
         public String UserName { get; set; } = null!;

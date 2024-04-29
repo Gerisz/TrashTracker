@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNetCore.Authorization
+
+@inject IAuthorizationService AuthorizationService
+
+@if ((await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
+{
+    <li class="nav-item">
+        @Html.IconActionLink("Felhasználók", "fa-solid fa-users", "Index", "User",
+                new(), new { @class = "nav-link" })
+    </li>
+}

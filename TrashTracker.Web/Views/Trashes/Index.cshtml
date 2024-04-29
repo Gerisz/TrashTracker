@@ -19,7 +19,7 @@
         </div>
         <div class="col-md">
             <input type="text" class="form-control" id="searchString"
-                   placeholder="Megjegyzés" value="@ViewData["currentFilter"]" />
+                   placeholder="Felhasználónév vagy megjegyzés" value="@ViewData["currentFilter"]" />
         </div>
         <div class="col-md">
             <select class="form-select" id="pageSize">
@@ -39,7 +39,7 @@
         </div>
     </div>
     <hr />
-    @await Html.PartialAsync("_IndexList")
+    @await Html.PartialAsync("_IndexList", (Model, ViewContext.RouteData.Values))
 </div>
 
 <script src="~/js/index.js"></script>

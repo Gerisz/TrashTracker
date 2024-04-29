@@ -3,7 +3,6 @@
 @inject SignInManager<TrashTrackerUser> SignInManager
 @inject UserManager<TrashTrackerUser> UserManager
 
-
 <li class="nav-item dropdown">
     @Html.IconActionLink(@UserManager.GetUserName(User) ?? "Nincs bejelentkezve",
             "fa-solid fa-user", "",

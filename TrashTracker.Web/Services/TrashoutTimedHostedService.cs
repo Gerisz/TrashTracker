@@ -22,7 +22,14 @@ namespace TrachTracker.Web.Services
         {
             _logger.LogInformation("Timed Hosted Service running.");
 
-            await DoWork(stoppingToken);
+            try
+            {
+                await DoWork(stoppingToken);
+            }
+            catch (HttpRequestException)
+            {
+                _logger.LogError("No internet connection, trying again in 30 minutes.");
+            }
 
             using PeriodicTimer timer = new(TimeSpan.FromMinutes(30));
 
@@ -32,6 +39,10 @@ namespace TrachTracker.Web.Services
                 {
                     await DoWork(stoppingToken);
                 }
+            }
+            catch (HttpRequestException)
+            {
+                _logger.LogError("No internet connection, trying again in 30 minutes.");
             }
             catch (OperationCanceledException)
             {

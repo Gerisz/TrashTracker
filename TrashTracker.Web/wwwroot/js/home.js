@@ -60,7 +60,7 @@ let map = new ol.Map({
                         style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 fill: new ol.style.Fill({
-                                    color: '#888888'
+                                    color: '#6C757D'
                                 }),
                                 stroke: new ol.style.Stroke({
                                     color: '#000000',

@@ -93,15 +93,14 @@ namespace TrashTracker.Data.Models.Tables
                 .Where(i => i.FullDownloadUrl != null)
                 .Select(i => new TrashImage(i.FullDownloadUrl!))
                 .ToList();
-
         }
 
-        public Trash(TrashFromUser trashFromUser)
+        public Trash(TrashFromUser trashFromUser, String userId)
         {
             var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID);
 
             TrashoutId = null;
-            UserId = null;
+            UserId = userId;
 
             Location = (Point)GeometryFixer.Fix(gf.CreatePoint(
                 new Coordinate()
@@ -126,6 +125,34 @@ namespace TrashTracker.Data.Models.Tables
             trashFromUser.Types
                 .Where(a => a.IsSelected)
                 .Select(a => Types |= a.Value);
+        }
+
+        /// <summary>
+        /// Updates <see langword="this"/>' values with <paramref name="trash"/>'s.
+        /// </summary>
+        /// <param name="trash">An instance of <see cref="Trash"/> with the new values.</param>
+        /// <returns>Returns <see langword="this"/> with it's updated values.</returns>
+        public Trash Update(Trash trash)
+        {
+            TrashoutId = trash.TrashoutId;
+            UserId = trash.UserId;
+            Location = trash.Location;
+            Country = trash.Country;
+            Locality = trash.Locality;
+            SubLocality = trash.SubLocality;
+            CreateTime = trash.CreateTime;
+            UpdateTime = trash.UpdateTime;
+            UpdateNeeded = trash.UpdateNeeded;
+            Note = trash.Note;
+            Status = trash.Status;
+            Size = trash.Size;
+            Types = trash.Types;
+            Accessibilities = trash.Accessibilities;
+
+            Images.Clear();
+            Images.AddRange(trash.Images);
+
+            return this;
         }
 
         private const int WGS_SRID = 4326;

@@ -1,67 +1,70 @@
 ﻿@using TrashTracker.Data.Models.Enums
-@model PaginatedList<Trash>
+@model (PaginatedList<Trash> Trashes, RouteValueDictionary ParentRouteValue)
 
 
 @{
     Boolean showCleaned = (Boolean)(ViewData["showCleaned"] ?? false);
+    var parentAction = (String)Model.ParentRouteValue["action"]!;
+    var parentController = (String)Model.ParentRouteValue["controller"]!;
+    var trashes = Model.Trashes;
 }
 
 <nav>
     <ul class="pagination justify-content-center flex-nowrap">
-        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angles-left", "Index", "Trashes",
+        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-left", parentAction, parentController,
                      new
                      {
                          pageNumber = 1,
-                         pageSize = Model.PageSize,
+                         pageSize = trashes.PageSize,
                          searchString = ViewData["currentFilter"],
                          showCleaned = showCleaned
                      },
                      new { @class = "page-link" })
         </li>
-        <li class="page-item @(!Model.HasPreviousPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angle-left", "Index", "Trashes",
+        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-left", parentAction, parentController,
                      new
                      {
-                         pageNumber = Math.Max(1, Model.PageNumber - 1),
-                         pageSize = Model.PageSize,
+                         pageNumber = Math.Max(1, trashes.PageNumber - 1),
+                         pageSize = trashes.PageSize,
                          searchString = ViewData["currentFilter"],
                          showCleaned = showCleaned
                      },
                      new { @class = "page-link" })
         </li>
-        @for (Int32 i = Math.Max(1, Model.PageNumber - 2);
-        i <= Math.Min(Model.PageNumber + 2, Model.TotalPages); i++)
+        @for (Int32 i = Math.Max(1, trashes.PageNumber - 2);
+        i <= Math.Min(trashes.PageNumber + 2, trashes.TotalPages); i++)
         {
-            <li class="page-item  @(Model.PageNumber == i ? "disabled" : "")">
-                @Html.ActionLink(i.ToString(), "Index", "Trashes",
+            <li class="page-item  @(trashes.PageNumber == i ? "disabled" : "")">
+                @Html.ActionLink(i.ToString(), parentAction, parentController,
                          new
                          {
                              pageNumber = i,
-                             pageSize = Model.PageSize,
+                             pageSize = trashes.PageSize,
                              searchString = ViewData["currentFilter"],
                              showCleaned = showCleaned
                          },
                          new { @class = "page-link" })
             </li>
         }
-        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angle-right", "Index", "Trashes",
+        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-right", parentAction, parentController,
                      new
                      {
-                         pageNumber = Math.Min(Model.PageNumber + 1, Model.TotalPages),
-                         pageSize = Model.PageSize,
+                         pageNumber = Math.Min(trashes.PageNumber + 1, trashes.TotalPages),
+                         pageSize = trashes.PageSize,
                          searchString = ViewData["currentFilter"],
                          showCleaned = showCleaned
                      },
                      new { @class = "page-link" })
         </li>
-        <li class="page-item @(!Model.HasNextPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angles-right", "Index", "Trashes",
+        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-right", parentAction, parentController,
                      new
                      {
-                         pageNumber = Model.TotalPages,
-                         pageSize = Model.PageSize,
+                         pageNumber = trashes.TotalPages,
+                         pageSize = trashes.PageSize,
                          searchString = ViewData["currentFilter"],
                          showCleaned = showCleaned
                      },
@@ -99,14 +102,30 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in trashes)
         {
             @Html.HiddenFor(_ => item.UpdateNeeded)
             <tr>
                 <td>
                     @(item.TrashoutId != null
-                        ? @Html.DisplayFor(_ => item.TrashoutId)
-                        : @Html.DisplayFor(_ => item.User!.UserName))
+                        ? Html.IconActionLink($"Trashout/{item.TrashoutId}",
+                        "fa-solid fa-leaf",
+                        $"https://admin.trashout.ngo/trash-management/detail/{item.TrashoutId}",
+                        new
+                        {
+                            @class = "btn btn-success",
+                            data_bs_toggle = "tooltip",
+                            data_bs_title = "Megtekintés Trashout-on"
+                        })
+                        : Html.IconActionLink($"{item.User!.UserName}",
+                        "fa-solid fa-user", "Details", "User",
+                        new { userName = item.User!.UserName },
+                        new
+                        {
+                            @class = "btn btn-info",
+                            data_bs_toggle = "tooltip",
+                            data_bs_title = "Profil megtekintése"
+                        }))
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.Location.X)<br />
@@ -176,10 +195,10 @@
                 <td>
                     @Html.DisplayFor(_ => item.Note)
                 </td>
-                <td>
+                <td class="justify-content-end">
                     <div class="btn-group btn-group-table">
-                        @Html.IconActionLink("", "fa-solid fa-circle-info", "Details", "Trashes",
-                                 new { id = item.Id },
+                        @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
+                                 parentController, new { id = item.Id },
                                  new
                                  {
                                      @class = "btn btn-info",
@@ -187,12 +206,11 @@
                                      data_bs_title = "Részletek"
                                  })
                         <span class="d-inline-block btn-group btn-group-table"
-                              data-bs-title="@(item.TrashoutId != null
-                       ? "Nem módosítható" : "")"
+                              data-bs-title="@(item.TrashoutId != null ? "Nem módosítható" : "")"
                               data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
                               data-bs-trigger="hover focus">
-                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit", "Trashes",
-                                     new { id = item.Id },
+                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
+                                     parentController, new { id = item.Id },
                                      item.TrashoutId != null
                                      ? new { @class = "btn btn-warning disabled" }
                                      : new
@@ -207,8 +225,8 @@
                        ? "Nem törölhető" : "")"
                               data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
                               data-bs-trigger="hover focus">
-                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete", "Trashes",
-                                     new { id = item.Id },
+                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
+                                     parentController, new { id = item.Id },
                                      item.TrashoutId != null
                                      ? new { @class = "btn btn-danger disabled" }
                                      : new

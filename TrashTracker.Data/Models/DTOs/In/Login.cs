@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class Login : NavigationUrls
+    public class Login 
     {
         [DisplayName("Felhasználónév vagy E-mail cím")]
         public String UserName { get; set; } = null!;

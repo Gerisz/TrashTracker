@@ -2,12 +2,16 @@
 @using TrashTracker.Web.Utils
 @model TrashFromUser
 
+@{
+    var previousPage = ViewData["previousPage"];
+}
+
 <div class="container">
     <h1>Új hulladékpont bejelentése</h1>
     <hr />
     @using (Html.BeginForm())
     {
-        @Html.HiddenFor(m => m.PreviousPage)
+        @Html.HiddenFor(_ => previousPage)
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <div class="row">
@@ -65,7 +69,7 @@
         <div class="form-group">
             @foreach (var value in Model.Accessibilities)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new
+                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
                     {
                         @class = "btn-check",
                         id = value.Value,
@@ -87,7 +91,7 @@
         <div class="form-group">
             @foreach (var value in Model.Types)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new
+                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
                     {
                         @class = "btn-check",
                         id = value.Value,
@@ -124,7 +128,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col">
-                    <a href="@Model.PreviousPage" class="btn btn-secondary m-3">
+                    <a href="@previousPage" class="btn btn-secondary m-3">
                         <i class="fa-solid fa-arrow-left"></i> Vissza
                     </a>
                 </div>
@@ -142,6 +146,6 @@
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        //await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

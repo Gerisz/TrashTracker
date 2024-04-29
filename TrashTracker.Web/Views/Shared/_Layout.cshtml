@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TrashTracker.Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.2-web/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.2-web/css/brands.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.2-web/css/solid.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TrashTracker.Web.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header class="sticky-top">
@@ -26,9 +28,10 @@
                                      new(), new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
-                            @Html.IconActionLink("Lista", "fa-solid fa-list", "", "Trashes",
-                                     new(), new { @class = "nav-link" })
+                            @Html.IconActionLink("Lista", "fa-solid fa-list", "Index", "Trashes",
+                                     new { showCleaned = false }, new { @class = "nav-link" })
                         </li>
+                        @await Html.PartialAsync("_AdminPartial")
                     </ul>
                     <ul class="navbar-nav navbar-right">
                         @await Html.PartialAsync("_LoginPartial")
@@ -52,9 +55,9 @@
         </main>
     </div>
 
-    <script src="https://kit.fontawesome.com/266bea2642.js" crossorigin="anonymous"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/fontawesome-free-6.5.2-web/js/fontawesome.js" crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

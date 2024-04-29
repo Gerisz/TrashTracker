@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.Defaults;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Data.Models.Tables;
@@ -106,6 +110,45 @@ namespace TrashTracker.Web.Controllers
 
         #region Queries
 
+        [Authorize("Admin")]
+        [HttpGet]
+        public async Task<ActionResult<PaginatedList<UserOnList>>> Index(String? searchString,
+            String currentFilter, Int32? pageNumber, Int32? pageSize)
+        {
+            // query every user from database
+            var users = _userManager.Users.AsNoTracking();
+
+            // if no new serach string is given
+            if (searchString.IsNullOrEmpty())
+                // then let the previous serach term be the filtering string
+                searchString = currentFilter;
+            // and make it the current filter as well
+            ViewData["currentFilter"] = searchString;
+
+            if (!searchString.IsNullOrEmpty())
+                // filter by either username or e-mail address
+                users = users
+                    .Where(u => !u.UserName.IsNullOrEmpty() && u.UserName!.Contains(searchString!)
+                        || !u.Email.IsNullOrEmpty() && u.Email!.Contains(searchString!));
+
+            // order users by freshly registered
+            var usersOnList = users
+                .Select(UserOnList.Projection)
+                .OrderByDescending(x => x.RegistrationTime);
+
+            // paginate them
+            var paginatedUsersOnList = await PaginatedList<UserOnList>
+                .CreateAsync(usersOnList, pageNumber ?? 1, pageSize ?? 100);
+
+            // if requested page has no points
+            if (paginatedUsersOnList.Count() <= 0)
+                // then return the first page
+                return View(await PaginatedList<UserOnList>
+                    .CreateAsync(usersOnList, 1, pageSize ?? 100));
+            // else just return the requested page with its points
+            return View(paginatedUsersOnList);
+        }
+
         [HttpGet]
         public async Task<ActionResult<UserDetails>> Details(String userName)
         {
@@ -117,8 +160,102 @@ namespace TrashTracker.Web.Controllers
             return View(UserDetails.Create(user,
                 (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "",
                 ImageURL, await PaginatedList<Trash>.CreateAsync(
-                    _context.Trashes.Where(t => t.User != null && userName == t.User.UserName),
+                    _context.Trashes
+                        .Include(t => t.User)
+                        .Where(t => t.User != null && userName == t.User.UserName),
                     1, 100)));
+        }
+
+        // GET: Trashes/Edit/5
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> Edit(String userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+                return NotFound();
+            if (IsCurrentUser(user))
+                return Forbid();
+
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            try
+            {
+                return View(new UserEdit(user,
+                    Enum.Parse<Roles>((await _userManager.GetRolesAsync(user))[0])));
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return View(new UserEdit(user, Roles.User));
+            }
+        }
+
+        // POST: Trashes/Edit/5
+        [Authorize(Policy = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit
+            (String userName, UserEdit userEdit, String previousPage)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                    return NotFound();
+                if (IsCurrentUser(user))
+                    return Forbid();
+
+                var result = await _userManager
+                    .RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+
+                if (!result.Succeeded)
+                    return BadRequest(result.Errors);
+
+                result = await _userManager.AddToRoleAsync(user, $"{userEdit.Role}");
+
+                if (result.Succeeded)
+                    return RedirectToLocal(previousPage);
+
+                return BadRequest(result.Errors);
+            }
+
+            return View(userEdit);
+        }
+
+        // GET: User/Delete/UserName
+        [Authorize(Policy = "Admin")]
+        public async Task<IActionResult> Delete(String userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+                return NotFound();
+            if (IsCurrentUser(user))
+                return Forbid();
+
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            return View(user);
+        }
+
+        // POST: User/Delete/UserName
+        [Authorize(Policy = "Admin")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(String userName, String previousPage)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+                return NotFound();
+            if (IsCurrentUser(user))
+                return Forbid();
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+                return RedirectToLocal(previousPage);
+
+            return BadRequest(result.Errors);
         }
 
         [HttpGet("[controller]/Image/{id}")]

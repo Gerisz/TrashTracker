@@ -23,7 +23,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         [HttpGet("OnMap")]
-        public async Task<IActionResult> GetPointsOnMapAsync()
+        public IActionResult GetPointsOnMap()
         {
             var points = OnMap.Create(_context.Trashes.AsNoTracking());
 

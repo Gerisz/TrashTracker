@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@model TrashTrackerUser
+
+@{
+    ViewData["Title"] = "Törlés";
+    var previousPage = ViewData["previousPage"];
+}
+
+<div class="container">
+    <h1>@Html.DisplayFor(_ => Model.UserName) nevű felhasználó</h1>
+    <h3>Biztosan törölni szeretné ezt a felhasználót?</h3>
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(_ => previousPage)
+        <a class="btn btn-success" href="@previousPage">
+            <i class="fa-solid fa-arrow-left"></i> Vissza
+        </a>
+        <span data-bs-title="@(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
+                ? "Nem törölhető" : "")"
+              data-bs-toggle="@(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
+                ? "tooltip" : "")"
+              data-bs-trigger="hover focus">
+            <button type="submit"
+                    class="btn btn-danger
+                    @(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
+                    ? "disabled" : "")">
+                <i class="fa-solid fa-trash-can"></i> Törlés
+            </button>
+        </span>
+    }
+</div>

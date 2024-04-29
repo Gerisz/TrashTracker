@@ -3,15 +3,17 @@ function getPosition() {
         navigator.geolocation.getCurrentPosition(position => success(position),
             error => error(error), { enableHighAccuracy: true });
     } else {
-        alert("Geolocation is not supported by this browser.");
+        alert('Geolocation is not supported by this browser.');
     }
 }
 
 function success(position) {
-    document.getElementById("Lat").value =
-        Math.round(position.coords.latitude * 10 ** 6) / 10 ** 6;
-    document.getElementById("Long").value =
-        Math.round(position.coords.longitude * 10 ** 6) / 10 ** 6;
+    document.getElementById('Lat').value =
+        new Intl.NumberFormat(navigator.language, { style: 'decimal' })
+            .format(Math.round(position.coords.latitude * 10 ** 6) / 10 ** 6);
+    document.getElementById('Long').value =
+        new Intl.NumberFormat(navigator.language, { style: 'decimal' })
+            .format(Math.round(position.coords.longitude * 10 ** 6) / 10 ** 6);
 }
 
 function error(error) {

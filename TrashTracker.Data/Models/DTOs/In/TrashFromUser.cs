@@ -1,17 +1,23 @@
 ﻿using System.ComponentModel;
-using TrashTracker.Data.Models.Attributes;
+using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
-    public class TrashFromUser : NavigationUrls
+    public class TrashFromUser 
     {
-        [Coordinate]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [DisplayName("Szélesség")]
+        [Localizable(false)]
+        [Range(-180.0, 180.0,
+            ErrorMessage = "A koordináta nem lehet kevesebb, mint -180 és több, mint 180.")]
         public Double Lat { get; set; }
-        [Coordinate]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         [DisplayName("Hosszúság")]
+        [Localizable(false)]
+        [Range(-180.0, 180.0,
+            ErrorMessage = "A koordináta nem lehet kevesebb, mint -180 és több, mint 180.")]
         public Double Long { get; set; }
         [DisplayName("Település")]
         public String? Locality { get; set; }

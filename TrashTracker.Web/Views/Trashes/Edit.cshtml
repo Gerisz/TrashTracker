@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var previousPage = ViewData["previousPage"];
 }
 
 <div class="container">
@@ -10,12 +11,13 @@
     <hr />
     @using (Html.BeginForm())
     {
-        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(_ => previousPage)
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(m => m.Lat, "",
+                        @Html.EditorFor(_ => Model.Lat, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -24,13 +26,14 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(m => m.Lat)
-                        @Html.ValidationMessageFor(m => m.Lat, "", new { @class = "text-danger" })
+                        @Html.LabelFor(_ => Model.Lat)
+                        @Html.ValidationMessageFor(_ => Model.Lat, "",
+                                 new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(m => m.Long, "",
+                        @Html.EditorFor(_ => Model.Long, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -39,8 +42,9 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(m => m.Long)
-                        @Html.ValidationMessageFor(m => m.Long, "", new { @class = "text-danger" })
+                        @Html.LabelFor(_ => Model.Long)
+                        @Html.ValidationMessageFor(_ => Model.Long, "",
+                                 new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col-md-auto">
@@ -50,62 +54,100 @@
                 </div>
             </div>
         </div>
+        <legend>@Html.LabelFor(m => m.Status)</legend>
         <div class="form-group">
-            @Html.LabelFor(m => m.Note)
-            @Html.TextAreaFor(m => m.Note)
-            @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(m => m.Status,
+                     new List<SelectListItem>(((Status[])Enum.GetValues(typeof(Status)))
+                     .Select(s => new SelectListItem()
+        {
+            Value = s.ToString(),
+            Text = EnumHelper<Status>.GetDisplayValue(s)
+        })),
+                     new { @class = "form-select" })
         </div>
+        <legend>@Html.LabelFor(m => m.Size)</legend>
         <div class="form-group">
-            @foreach (var value in Enum.GetValues<Size>())
-            {
-                @Html.RadioButtonFor(m => m.Size, value, new { @class = "btn-check" })
-                var displayValue = EnumHelper<Size>
-                .GetDisplayValue(value);
-                var displayIconClass = EnumHelper<Size>
-                .GetDisplayIconClass(value);
-                @Html.IconLabel(displayValue, displayIconClass,
-                         new { @class = "btn btn-primary" })
-            }
+            @Html.DropDownListFor(m => m.Size,
+                     new List<SelectListItem>(((Size[])Enum.GetValues(typeof(Size)))
+                     .Select(s => new SelectListItem()
+        {
+            Value = s.ToString(),
+            Text = EnumHelper<Size>.GetDisplayValue(s)
+        })),
+                     new { @class = "form-select" })
         </div>
+        <legend>@Html.LabelFor(m => m.Accessibilities)</legend>
         <div class="form-group">
             @foreach (var value in Model.Accessibilities)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
+                    {
+                        @class = "btn-check",
+                        id = value.Value,
+                        name = value.Value
+                    })
                 var displayValue = EnumHelper<Accessibility>
                 .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<Accessibility>
                 .GetDisplayIconClass(value.Value);
-                @Html.IconLabel(displayValue, displayIconClass,
-                         new { @class = "btn btn-primary" })
+                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary",
+                             @for = value.Value
+                         })
             }
         </div>
+        <legend>@Html.LabelFor(m => m.Types)</legend>
         <div class="form-group">
             @foreach (var value in Model.Types)
             {
-                @Html.CheckBoxFor(_ => value.IsSelected, new { @class = "btn-check" })
+                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
+                    {
+                        @class = "btn-check",
+                        id = value.Value,
+                        name = value.Value
+                    })
                 var displayValue = EnumHelper<TrashType>
                 .GetDisplayValue(value.Value);
                 var displayIconClass = EnumHelper<TrashType>
                 .GetDisplayIconClass(value.Value);
-                @Html.IconLabel(displayValue, displayIconClass,
-                         new { @class = "btn btn-primary" })
+                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary",
+                             @for = value.Value
+                         })
             }
         </div>
-        <div class="row">
-            <div class="col form-group">
-                <a class="btn btn-danger" href="@Model.PreviousPage">
-                    <i class="fa-solid fa-arrow-left"></i> Vissza
-                </a>
+        <div class="form-group">
+            <div class="form-floating">
+
+                @Html.EditorFor(m => m.Note,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Note)
+                @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
             </div>
-            <div class="col form-group justify-content-right">
-                <span data-bs-title="@(Model.TrashoutId != null ? "Nem módosítható" : "")"
-                      data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
-                      data-bs-trigger="hover focus">
-                    <button type="submit"
-                            class="btn btn-success @(Model.TrashoutId != null ? "disabled" : "")">
-                        <i class="fa-solid fa-floppy-disk"></i> Mentés
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col">
+                    <a href="@previousPage" class="btn btn-secondary m-3">
+                        <i class="fa-solid fa-arrow-left"></i> Vissza
+                    </a>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success m-3">
+                        <i class="fa-solid fa-pen-to-square"></i> Frissítés
                     </button>
-                </span>
+                </div>
             </div>
         </div>
     }

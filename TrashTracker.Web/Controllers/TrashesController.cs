@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.DTOs.Out;
@@ -25,33 +26,48 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/5
-        public async Task<IActionResult> Index(String? searchString,
+        public async Task<ActionResult<PaginatedList<Trash>>> Index(String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize, Boolean? showCleaned)
         {
-            if (searchString.IsNullOrEmpty())
-                searchString = currentFilter;
-
-            ViewData["currentFilter"] = searchString;
-            var count = _context.Trashes.Count();
+            // query every trash from database
             var trashes = _context.Trashes
+                .Include(t => t.User)
                 .AsNoTracking();
 
-            if (!searchString.IsNullOrEmpty())
-                trashes = trashes
-                    .Where(t => (t.Note != null || t.Note != "") && t.Note!.Contains(searchString!));
+            // if no new serach string is given
+            if (searchString.IsNullOrEmpty())
+                // then let the previous serach term be the filtering string
+                searchString = currentFilter;
+            // and make it the current filter as well
+            ViewData["currentFilter"] = searchString;
 
+            if (!searchString.IsNullOrEmpty())
+                // filter by either username or note
+                trashes = trashes
+                    .Where(t => !(t.Note == null || t.Note == "") && t.Note.Contains(searchString!)
+                        || !(t.User == null || t.User!.UserName == null || t.User.UserName == "")
+                            && t.User.UserName.Contains(searchString!));
+
+            // showCleaned into ViewData for correct switch position in form
             ViewData["showCleaned"] = showCleaned ?? false;
+            // if we dont want to show cleaned
             if (!showCleaned ?? false)
+                // then filter them
                 trashes = trashes.Where(t => t.Status != Status.Cleaned);
 
-            trashes = trashes.OrderByDescending(x => x.UpdateTime)
-                .Include(t => t.User);
+            // order points by freshly updated
+            trashes = trashes.OrderByDescending(x => x.UpdateTime);
 
+            // paginate them
             var paginatedTrashes = await PaginatedList<Trash>
                 .CreateAsync(trashes, pageNumber ?? 1, pageSize ?? 100);
+
+            // if requested page has no points
             if (paginatedTrashes.Count() <= 0)
+                // then return the first page
                 return View(await PaginatedList<Trash>
                     .CreateAsync(trashes, 1, pageSize ?? 100));
+            // else just return the requested page with its points
             return View(paginatedTrashes);
         }
 
@@ -68,18 +84,18 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+
             return View(TrashDetails
-                .Create(trash, ImageURL, Request.Headers["Referer"].ToString()));
+                .Create(trash, ImageURL));
         }
 
         // GET: Trashes/Create
         [Authorize]
         public IActionResult Create()
         {
-            return View(new TrashFromUser()
-            {
-                PreviousPage = Request.Headers["Referer"].ToString()
-            });
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            return View(new TrashFromUser());
         }
 
         // POST: Trashes/Create
@@ -88,15 +104,17 @@ namespace TrashTracker.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TrashFromUser trashFromUser)
+        public async Task<IActionResult> Create(TrashFromUser trashFromUser, String previousPage)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(new Trash(trashFromUser));
+                _context.Add(new Trash(trashFromUser,
+                    User.FindFirstValue(ClaimTypes.NameIdentifier)!));
                 await _context.SaveChangesAsync();
 
-                return Redirect(trashFromUser.PreviousPage!);
+                return RedirectToLocal(previousPage);
             }
+            ViewData["previousPage"] = previousPage;
             return View(trashFromUser);
         }
 
@@ -109,10 +127,8 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            return View(new TrashEdit(trash)
-            {
-                PreviousPage = Request.Headers["Referer"].ToString()
-            });
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            return View(new TrashEdit(trash));
         }
 
         // POST: Trashes/Edit/5
@@ -121,7 +137,7 @@ namespace TrashTracker.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit)
+        public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit, String previousPage)
         {
             if (id != trashEdit.Id)
                 return NotFound();
@@ -135,8 +151,7 @@ namespace TrashTracker.Web.Controllers
                     if (trash == null)
                         return NotFound();
 
-                    _context.Trashes.Entry(trash).CurrentValues
-                        .SetValues(new Trash(trashEdit) { Id = trash.Id });
+                    trash.Update(new Trash(trashEdit, trash.UserId!));
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -146,7 +161,7 @@ namespace TrashTracker.Web.Controllers
                     else
                         throw;
                 }
-                return Redirect(trashEdit.PreviousPage!);
+                return RedirectToLocal(previousPage);
             }
 
             return View(trashEdit);
@@ -166,7 +181,7 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            ViewData["Reffer"] = Request.Headers.Referer.ToString();
+            ViewData["previousPage"] = Request.Headers.Referer.ToString();
             return View(trash);
         }
 
@@ -174,16 +189,15 @@ namespace TrashTracker.Web.Controllers
         [Authorize(Policy = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Int32 id)
+        public async Task<IActionResult> DeleteConfirmed(Int32 id, String previousPage)
         {
             var trash = await _context.Trashes.FindAsync(id);
+
             if (trash != null)
-            {
                 _context.Trashes.Remove(trash);
-            }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToLocal(previousPage);
         }
 
         /// <summary>
@@ -203,6 +217,14 @@ namespace TrashTracker.Web.Controllers
             var imageStream = new MemoryStream(image.Image);
 
             return File(imageStream, image.ContentType!);
+        }
+
+        private IActionResult RedirectToLocal(String? returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+            else
+                return RedirectToAction(nameof(TrashesController.Index), "Trashes");
         }
 
         private bool TrashExists(Int32 id)

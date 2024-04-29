@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Törlés";
+    var previousPage = ViewData["previousPage"];
 }
 
 <div class="container">
@@ -10,7 +11,8 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.Id)
-        <a class="btn btn-success" href="@ViewData["Reffer"]">
+        @Html.HiddenFor(_ => previousPage)
+        <a class="btn btn-success" href="@previousPage">
             <i class="fa-solid fa-arrow-left"></i> Vissza
         </a>
         <span data-bs-title="@(Model.TrashoutId != null ? "Nem törölhető" : "")"

@@ -14,7 +14,8 @@
             Forrás
         </dt>
         <dd class="col-sm-10">
-            @(Model.TrashoutId != null
+            @(
+                Model.TrashoutId != null
                 ? Html.IconActionLink($"Trashout/{Model.TrashoutId}",
                 "fa-solid fa-leaf",
                 $"https://admin.trashout.ngo/trash-management/detail/{Model.TrashoutId}",
@@ -24,10 +25,15 @@
                     data_bs_toggle = "tooltip",
                     data_bs_title = "Megtekintés Trashout-on"
                 })
-                : Html.IconActionLink($"{Html.DisplayFor(_ => Model.UserName)}",
-                "fa-solid fa-user",
-                $"",
-                new { @class = "btn btn-info disabled" }))
+                : Html.IconActionLink($"{Model.UserName}",
+                "fa-solid fa-user", "Details", "User", new { userName = Model.UserName },
+                new
+                {
+                    @class = "btn btn-info",
+                    data_bs_toggle = "tooltip",
+                    data_bs_title = "Profil megtekintése"
+                })
+                )
         </dd>
         <dt class="col-sm-2">
             Koordináták

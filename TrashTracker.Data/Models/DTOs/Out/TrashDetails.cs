@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace TrashTracker.Data.Models.DTOs.Out
 {
-    public class TrashDetails : NavigationUrls
+    public class TrashDetails 
     {
         public Int32 Id { get; set; }
         public Int32? TrashoutId { get; set; }
@@ -48,7 +48,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
         public IEnumerable<Uri> Images { get; set; } = [];
 
         public static Expression<Func<Trash, TrashDetails>> Projection
-            (String imageUrlBase, String previousPage) => trash => new TrashDetails()
+            (String imageUrlBase) => trash => new TrashDetails()
             {
                 Id = trash.Id,
                 TrashoutId = trash.TrashoutId,
@@ -66,12 +66,11 @@ namespace TrashTracker.Data.Models.DTOs.Out
                 Size = trash.Size,
                 Types = trash.Types,
                 Accessibilities = trash.Accessibilities,
-                Images = trash.Images.Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}")),
-                PreviousPage = previousPage
+                Images = trash.Images.Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
             };
 
-        public static TrashDetails Create(Trash place, String imageUrlBase, String previousPage)
-            => Projection(imageUrlBase, previousPage).Compile().Invoke(place);
+        public static TrashDetails Create(Trash place, String imageUrlBase)
+            => Projection(imageUrlBase).Compile().Invoke(place);
 
     }
 }
