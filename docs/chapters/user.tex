@@ -7,53 +7,133 @@
 
 Magának webalkalmazás szerveroldalának a futtatásához a ASP.NET Core Runtime 8.0-ra van szükség, amelyhez
 szükséges az alábbi operációs rendszerek valamelyike:
-\begin{itemize}
+\begin{compactitem}
 	\item Windows 10, 11 vagy Server 2012+
 	\item 64-bites Ubuntu 20.04+ vagy Debian 11+
 	\item macOS 10.15+ (csak külső, hosztolt szerver esetén támogatott)
-\end{itemize} 
+\end{compactitem} 
 A memóriahasználat a felhasználóktól nagyban függ, így 0,5 GB-tól akár 4 GB RAM-ra is szüksége lehet a szervernek a zökkenőmentes futáshoz. A merevlemezen történő tárhelyhasználat nagyban függ az éppen bejelentett pontok méretétől és legfőképp az azokhoz csatolt fényképektől. Magához a futtatáshoz elegendő 0,5 GB tárhely is (az ehhez szükséges szoftvereket nem bele értve), viszont az alkalmazás használtat közben ez nagy mértékben fog növekedni az előbb említett okok miatt, így érdemes akár saját, nagy kapacitású merevlemezre telepíteni a szerveroldalt.
 Az szerver által használt SQL Server adatbázishoz (későbbiekben MSSQL-adatbázis) a Microsoft SQL Server szoftver valamelyik, de lehetőség szerint a legfrissebb, 2019-es verziójára van szükség, melyet a fentebb említett operációs rendszerek bármelyike képes futtatni.
 Az első üzembe helyezést követően nincsen szükség további rendszergazdai feladatokra.
 \subsection{Használat}
 
 A program felhasználói felülete egy weboldal. Ennek meglátogatásához elsősorban szükség van egy olyan operációs rendszer telepítésére, majd futtatására, melyre elérhető bármilyen friss, Chromium-alapú webböngésző. Egy ilyen böngésző a Google Chrome, amellyel ajánlott a weboldal látogatása. Hardver- és szoftver követelményei az alábbiak:
-\begin{itemize}
+\begin{compactitem}
 	\item Operációs rendszerek valamelyike:
-	\begin{itemize}
+	\begin{compactitem}
 		\item Windows 10, 11 vagy Server 2012+
 		\item 64-bites Ubuntu 20.04+ vagy Debian 11+
 		\item macOS 10.15+
 		\item Android 8.0+ vagy Chrome OS
-	\end{itemize}
+	\end{compactitem}
 	\item Minimális hardver követelmények:
-	\begin{itemize}
+	\begin{compactitem}
 		\item Pentium 4+ (vagy más, SSE3-at támogató) processzor
 		\item 2 (ajánlottan 4) GB RAM
-	\end{itemize}
-\end{itemize}
+	\end{compactitem}
+\end{compactitem}
 
 Felhasználóként első üzembe helyezésre nincsen szükség, elég ha a felhasználó meglátogatja az oldalt. Ha még nem regisztrált felhasználói fiókot, akkor bizonyos funkciók eléréséhez regisztrálnia kell.
 
 \section{Általános felhasználói tájékoztató}
 
 Az weboldal használtat közben négy felhasználói típusról beszélhetünk: vendég, regisztrált (és bejelentkezett) felhasználó, moderátor és adminisztrátor. Így vendégnek számít aki még nem regisztrált, vagy ha igen, akkor nem jelentkezett be fiókjával, moderátornak aki moderátori szintű fiókkal és adminisztrátornak, aki adminisztrátori szintű fiókkal azonosította magát a bejelentkező felületen.
+\newpage
 
-\section{A weboldal funkciói vendégként}
+\section{Funkciók vendégként}
 
-Egy vendég felhasználó számára hat funkció érhető el a weboldalon:
-\begin{itemize}
+\noindent Egy vendég felhasználó számára hat funkció érhető el a weboldalon:
+\begin{compactitem}
 	\item regisztrálás új-, illetve bejelentkezés már meglévő fiókba
 	\item a térkép megtekintése a bejelentett pontokkal (ez a főoldal)
 	\item egy-egy pont adatainak részletesebb megtekintése
 	\item az összes pont listázása
 	\item a weboldal színsémájának ("sötét"- vagy "világos" mód) tetszőleges beállítása
-\end{itemize}
+\end{compactitem}
 
-\section{Futás közbeni üzenetek}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\textwidth]{usecase_guest}
+	\caption{Felhasználói esetek vendégként}
+	\label{fig:usecase_guest}
+\end{figure}
 
-A program egy weboldal, melynek meglátogatásához szükség van egy Chromium alapú (legfrissebb verziójú) böngészőre, ezen kívül nincsen szükség más szoftver telepítésére/elindítására.
+\subsection{Felület általános leírása}
 
+A weboldal látogatása során több felület is megjelenik, viszont ezek általánosan leírhatóak. Minden lap tetején egy navigációs sáv van, melynek segítségével több funkciót is gyorsan elérhetünk. A sáv bal oldalán a weboldal neve, illetve a "Térkép" felirat egyaránt a térképre, azaz a főoldalra irányít, a mellette szereplő "Lista" pedig a pontok listájához. A másik oldalon (jobbról balra) egy fizikai kapcsolót imitáló gomb, melynek segítségével válthatunk az előbb említett színsémák között, illetve amellett egy "Nincs bejelentkezve" feliratú listát lenyitva tudunk a regisztráció, illetve a bejelentkezés közül választani.\par
+Ha a felhasználó nem egy széles képernyőn (pl. asztali számítógép vagy fektetett táblagép) látogatja meg az oldalt, akkor a sáv bár hasonlóan ott van, viszont a könnyebb használat érdekében a menüpontok egy, a jobb oldalon található \hspace{0.1cm}\boldmath\(\equiv\)\hspace{0.1cm} ikonra kattintva lehet ezeket elérni.
+
+\begin{figure}[H]
+	\centering
+	\subcaptionbox{Nagy méretű kijelző}{
+		\includegraphics[width=0.45\linewidth]{map}}
+	\hspace{5pt}
+	\subcaptionbox{Kis méretű kijelző}{
+		\includegraphics[width=0.2\linewidth]{map_phone}}
+		\hspace{5pt}
+	\subcaptionbox{Kis méretű kijelző (lenyitott navigációs sávval)}{
+		\includegraphics[width=0.2\linewidth]{map_phone_menu}}
+	\caption{A felület kinézete a kezdőoldalon különböző méretű kijelzők esetén}
+	\label{fig:map_guest}
+\end{figure}
+
+\subsection{Térkép (kezdőoldal)}
+
+A navigációs sávon a weboldal nevére, illetve a "Térkép" feliratra kattintva azonnal a bejelentett pontok térképére navigálhatunk. Ennek kezelése a már jól ismert térképes alkalmazásokéhoz hasonló. A bal felső sarokban található \hspace{0.1cm}\boldmath\(+\)\hspace{0.1cm}, illetve \hspace{0.1cm}\boldmath\(-\)\hspace{0.1cm} ikonra kattintva nagyítani, illetve kicsinyíteni lehet, emellett egérrel a görgő görgetésével és érintőképernyőn két ujj összehúzásával/széttolásával is lehetőség van. A jobb felső sarokban a térképet teljes képernyős módba is lehet helyezni, melynek ismételt megnyomásával, vagy billentyűzeten az Esc gombbal ki lehet lépni. A bal alsó sarokban található a szűrés gomb, melynek segítségével különböző, a felhasználók által jelentett tulajdonságok szerint van lehetőség.
+
+\subsubsection{Jelmagyarázat}
+
+A térképen a pontok különböző mérettel és színnel jelennek meg, melyeknek céljuk a fontosabb információk lehetőség szerinti kiemelése.\\
+A szemét mennyisége szerint a pont mérete lehet
+\begin{compactitem}
+	\item[\large\textbullet] kicsi (8 pixel), azaz "elfér egy zsákban",
+	\item[\Large\textbullet] közepes (10 pixel), azaz "elfér egy talicskában" és
+	\item[\LARGE\textbullet] nagy (12 pixel), azaz "autóra van szükség".
+\end{compactitem}\newpage
+A szemét első bejelentés óta levő állapota szerint a pont színe lehet
+\begin{compactitem}
+	\item[\textcolor{tt_green}{\Large\textbullet}] zöld, azaz "megtisztítva",
+	\item[\textcolor{tt_yellow}{\Large\textbullet}] sárga, azaz "kevesebb",
+	\item[\textcolor{tt_orange}{\Large\textbullet}] narancs, azaz "még mindig itt van" és
+	\item[\textcolor{tt_red}{\Large\textbullet}] piros, azaz "több".
+\end{compactitem}
+
+\subsubsection{Szűrés}
+
+A fentebb említett szűrés gombra kattintva a képernyő alján beúszik egy görgethető menü, amely a pontok tulajdonságai szerinti szűrést teszi lehetővé. A szemét mennyisége és állapota mellett annak típusa és hozzáférhetősége szerint is lehet válogatni. Ezeket a beúszó menün található, tulajdonságok szerint csoportosított "kapcsoló" gombokkal lehet elérni. Ha egy ilyen gomb kék színű, akkor igen, ha átlátszó, akkor pedig nem szeretnénk a térképen látni. Alapértelmezetten az összes ilyen gomb "igen" állapotban van. A gombok között szűrés esetén a logikai vagy művelete értelmezett, tehát ha bejelölésre kerül egy tulajdonság, viszont egy másik nem, akkor attól függetlenül a bejelöletlen attribútum még előfordulhat a megjelenített pontok között, feltéve, hogy legalább egy bejelölt jellemzővel rendelkezik. Ezt a menüt a jobb felső sarokban található \hspace{0.1cm}\boldmath\(\times\)\hspace{0.1cm} gombra nyomva lehet bezárni, a szűrőket megtartva, egy másik oldalra navigálásig vagy az oldal újratöltéséig.
+
+\subsubsection{Betekintés és részletek}
+
+Egy pontra való kattintáskor afelett megjelenik egy modális "buborék", amely minimális információt és egy képet tartalmaz a hozzátartozó szemétről. Emellett a kis ablak alján található egy "Részletek" gomb, melyre kattintva elnavigálhatunk az azt részletező adatlapra.
+
+\subsection{Pont részletezése}
+
+Ezt az oldalt az előző bekezdésben említett "Részletek" gombra kattintva, vagy a következő bekezdésben tárgyalt \faIcon{info-circle} ikonra kattintva lehet elérni.
+
+\subsection{Listanézet}
+
+A pontokat nem csak térképen, hanem listaként is megtekinthetjük. Ennek célja, hogy a bejelentés/frissítés dátuma szerint rendezve könnyedén fel lehessen fedezni a legrelevánsabb szemétlerakatokat. A lista minden sora egy-egy pontot, annak oszlopai pedig annak a fejlécben szereplő tulajdonságát tartalmazzák. Egy adott rekord részletezésére is lehetőség van, a jobb oldalon található \faIcon{info-circle} ikonra kattintva. Az oldal tetején lehetőség van alapvető szűrésekre is, opcionálisan belefoghatjuk a listába a már megtisztított pontokat, kereshetünk a bejelentő felhasználónevében, illetve az ahhoz tartozó megjegyzéseiben, illetve állíthatjuk az egy oldalon szereplő találatok maximális számát. Ha több találat van, mint ami az oldalon elfér, akkor a lista tetején, illetve alján található nyilakkal és számokkal könnyedén navigálhatunk azok között.
+
+\subsection{Színséma választása}
+
+Minden oldal navigációs sávjának jobb szélén található egy kapcsoló mellyel könnyedén állítható az adott oldal színsémája, melynek bal- (\faIcon{moon}) állása sötét, illetve jobb oldali (\faIcon{sun}) állása világos módot jelent. Alapértelmezetten ez az előbbi állapotban van az energiatakarékosabb működés és a szemet jobban kímélő megjelenés miatt. Ez a beállítás szabadon állítható, mely megmarad minden aloldalon a böngészés idejére.
+
+\subsection{Regisztráció}
+
+További funkciók használatáért (pontok bejelentése és frissítése) a felhasználónak egy felhasználói fiókra van szüksége, mely utóbbija ha nincs, akkor regisztrálnia kell érte. Ezt a navigációs sáv jobb oldalán található "Nincs bejelentkezve" feliratra kattintva lenyíló menüben található "Regisztráció"-ra nyomva érheti el. Ha az előbbi helyett egy \faIcon{user} ikonnal társulva egy felhasználó neve szerepel, akkor a felhasználó már be van jelentkezve, ezzel kapcsolatosan nincsen teendője.\par
+A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívánt felhasználónevet, e-mail címet (elérhetőségként), illetve egy jelszavat, melyre a bejelentkezéshez lesz szükség. Az adatok kitöltése után az űrlap alján található "Regisztráció" gombra kattintva lehet beadni az adatokat, melyek ha megfelelnek a követelményeknek, akkor a felhasználó a főoldalon találja magát, az új fiókjával bejelentkezve.
+
+\subsubsection{Hibaüzenetek}
+
+\subsection{Bejelentkezés}
+
+Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció helyett beléphet abba, az előző bekezdésben tárgyaltak szerint a "Bejelentkezés" gombra kattintva. Az űrlap hasonló, viszont itt elég csak a felhasználónév (vagy e-mail cím tetsztőlegesen), illetve a hozzátartozó jelszó egyszeri megadására. Ha az adatok egyeznek a regisztrációkor megadottakkal, akkor az űrlap aján található "Bejelentkezés" gombra kattintva a felhasználó a főoldalra lesz átirányítva, a felhasználói fiókjába bejelentkezve. Ellenben, ha nem jár sikerrel, akkor üzenetek tájékoztatják a kilenst erről. Ha többszöri próbálkozásra sem jár sikerrel, akkor lehetősége van bejelentkezés helyett újabb felhasználó regisztrálására, vagy egy adminisztrátort megkérve bejelentkezési adatainak megváltoztatására is.
+
+\subsubsection{Hibaüzenetek}
+
+\section{Funkciók felhasználóként}
+
+Sikeres bejelentkezést (vagy regisztrációt) követően a felhasználó vendég helyett bejelentkezett felhasználónak (vagy fióktípusának megfelelőnek) számít. Ezzel további funkciók válnak elérhetővé, mint például a szemétpontok bejelentése és frissítése, illetve a saját felhasználói fiók profiljának szerkesztése.
 
 \section{Felsorolások}
 
