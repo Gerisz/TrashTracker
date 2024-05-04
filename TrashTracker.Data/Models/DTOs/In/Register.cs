@@ -13,12 +13,15 @@ namespace TrashTracker.Data.Models.DTOs.In
 
         [DataType(DataType.EmailAddress)]
         [DisplayName("E-mail cím")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Érvénytelen e-mail cím!")]
         [Required(ErrorMessage = "E-mail cím megadása kötelező!")]
         public String Email { get; set; } = null!;
 
         [DataType(DataType.Password)]
         [DisplayName("Jelszó")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$",
+            ErrorMessage = "Jelszónak tartalmaznia kell legalább egy kis- és nagybetűt, " +
+            "illetve számjegyet!")]
         [Required(ErrorMessage = "Jelszó megadása kötelező!")]
         [StringLength(32,
             ErrorMessage = "A jelszó nem lehet rövidebb {2} és hosszabb {1} karakternél",
@@ -29,9 +32,6 @@ namespace TrashTracker.Data.Models.DTOs.In
         [DataType(DataType.Password)]
         [DisplayName("Jelszó megerősítése")]
         [Required(ErrorMessage = "Jelszó megerősítése kötelező!")]
-        [StringLength(32,
-            ErrorMessage = "A jelszó nem lehet rövidebb {2} és hosszabb {1} karakternél",
-            MinimumLength = 6)]
         public String PasswordRepeat { get; set; } = null!;
 
         [DisplayName("Profilkép")]
