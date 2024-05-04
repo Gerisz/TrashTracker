@@ -156,7 +156,7 @@ Minden oldal navigációs sávjának jobb szélén található egy kapcsoló mel
 
 \subsection{Regisztráció}
 
-További funkciók használatáért (pontok bejelentése és frissítése) a felhasználónak egy felhasználói fiókra van szüksége, mely utóbbija ha nincs, akkor regisztrálnia kell érte. Ezt a navigációs sáv jobb oldalán található "Nincs bejelentkezve" feliratra kattintva lenyíló menüben található "Regisztráció"-ra nyomva érheti el. Ha az előbbi helyett egy \faIcon{user} ikonnal társulva egy felhasználó neve szerepel, akkor a felhasználó már be van jelentkezve, ezzel kapcsolatosan nincsen teendője.\par
+További funkciók használatáért (pontok bejelentése és frissítése) a felhasználónak egy felhasználói fiókra van szüksége, mely utóbbija ha nincs, akkor regisztrálnia kell hozzá. Ezt a navigációs sáv jobb oldalán található "Nincs bejelentkezve" feliratra kattintva lenyíló menüben szereplő "Regisztráció" menüpontra nyomva érheti el. Ha az előbbi helyett egy \faIcon{user} ikonnal társulva egy felhasználó neve szerepel, akkor az már be van jelentkezve, ezzel kapcsolatosan nincsen teendője.\par
 A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívánt felhasználónevet, e-mail címet (elérhetőségként), jelszavat, illetve opcionálisan egy profilképet. Az adatok kitöltése után az űrlap alján található "Regisztráció" gombra kattintva lehet beadni az adatokat, melyek ha megfelelnek a követelményeknek, akkor a felhasználó a főoldalon találja magát, az új fiókjával bejelentkezve.
 
 \begin{figure}[H]
@@ -168,9 +168,43 @@ A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívá
 
 \subsubsection{Hibaüzenetek}
 
+A regisztrációkor megadott adatok több követelménynek is meg kell hogy feleljenek, melyek "megsértésekor" hibaüzenetek jelenhetnek meg az űrlap kitöltése közben vagy után. Az első ilyen követelmény, hogy minden felhasználónévnek egyedinek kell lennie. Ezt az űrlap helyes kitöltése és elküldése után egy "\textcolor{red}{Ez a felhasználónév már foglalt!}" felirat jelzi.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{register_form_duplicate_username}
+	\caption{Már foglalt felhasználónév esetén megjelenő hibaüzenet}
+	\label{fig:register_form_duplicate_username}
+\end{figure}
+
+Ha a megadott e-mail cím nem érvényes (azaz nem felel meg annak formai követelményeihez, pl. legyen benne "@" és egy "."), azt az űrlap kitöltése közben jelzi egy "\textcolor{red}{Érvénytelen e-mail cím!}" feliratú üzenet.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{register_form_invalid_email}
+	\caption{Érvénytelen e-mail cím esetén megjelenő hibaüzenet}
+	\label{fig:register_form_invalid_email}
+\end{figure}
+
+A legtöbb követelmény a jelszavakat érinti, itt több hibaüzenettel is találkozhat a felhasználó. Biztonsági okokból, egy jelszó 6-32 db karakterből kell álljon, melynek tartalmaznia kell legalább egy-egy kis- és nagybetűt, illetve számjegyet is. Ha ennek mégsem felelne meg a megadott jelszó, akkor azt az e-mail címhez hasonlóan egy "\textcolor{red}{A jelszó nem lehet rövidebb 6 és hosszabb 32 karakternél!}" vagy "\textcolor{red}{Jelszónak tartalmaznia kell legalább egy kis- és nagybetűt illetve számjegyet!}" üzenet jelenik meg, annak függvényében, hogy melyik pontján nem megy át az ellenőrzésen (tehát ha túl rövid a jelszó és pl. nem tartalmaz nagybetűt, akkor csak az előbbi jelenik meg, az utóbbi csak ha a hossz javítása után sem felel meg). Emellett a jelszó megerősítésére is szükség van, azaz meg kell adni a beírt jelszót egy második alkalommal is. Ha ezek nem egyeznének meg, azt is egy hibaüzenet jelzi a felhasználó számára.
+
+\begin{figure}[H]
+	\centering
+	\subcaptionbox{Nem megfelelő hosszú jelszó hibaüzenete}{
+		\includegraphics[width=0.3\linewidth]{register_form_invalid_password_length}}
+	\hspace{5pt}
+	\subcaptionbox{Nem megfelelő karaktereket tartalmazó jelszó hibaüzenete}{
+		\includegraphics[width=0.3\linewidth]{register_form_invalid_password_characters}}
+	\hspace{5pt}
+	\subcaptionbox{Nem azonos jelszavak hibaüzenete}{
+		\includegraphics[width=0.3\linewidth]{register_form_invalid_password_repeat}}
+	\caption{Érvénytelen jelszó esetén megjelenő hibaüzenetek}
+	\label{fig:register_form_invalid_password}
+\end{figure}
+
 \subsection{Bejelentkezés}
 
-Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció helyett beléphet abba, az előző bekezdésben tárgyaltak szerint a "Bejelentkezés" gombra kattintva. Az űrlap hasonló, viszont itt elég csak a felhasználónév (vagy e-mail cím tetsztőlegesen), illetve a hozzátartozó jelszó egyszeri megadására. Ha az adatok egyeznek a regisztrációkor megadottakkal, akkor az űrlap aján található "Bejelentkezés" gombra kattintva a felhasználó a főoldalra lesz átirányítva, a felhasználói fiókjába bejelentkezve. Ellenben, ha nem jár sikerrel, akkor üzenetek tájékoztatják a kilenst erről. Ha többszöri próbálkozásra sem jár sikerrel, akkor lehetősége van bejelentkezés helyett újabb felhasználó regisztrálására, vagy egy adminisztrátort megkérve bejelentkezési adatainak megváltoztatására is.
+Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció helyett beléphet abba, az előző bekezdésben tárgyaltak szerint a "Bejelentkezés" gombra kattintva. Az űrlap hasonló, viszont itt elég csak a felhasználónév (vagy e-mail cím tetszőlegesen), illetve a hozzátartozó jelszó egyszeri megadására. Ha az adatok egyeznek a regisztrációkor megadottakkal, akkor az űrlap alján található "Bejelentkezés" gombra kattintva a felhasználó a főoldalra lesz átirányítva, a felhasználói fiókjába bejelentkezve. Ellenben, ha nem jár sikerrel, akkor üzenetek tájékoztatják a klienst erről. Ha többszöri próbálkozásra sem jár sikerrel, akkor lehetősége van bejelentkezés helyett újabb felhasználó regisztrálására, vagy egy adminisztrátort megkérve bejelentkezési adatainak megváltoztatására is.
 
 \begin{figure}[H]
 	\centering
@@ -179,8 +213,16 @@ Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció he
 	\label{fig:login_form}
 \end{figure}
 
-
 \subsubsection{Hibaüzenetek}
+
+Sikertelen bejelentkezés esetén, azaz nem megfelelő felhasználónév (vagy e-mail cím) és jelszó páros megadásakor biztonsági okok miatt csak egy, a regisztráláskor látottaknál általánosabb "\textcolor{red}{Sikertelen bejelentkezés!}" felirat szerepel.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{login_form_error}
+	\caption{A bejelentkezéses felület űrlapján szereplő hibaüzenet}
+	\label{fig:login_form_error}
+\end{figure}
 
 \section{Funkciók felhasználóként}
 

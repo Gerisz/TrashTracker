@@ -24,7 +24,7 @@ namespace TrashTracker.Data.Models.DTOs.In
             "illetve számjegyet!")]
         [Required(ErrorMessage = "Jelszó megadása kötelező!")]
         [StringLength(32,
-            ErrorMessage = "A jelszó nem lehet rövidebb {2} és hosszabb {1} karakternél",
+            ErrorMessage = "A jelszó nem lehet rövidebb {2} és hosszabb {1} karakternél!",
             MinimumLength = 6)]
         public String Password { get; set; } = null!;
 
