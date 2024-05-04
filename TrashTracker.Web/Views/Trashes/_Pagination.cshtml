@@ -1,0 +1,72 @@
+﻿@model (PaginatedList<Trash> Trashes, RouteValueDictionary ParentRouteValue)
+
+@{
+    Boolean showCleaned = (Boolean)(ViewData["showCleaned"] ?? false);
+    var parentAction = (String)Model.ParentRouteValue["action"]!;
+    var parentController = (String)Model.ParentRouteValue["controller"]!;
+    var trashes = Model.Trashes;
+}
+
+<nav>
+    <ul class="pagination justify-content-center flex-nowrap">
+        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-left", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = 1,
+                         pageSize = trashes.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-left", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = Math.Max(1, trashes.PageNumber - 1),
+                         pageSize = trashes.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        @for (Int32 i = Math.Max(1, trashes.PageNumber - 2);
+        i <= Math.Min(trashes.PageNumber + 2, trashes.TotalPages); i++)
+        {
+            <li class="page-item  @(trashes.PageNumber == i ? "disabled" : "")">
+                @Html.ActionLink(i.ToString(), parentAction, parentController,
+                         new
+                         {
+                             pageNumber = i,
+                             pageSize = trashes.PageSize,
+                             searchString = ViewData["currentFilter"],
+                             showCleaned = showCleaned
+                         },
+                         new { @class = "page-link" })
+            </li>
+        }
+        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angle-right", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = Math.Min(trashes.PageNumber + 1, trashes.TotalPages),
+                         pageSize = trashes.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
+            @Html.IconActionLink("", "fa-solid fa-angles-right", parentAction, parentController,
+                     new
+                     {
+                         pageNumber = trashes.TotalPages,
+                         pageSize = trashes.PageSize,
+                         searchString = ViewData["currentFilter"],
+                         showCleaned = showCleaned
+                     },
+                     new { @class = "page-link" })
+        </li>
+    </ul>
+</nav>

@@ -159,12 +159,20 @@ function filter() {
 }
 
 function popoverContent(data) {
-    return `<img src="${data.images.shift()}" class="d-block w-100 mb-2">
+    return `
+        <div class="row">
+            <div class="col-6">
+                <img src="${data.images.shift()}" class="d-block w-100 mb-2">
+            </div>
+            <div class="col-6">
+                ${data.note || `<i>nincs megjegyzés</i>`}
+            </div>
+        </div>
         <div class="row m-0">
-            <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
-                        href="/Trashes/Details/${data.id}">
-                <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
-                        <span>Részletek</span>
-            </a>
+                <a class="btn btn-info" data-bs-title="Részletek" data-bs-toggle="tooltip"
+                            href="/Trashes/Details/${data.id}">
+                    <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                            <span>Részletek</span>
+                </a>
         </div>`;
 }

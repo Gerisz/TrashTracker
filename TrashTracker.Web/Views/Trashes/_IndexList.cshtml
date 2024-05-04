@@ -1,77 +1,19 @@
-﻿@using TrashTracker.Data.Models.Enums
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using TrashTracker.Data.Models.Enums
 @model (PaginatedList<Trash> Trashes, RouteValueDictionary ParentRouteValue)
 
+@inject IAuthorizationService AuthorizationService
+@inject SignInManager<TrashTrackerUser> SignInManager
 
 @{
-    Boolean showCleaned = (Boolean)(ViewData["showCleaned"] ?? false);
     var parentAction = (String)Model.ParentRouteValue["action"]!;
     var parentController = (String)Model.ParentRouteValue["controller"]!;
     var trashes = Model.Trashes;
 }
 
-<nav>
-    <ul class="pagination justify-content-center flex-nowrap">
-        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angles-left", parentAction, parentController,
-                     new
-                     {
-                         pageNumber = 1,
-                         pageSize = trashes.PageSize,
-                         searchString = ViewData["currentFilter"],
-                         showCleaned = showCleaned
-                     },
-                     new { @class = "page-link" })
-        </li>
-        <li class="page-item @(!trashes.HasPreviousPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angle-left", parentAction, parentController,
-                     new
-                     {
-                         pageNumber = Math.Max(1, trashes.PageNumber - 1),
-                         pageSize = trashes.PageSize,
-                         searchString = ViewData["currentFilter"],
-                         showCleaned = showCleaned
-                     },
-                     new { @class = "page-link" })
-        </li>
-        @for (Int32 i = Math.Max(1, trashes.PageNumber - 2);
-        i <= Math.Min(trashes.PageNumber + 2, trashes.TotalPages); i++)
-        {
-            <li class="page-item  @(trashes.PageNumber == i ? "disabled" : "")">
-                @Html.ActionLink(i.ToString(), parentAction, parentController,
-                         new
-                         {
-                             pageNumber = i,
-                             pageSize = trashes.PageSize,
-                             searchString = ViewData["currentFilter"],
-                             showCleaned = showCleaned
-                         },
-                         new { @class = "page-link" })
-            </li>
-        }
-        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angle-right", parentAction, parentController,
-                     new
-                     {
-                         pageNumber = Math.Min(trashes.PageNumber + 1, trashes.TotalPages),
-                         pageSize = trashes.PageSize,
-                         searchString = ViewData["currentFilter"],
-                         showCleaned = showCleaned
-                     },
-                     new { @class = "page-link" })
-        </li>
-        <li class="page-item @(!trashes.HasNextPage ? "disabled" : "")">
-            @Html.IconActionLink("", "fa-solid fa-angles-right", parentAction, parentController,
-                     new
-                     {
-                         pageNumber = trashes.TotalPages,
-                         pageSize = trashes.PageSize,
-                         searchString = ViewData["currentFilter"],
-                         showCleaned = showCleaned
-                     },
-                     new { @class = "page-link" })
-        </li>
-    </ul>
-</nav>
+@await Html.PartialAsync("~/Views/Trashes/_Pagination.cshtml")
+
 <table class="table">
     <thead>
         <tr>
@@ -91,13 +33,16 @@
                 @Html.DisplayNameFor(_ => new Trash().Note)
             </th>
             <th class="text-end">
-                @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),
-                         new
-                         {
-                             @class = "btn btn-success",
-                             data_bs_toggle = "tooltip",
-                             data_bs_title = "Hozzáadás"
-                         })
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),
+                             new
+                             {
+                                 @class = "btn btn-success",
+                                 data_bs_toggle = "tooltip",
+                                 data_bs_title = "Hozzáadás"
+                             })
+                }
             </th>
         </tr>
     </thead>
@@ -128,8 +73,15 @@
                         }))
                 </td>
                 <td>
-                    @Html.DisplayFor(_ => item.Location.X)<br />
-                    @Html.DisplayFor(_ => item.Location.Y)
+                    @Html.IconActionLink($"{item.Location.X},\n {item.Location.Y}",
+                             "fa-solid fa-map-location-dot", "Index", "Home",
+                             new { lat = item.Location.X, lon = item.Location.Y, },
+                             new
+                             {
+                                 @class = "btn btn-info",
+                                 data_bs_toggle = "tooltip",
+                                 data_bs_title = "Megtekintés térképen"
+                             })
                 </td>
                 <td>
                     @Html.DisplayFor(_ => item.CreateTime)
@@ -205,40 +157,50 @@
                                      data_bs_toggle = "tooltip",
                                      data_bs_title = "Részletek"
                                  })
-                        <span class="d-inline-block btn-group btn-group-table"
-                              data-bs-title="@(item.TrashoutId != null ? "Nem módosítható" : "")"
-                              data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
-                              data-bs-trigger="hover focus">
-                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
-                                     parentController, new { id = item.Id },
-                                     item.TrashoutId != null
-                                     ? new { @class = "btn btn-warning disabled" }
-                                     : new
-                                     {
-                                         @class = "btn btn-warning",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Módosítás"
-                                     })
-                        </span>
-                        <span class="d-inline-block btn-group btn-group-table"
-                              data-bs-title="@(item.TrashoutId != null
-                       ? "Nem törölhető" : "")"
-                              data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
-                              data-bs-trigger="hover focus">
-                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
-                                     parentController, new { id = item.Id },
-                                     item.TrashoutId != null
-                                     ? new { @class = "btn btn-danger disabled" }
-                                     : new
-                                     {
-                                         @class = "btn btn-danger",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Törlés"
-                                     })
-                        </span>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <span class="d-inline-block btn-group btn-group-table"
+                                  data-bs-title="@(item.TrashoutId != null ? "Nem módosítható" : "")"
+                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                  data-bs-trigger="hover focus">
+                                @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
+                                         parentController, new { id = item.Id },
+                                         item.TrashoutId != null
+                                         ? new { @class = "btn btn-warning disabled" }
+                                         : new
+                                         {
+                                             @class = "btn btn-warning",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Módosítás"
+                                         })
+                            </span>
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Moderator")).Succeeded)
+                        {
+                            <span class="d-inline-block btn-group btn-group-table"
+                                  data-bs-title="@(
+                           item.TrashoutId != null
+                           ? "Nem törölhető" : "")"
+                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                  data-bs-trigger="hover focus">
+                                @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
+                                         parentController, new { id = item.Id },
+                                         item.TrashoutId != null
+                                         ? new { @class = "btn btn-danger disabled" }
+                                         : new
+                                         {
+                                             @class = "btn btn-danger",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Törlés"
+                                         })
+                            </span>
+                        }
                     </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@await Html.PartialAsync("~/Views/Trashes/_Pagination.cshtml")

@@ -18,5 +18,5 @@
             <hr />
         </div>
     </div>
-    @await Html.PartialAsync("../Trashes/_IndexList", (Model.Trashes, ViewContext.RouteData.Values))
+    @await Html.PartialAsync("~/Views/Trashes/_IndexList.cshtml", (Model.Trashes, ViewContext.RouteData.Values))
 </div>

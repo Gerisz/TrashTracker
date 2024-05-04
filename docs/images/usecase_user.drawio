@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" modified="2024-05-01T19:33:30.956Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36 OPR/109.0.0.0" etag="cg_xvij9vB_jva9NRli4" version="24.3.1" type="device">
+  <diagram name="1 oldal" id="ZEmaSlT312Er0jaVH2z7">
+    <mxGraphModel dx="1393" dy="835" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-7" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=1;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-1" target="2mtIZXTCqTXwhXVJZt-6-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-8" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" edge="1" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-1" target="2mtIZXTCqTXwhXVJZt-6-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-1" value="&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;br style=&quot;font-size: 14px;&quot;&gt;&lt;/div&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/div&gt;Felhaszn." style="shape=actor;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="200" y="120" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-14" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-2" target="ISlp1e6x_ZDFkrLWW4SW-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-2" value="Pontok listázása" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="260" y="40" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-3" value="Pont adatainak részletezése" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="320" y="140" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-15" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-4" target="ISlp1e6x_ZDFkrLWW4SW-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-4" value="Térkép megtekintése" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="260" y="240" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-5" value="Színséma állítása" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="60" y="240" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-6" value="Kijelentkezés" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry y="140" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-7" value="Saját profil megtekintése" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" parent="1" vertex="1">
+          <mxGeometry x="60" y="40" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-8" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0.2;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-7" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-9" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-2" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-10" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-6" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-11" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.9;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-3" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-12" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0.017;entryY=0.988;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-5" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-13" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=0.983;entryY=0.988;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;fontFamily=Garamond;fontSize=14;" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-4" target="ISlp1e6x_ZDFkrLWW4SW-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-16" value="&amp;lt;&amp;lt;precedes&amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="290" y="90" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ISlp1e6x_ZDFkrLWW4SW-17" value="&amp;lt;&amp;lt;precedes&amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="290" y="200" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-1" value="Pont bejelentése" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="460" y="80" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-2" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-2" target="2mtIZXTCqTXwhXVJZt-6-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="389" y="84" as="sourcePoint" />
+            <mxPoint x="400" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-3" value="&amp;lt;&amp;lt;precedes&amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="380" y="30" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-4" value="Pont adatainak módosítása" style="ellipse;whiteSpace=wrap;html=1;fontFamily=Garamond;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="520" y="200" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-5" value="" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="ISlp1e6x_ZDFkrLWW4SW-3" target="2mtIZXTCqTXwhXVJZt-6-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="70" as="sourcePoint" />
+            <mxPoint x="470" y="70" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2mtIZXTCqTXwhXVJZt-6-6" value="&amp;lt;&amp;lt;precedes&amp;gt;&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="100" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

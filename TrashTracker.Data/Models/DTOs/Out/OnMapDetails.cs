@@ -8,6 +8,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
     {
         public Int32 Id { get; set; }
         public String? Location { get; set; }
+        public String? Note { get; set; }
         public IEnumerable<Uri> Images { get; set; } = [];
 
         public static Expression<Func<Trash, OnMapDetails>> Projection(String imageUrlBase)
@@ -19,6 +20,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
                     : trash.Locality.IsNullOrEmpty()
                         ? trash.SubLocality
                         : trash.Locality + ", " + trash.SubLocality,
+                Note = trash.Note,
                 Images = trash.Images.Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
             };
 
