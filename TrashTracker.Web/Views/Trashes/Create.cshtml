@@ -13,7 +13,8 @@
     {
         @Html.HiddenFor(_ => previousPage)
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
+        <legend>Lokáció</legend>
+        <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
@@ -54,8 +55,45 @@
                 </div>
             </div>
         </div>
+        <legend>Település</legend>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(_ => Model.Locality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(_ => Model.Locality)
+                        @Html.ValidationMessageFor(_ => Model.Locality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(_ => Model.SubLocality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(_ => Model.SubLocality)
+                        @Html.ValidationMessageFor(_ => Model.SubLocality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
         <legend>@Html.LabelFor(m => m.Size)</legend>
-        <div class="form-group">
+        <div class="form-group m-3">
             @Html.DropDownListFor(m => m.Size,
                      new List<SelectListItem>(((Size[])Enum.GetValues(typeof(Size)))
                      .Select(s => new SelectListItem()
@@ -66,7 +104,7 @@
                      new { @class = "form-select" })
         </div>
         <legend>@Html.LabelFor(m => m.Accessibilities)</legend>
-        <div class="form-group">
+        <div class="form-group m-3">
             @foreach (var value in Model.Accessibilities)
             {
                 @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
@@ -82,13 +120,13 @@
                 @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
                          new
                          {
-                             @class = "btn btn-outline-primary",
+                             @class = "btn btn-outline-primary me-2",
                              @for = value.Value
                          })
             }
         </div>
         <legend>@Html.LabelFor(m => m.Types)</legend>
-        <div class="form-group">
+        <div class="form-group m-3">
             @foreach (var value in Model.Types)
             {
                 @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
@@ -104,14 +142,13 @@
                 @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
                          new
                          {
-                             @class = "btn btn-outline-primary",
+                             @class = "btn btn-outline-primary me-2",
                              @for = value.Value
                          })
             }
         </div>
-        <div class="form-group">
+        <div class="form-group m-3">
             <div class="form-floating">
-
                 @Html.EditorFor(m => m.Note,
                          new
                          {
@@ -125,7 +162,7 @@
                 @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <a href="@previousPage" class="btn btn-secondary m-3">
