@@ -29,16 +29,17 @@ builder.Services.AddDbContext<TrashTrackerDbContext>(options =>
 
 builder.Services.AddIdentity<TrashTrackerUser, TrashTrackerIdentityRole>(options =>
 {
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 3;
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
-    options.Password.RequireLowercase = false;
+    options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
+    options.Password.RequireUppercase = true;
 
     options.SignIn.RequireConfirmedAccount = true;
 })
 .AddEntityFrameworkStores<TrashTrackerDbContext>()
+.AddErrorDescriber<TrashTrackerIdentityErrorDescriber>()
 .AddDefaultTokenProviders();
 
 PolicyBuilder.BuildPolicies<Roles>(builder);

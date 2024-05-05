@@ -12,6 +12,7 @@
             new { backUrl = ViewData["returnUrl"] }, FormMethod.Post, null,
             new { enctype = "multipart/form-data" }))
             {
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div class="form-group m-3">
                     <div class="form-floating">
                         @Html.EditorFor(m => m.UserName,

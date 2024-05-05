@@ -92,7 +92,8 @@ namespace TrashTracker.Web.Controllers
                     return RedirectToLocal(returnUrl);
                 }
 
-                ModelState.AddModelError("", "Sikertelen regisztráció!");
+                ModelState.AddModelError("",
+                    String.Join("\n", result.Errors.Select(e => e.Description)));
             }
 
             return View(register);

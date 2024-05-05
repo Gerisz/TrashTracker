@@ -15,31 +15,31 @@
 \select@language {hungarian} \contentsline {subsection}{\numberline {2.3.5}Színséma választása}{10}{subsection.2.3.5}%
 \select@language {hungarian} \contentsline {subsection}{\numberline {2.3.6}Regisztráció}{11}{subsection.2.3.6}%
 \select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{11}{section*.12}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.3.7}Bejelentkezés}{11}{subsection.2.3.7}%
-\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{12}{section*.14}%
-\select@language {hungarian} \contentsline {section}{\numberline {2.4}Funkciók felhasználóként}{12}{section.2.4}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.4.1}Pont bejelentése}{12}{subsection.2.4.1}%
-\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{13}{section*.16}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.4.2}Pont módosítása}{13}{subsection.2.4.2}%
-\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{13}{section*.17}%
-\select@language {hungarian} \contentsline {section}{\numberline {2.5}Felsorolások}{13}{section.2.5}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.5.1}Szoros térközű felsorolások}{14}{subsection.2.5.1}%
-\select@language {hungarian} \contentsline {section}{\numberline {2.6}Képek, ábrák}{15}{section.2.6}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.6.1}Képek szegélyezése}{15}{subsection.2.6.1}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.6.2}Képek csoportosítása}{16}{subsection.2.6.2}%
-\select@language {hungarian} \contentsline {section}{\numberline {2.7}Táblázatok}{16}{section.2.7}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.7.1}Sorok és oszlopok egyesítése}{17}{subsection.2.7.1}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {2.7.2}Több oldalra átnyúló táblázatok}{17}{subsection.2.7.2}%
-\select@language {hungarian} \contentsline {chapter}{\numberline {3}Fejlesztői dokumentáció}{20}{chapter.3}%
-\select@language {hungarian} \contentsline {section}{\numberline {3.1}Tételek, definíciók, megjegyzések}{20}{section.3.1}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {3.1.1}Egyenletek, matematika}{21}{subsection.3.1.1}%
-\select@language {hungarian} \contentsline {section}{\numberline {3.2}Forráskódok}{22}{section.3.2}%
-\select@language {hungarian} \contentsline {subsection}{\numberline {3.2.1}Algoritmusok}{23}{subsection.3.2.1}%
-\select@language {hungarian} \contentsline {chapter}{\numberline {4}Összegzés}{24}{chapter.4}%
-\select@language {hungarian} \contentsline {chapter}{Köszönetnyilvánítás}{25}{chapter*.23}%
-\select@language {hungarian} \contentsline {chapter}{\numberline {A}Szimulációs eredmények}{26}{appendix.A}%
-\select@language {hungarian} \contentsline {chapter}{Irodalomjegyzék}{28}{section*.24}%
-\select@language {hungarian} \contentsline {chapter}{Ábrajegyzék}{28}{section*.25}%
-\select@language {hungarian} \contentsline {chapter}{Táblázatjegyzék}{29}{section*.26}%
-\select@language {hungarian} \contentsline {chapter}{Algoritmusjegyzék}{30}{section*.27}%
-\select@language {hungarian} \contentsline {chapter}{Forráskódjegyzék}{31}{section*.29}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.3.7}Bejelentkezés}{13}{subsection.2.3.7}%
+\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{14}{section*.17}%
+\select@language {hungarian} \contentsline {section}{\numberline {2.4}Funkciók felhasználóként}{14}{section.2.4}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.4.1}Pont bejelentése}{15}{subsection.2.4.1}%
+\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{15}{section*.20}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.4.2}Pont módosítása}{15}{subsection.2.4.2}%
+\select@language {hungarian} \contentsline {subsubsection}{Hibaüzenetek}{15}{section*.21}%
+\select@language {hungarian} \contentsline {section}{\numberline {2.5}Felsorolások}{15}{section.2.5}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.5.1}Szoros térközű felsorolások}{17}{subsection.2.5.1}%
+\select@language {hungarian} \contentsline {section}{\numberline {2.6}Képek, ábrák}{17}{section.2.6}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.6.1}Képek szegélyezése}{18}{subsection.2.6.1}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.6.2}Képek csoportosítása}{18}{subsection.2.6.2}%
+\select@language {hungarian} \contentsline {section}{\numberline {2.7}Táblázatok}{19}{section.2.7}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.7.1}Sorok és oszlopok egyesítése}{19}{subsection.2.7.1}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {2.7.2}Több oldalra átnyúló táblázatok}{19}{subsection.2.7.2}%
+\select@language {hungarian} \contentsline {chapter}{\numberline {3}Fejlesztői dokumentáció}{22}{chapter.3}%
+\select@language {hungarian} \contentsline {section}{\numberline {3.1}Tételek, definíciók, megjegyzések}{22}{section.3.1}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.1.1}Egyenletek, matematika}{23}{subsection.3.1.1}%
+\select@language {hungarian} \contentsline {section}{\numberline {3.2}Forráskódok}{24}{section.3.2}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.2.1}Algoritmusok}{25}{subsection.3.2.1}%
+\select@language {hungarian} \contentsline {chapter}{\numberline {4}Összegzés}{26}{chapter.4}%
+\select@language {hungarian} \contentsline {chapter}{Köszönetnyilvánítás}{27}{chapter*.27}%
+\select@language {hungarian} \contentsline {chapter}{\numberline {A}Szimulációs eredmények}{28}{appendix.A}%
+\select@language {hungarian} \contentsline {chapter}{Irodalomjegyzék}{30}{section*.28}%
+\select@language {hungarian} \contentsline {chapter}{Ábrajegyzék}{30}{section*.29}%
+\select@language {hungarian} \contentsline {chapter}{Táblázatjegyzék}{31}{section*.30}%
+\select@language {hungarian} \contentsline {chapter}{Algoritmusjegyzék}{32}{section*.31}%
+\select@language {hungarian} \contentsline {chapter}{Forráskódjegyzék}{33}{section*.33}%
