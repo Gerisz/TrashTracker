@@ -4,15 +4,15 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.Out
 {
-    public class OnMapDetails
+    public class TrashMapDetails
     {
         public Int32 Id { get; set; }
         public String? Location { get; set; }
         public String? Note { get; set; }
         public IEnumerable<Uri> Images { get; set; } = [];
 
-        public static Expression<Func<Trash, OnMapDetails>> Projection(String imageUrlBase)
-            => trash => new OnMapDetails()
+        public static Expression<Func<Trash, TrashMapDetails>> Projection(String imageUrlBase)
+            => trash => new TrashMapDetails()
             {
                 Id = trash.Id,
                 Location = trash.SubLocality.IsNullOrEmpty()
@@ -24,7 +24,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
                 Images = trash.Images.Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
             };
 
-        public static OnMapDetails Create(Trash place, String imageUrlBase)
+        public static TrashMapDetails Create(Trash place, String imageUrlBase)
             => Projection(imageUrlBase).Compile().Invoke(place);
     }
 }

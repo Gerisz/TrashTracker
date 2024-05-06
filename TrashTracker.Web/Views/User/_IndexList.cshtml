@@ -1,5 +1,5 @@
 ﻿@using TrashTracker.Data.Models.Enums
-@model (PaginatedList<UserOnList> Users, RouteValueDictionary ParentRouteValue)
+@model (PaginatedList<UserIndex> Users, RouteValueDictionary ParentRouteValue)
 
 @{
     var parentAction = (String)Model.ParentRouteValue["action"]!;
@@ -13,13 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(_ => new UserOnList().UserName)
+                @Html.DisplayNameFor(_ => new UserIndex().UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(_ => new UserOnList().Email)
+                @Html.DisplayNameFor(_ => new UserIndex().Email)
             </th>
             <th>
-                @Html.DisplayNameFor(_ => new UserOnList().RegistrationTime)
+                @Html.DisplayNameFor(_ => new UserIndex().RegistrationTime)
             </th>
             <th></th>
         </tr>

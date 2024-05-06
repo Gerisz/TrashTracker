@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
@@ -37,5 +38,12 @@ namespace TrashTracker.Data.Models.DTOs.In
         [DisplayName("Profilkép")]
         [ValidImage]
         public IFormFile? Image { get; set; }
+
+        public Register() { }
+        public Register(TrashTrackerUser user)
+        {
+            UserName = user.UserName;
+            Email = user.Email;
+        }
     }
 }

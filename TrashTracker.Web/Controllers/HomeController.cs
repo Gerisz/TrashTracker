@@ -25,7 +25,7 @@ namespace TrashTracker.Web.Controllers
         [HttpGet("OnMap")]
         public IActionResult GetPointsOnMap()
         {
-            var points = OnMap.Create(_context.Trashes.AsNoTracking());
+            var points = TrashMap.Create(_context.Trashes.AsNoTracking());
 
             var json = Serializer.Serialize(points);
 
@@ -38,7 +38,7 @@ namespace TrashTracker.Web.Controllers
             var trash = await _context.Trashes.FindAsync(id);
             if (trash == null)
                 return NotFound();
-            return Ok(Serializer.Serialize(OnMapDetails.Create(trash, ImageDownloadURL)));
+            return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, ImageDownloadURL)));
         }
 
 

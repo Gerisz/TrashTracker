@@ -6,22 +6,22 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.Out
 {
-    public class OnMap
+    public class TrashMap
     {
         public String Type { get; set; } = "FeatureCollection";
         public IEnumerable<OnMapFeature> Features { get; set; } = [];
 
-        public OnMap() { }
+        public TrashMap() { }
 
-        public static Expression<Func<IEnumerable<Trash>, OnMap>> Projection { get; }
-            = trashes => new OnMap()
+        public static Expression<Func<IEnumerable<Trash>, TrashMap>> Projection { get; }
+            = trashes => new TrashMap()
             {
                 Features = trashes
                     .AsQueryable()
                     .Select(OnMapFeature.Projection)
             };
 
-        public static OnMap Create(IEnumerable<Trash> trashes)
+        public static TrashMap Create(IEnumerable<Trash> trashes)
             => Projection.Compile().Invoke(trashes);
     }
 

@@ -118,13 +118,22 @@ namespace TrashTracker.Data.Models.Tables
             Status = Status.StillHere;
             Size = trashFromUser.Size;
 
-            trashFromUser.Accessibilities
-                .Where(a => a.IsSelected)
-                .Select(a => Accessibilities |= a.Value);
+            Accessibilities |= (trashFromUser.ByCar ? Accessibility.ByCar : 0)
+                | (trashFromUser.InCave ? Accessibility.InCave : 0)
+                | (trashFromUser.UnderWater ? Accessibility.UnderWater : 0)
+                | (trashFromUser.NotForGeneralCleanup ? Accessibility.NotForGeneralCleanup : 0);
 
-            trashFromUser.Types
-                .Where(a => a.IsSelected)
-                .Select(a => Types |= a.Value);
+            Types |= (trashFromUser.Automotive ? TrashType.Automotive : 0)
+                | (trashFromUser.Construction ? TrashType.Construction : 0)
+                | (trashFromUser.Dangerous ? TrashType.Dangerous : 0)
+                | (trashFromUser.DeadAnimals ? TrashType.DeadAnimals : 0)
+                | (trashFromUser.Domestic ? TrashType.Domestic : 0)
+                | (trashFromUser.Electronic ? TrashType.Electronic : 0)
+                | (trashFromUser.Glass ? TrashType.Glass : 0)
+                | (trashFromUser.Liquid ? TrashType.Liquid : 0)
+                | (trashFromUser.Metal ? TrashType.Metal : 0)
+                | (trashFromUser.Organic ? TrashType.Organic : 0)
+                | (trashFromUser.Plastic ? TrashType.Plastic : 0);
         }
 
         /// <summary>

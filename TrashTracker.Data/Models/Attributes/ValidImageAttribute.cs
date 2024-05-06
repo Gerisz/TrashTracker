@@ -33,7 +33,7 @@ namespace CleanTiszaMap.Data.Attributes
             else if (value is IEnumerable<IFormFile> files)
                 return files.All(IsValidImage);
 
-            ErrorMessage = "The given object was not a file.";
+            ErrorMessage = "Az objektum nem fájl!";
             return false;
         }
 
@@ -41,7 +41,7 @@ namespace CleanTiszaMap.Data.Attributes
         {
             if (!file.ContentType.StartsWith("image/"))
             {
-                ErrorMessage = "The given file is not an image.";
+                ErrorMessage = "A fájl nem egy kép!";
                 return false;
             }
 
@@ -50,15 +50,15 @@ namespace CleanTiszaMap.Data.Attributes
             if (!AllowedExtensions.Contains(extension))
             {
                 var supportedFormats = String.Join(", ", AllowedExtensions);
-                ErrorMessage = $"This image format is not supported." +
-                    $"Supported formats are: {supportedFormats}.";
+                ErrorMessage = $"Ez a kép formátuma nem támogatott!" +
+                    $"Támogatott formátumok: {supportedFormats}.";
                 return false;
             }
 
             if (file.Length > MaxSizeBytes)
             {
-                ErrorMessage = $"The given image is too large." +
-                    $"Maximum size: {MaxSizeBytes / 1024}KB.";
+                ErrorMessage = $"Ez a kép túl nagy!" +
+                    $"Maximális méret: {MaxSizeBytes / 1024}KB.";
             }
 
             return true;

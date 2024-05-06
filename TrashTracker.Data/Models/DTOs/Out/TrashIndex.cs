@@ -4,7 +4,7 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.Out
 {
-    public class UserOnList
+    public class TrashIndex
     {
         [DisplayName("Felhasználónév")]
         public String UserName { get; set; } = null!;
@@ -13,8 +13,8 @@ namespace TrashTracker.Data.Models.DTOs.Out
         [DisplayName("Regisztrálás ideje")]
         public DateTime RegistrationTime { get; set; }
 
-        public static Expression<Func<TrashTrackerUser, UserOnList>> Projection { get; }
-            = user => new UserOnList()
+        public static Expression<Func<TrashTrackerUser, TrashIndex>> Projection { get; }
+            = user => new TrashIndex()
             {
                 UserName = user.UserName!,
                 Email = user.Email!,

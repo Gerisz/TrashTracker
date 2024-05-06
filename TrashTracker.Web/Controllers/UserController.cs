@@ -113,7 +113,7 @@ namespace TrashTracker.Web.Controllers
 
         [Authorize("Admin")]
         [HttpGet]
-        public async Task<ActionResult<PaginatedList<UserOnList>>> Index(String? searchString,
+        public async Task<ActionResult<PaginatedList<UserIndex>>> Index(String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize)
         {
             // query every user from database
@@ -134,17 +134,17 @@ namespace TrashTracker.Web.Controllers
 
             // order users by freshly registered
             var usersOnList = users
-                .Select(UserOnList.Projection)
+                .Select(UserIndex.Projection)
                 .OrderByDescending(x => x.RegistrationTime);
 
             // paginate them
-            var paginatedUsersOnList = await PaginatedList<UserOnList>
+            var paginatedUsersOnList = await PaginatedList<UserIndex>
                 .CreateAsync(usersOnList, pageNumber ?? 1, pageSize ?? 100);
 
             // if requested page has no points
             if (paginatedUsersOnList.Count() <= 0)
                 // then return the first page
-                return View(await PaginatedList<UserOnList>
+                return View(await PaginatedList<UserIndex>
                     .CreateAsync(usersOnList, 1, pageSize ?? 100));
             // else just return the requested page with its points
             return View(paginatedUsersOnList);
@@ -182,11 +182,11 @@ namespace TrashTracker.Web.Controllers
             try
             {
                 return View(new UserEdit(user,
-                    Enum.Parse<Roles>((await _userManager.GetRolesAsync(user))[0])));
+                    Enum.Parse<Roles>((await _userManager.GetRolesAsync(user))[0]), ImageURL));
             }
             catch (ArgumentOutOfRangeException)
             {
-                return View(new UserEdit(user, Roles.User));
+                return View(new UserEdit(user, Roles.User, ImageURL));
             }
         }
 

@@ -13,7 +13,8 @@
     {
         @Html.HiddenFor(_ => previousPage)
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
+        <legend>Lokáció</legend>
+        <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
@@ -54,19 +55,45 @@
                 </div>
             </div>
         </div>
-        <legend>@Html.LabelFor(m => m.Status)</legend>
-        <div class="form-group">
-            @Html.DropDownListFor(m => m.Status,
-                     new List<SelectListItem>(((Status[])Enum.GetValues(typeof(Status)))
-                     .Select(s => new SelectListItem()
-        {
-            Value = s.ToString(),
-            Text = EnumHelper<Status>.GetDisplayValue(s)
-        })),
-                     new { @class = "form-select" })
+        <legend>Település</legend>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(_ => Model.Locality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(_ => Model.Locality)
+                        @Html.ValidationMessageFor(_ => Model.Locality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(_ => Model.SubLocality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(_ => Model.SubLocality)
+                        @Html.ValidationMessageFor(_ => Model.SubLocality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
         </div>
         <legend>@Html.LabelFor(m => m.Size)</legend>
-        <div class="form-group">
+        <div class="form-group m-3">
             @Html.DropDownListFor(m => m.Size,
                      new List<SelectListItem>(((Size[])Enum.GetValues(typeof(Size)))
                      .Select(s => new SelectListItem()
@@ -76,53 +103,56 @@
         })),
                      new { @class = "form-select" })
         </div>
-        <legend>@Html.LabelFor(m => m.Accessibilities)</legend>
-        <div class="form-group">
-            @foreach (var value in Model.Accessibilities)
+        <legend>Hozzáférhetőség</legend>
+        <div class="form-group m-3">
+            @foreach (var value in Enum.GetValues<Accessibility>())
             {
-                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
-                    {
-                        @class = "btn-check",
-                        id = value.Value,
-                        name = value.Value
-                    })
+                @Html.CheckBox(value.ToString(),
+                         (Boolean)Model.GetType().GetProperty($"{value}")!.GetValue(Model, null)!,
+                         new
+                         {
+                             @class = "btn-check",
+                             id = $"{nameof(Accessibility)}.{value}",
+                             name = $"{nameof(Accessibility)}.{value}"
+                         })
                 var displayValue = EnumHelper<Accessibility>
-                .GetDisplayValue(value.Value);
+                .GetDisplayValue(value);
                 var displayIconClass = EnumHelper<Accessibility>
-                .GetDisplayIconClass(value.Value);
-                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                .GetDisplayIconClass(value);
+                @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
                          new
                          {
-                             @class = "btn btn-outline-primary",
-                             @for = value.Value
+                             @class = "btn btn-outline-primary me-2",
+                             @for = $"{nameof(Accessibility)}.{value}"
                          })
             }
         </div>
-        <legend>@Html.LabelFor(m => m.Types)</legend>
-        <div class="form-group">
-            @foreach (var value in Model.Types)
+        <legend>Szeméttípusok</legend>
+        <div class="form-group m-3">
+            @foreach (var value in Enum.GetValues<TrashType>())
             {
-                @Html.CheckBox(value.Value.ToString(), value.IsSelected, new
-                    {
-                        @class = "btn-check",
-                        id = value.Value,
-                        name = value.Value
-                    })
-                var displayValue = EnumHelper<TrashType>
-                .GetDisplayValue(value.Value);
-                var displayIconClass = EnumHelper<TrashType>
-                .GetDisplayIconClass(value.Value);
-                @Html.IconLabelFor(_ => value.IsSelected, displayValue, displayIconClass,
+                @Html.CheckBox(value.ToString(),
+                         (Boolean)Model.GetType().GetProperty($"{value}")!.GetValue(Model, null)!,
                          new
                          {
-                             @class = "btn btn-outline-primary",
-                             @for = value.Value
+                             @class = "btn-check",
+                             id = $"{nameof(Accessibility)}.{value}",
+                             name = $"{nameof(Accessibility)}.{value}"
+                         })
+                var displayValue = EnumHelper<TrashType>
+                .GetDisplayValue(value);
+                var displayIconClass = EnumHelper<TrashType>
+                .GetDisplayIconClass(value);
+                @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary me-2",
+                             @for = $"{nameof(Accessibility)}.{value}"
                          })
             }
         </div>
-        <div class="form-group">
+        <div class="form-group m-3">
             <div class="form-floating">
-
                 @Html.EditorFor(m => m.Note,
                          new
                          {
@@ -136,7 +166,7 @@
                 @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <a href="@previousPage" class="btn btn-secondary m-3">
@@ -145,7 +175,7 @@
                 </div>
                 <div class="col d-flex justify-content-end">
                     <button type="submit" class="btn btn-success m-3">
-                        <i class="fa-solid fa-pen-to-square"></i> Frissítés
+                        <i class="fa-solid fa-plus"></i> Bejelentés
                     </button>
                 </div>
             </div>
