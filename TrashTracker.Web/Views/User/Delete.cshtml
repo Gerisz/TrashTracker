@@ -1,33 +1,44 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using System.Security.Claims
+﻿@using System.Security.Claims
+@using TrashTracker.Data.Models.Tables
 @model TrashTrackerUser
 
 @{
-    ViewData["Title"] = "Törlés";
+    ViewData["Title"] = "Felhasználó törlése";
     var previousPage = ViewData["previousPage"];
+
+    Boolean IsCurrentUser(TrashTrackerUser user)
+    {
+        return user.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }
 
 <div class="container">
-    <h1>@Html.DisplayFor(_ => Model.UserName) nevű felhasználó</h1>
+    <h1>@Html.DisplayFor(_ => Model.UserName) nevű felhasználó végleges törlése</h1>
+    <hr />
     <h3>Biztosan törölni szeretné ezt a felhasználót?</h3>
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(_ => previousPage)
-        <a class="btn btn-success" href="@previousPage">
-            <i class="fa-solid fa-arrow-left"></i> Vissza
-        </a>
-        <span data-bs-title="@(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
-                ? "Nem törölhető" : "")"
-              data-bs-toggle="@(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
-                ? "tooltip" : "")"
-              data-bs-trigger="hover focus">
-            <button type="submit"
-                    class="btn btn-danger
-                    @(User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.Id
-                    ? "disabled" : "")">
-                <i class="fa-solid fa-trash-can"></i> Törlés
-            </button>
-        </span>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-secondary m-3" href="@previousPage">
+                        <i class="fa-solid fa-arrow-left"></i> Vissza
+                    </a>
+                </div>
+                <div class="col d-flex align-items-center justify-content-end">
+                    <span data-bs-title="@(IsCurrentUser(Model) ? "Nem törölhető" : "")"
+                          data-bs-toggle="@(IsCurrentUser(Model) ? "tooltip" : "")"
+                          data-bs-trigger="hover focus">
+                        <button type="submit"
+                                class="btn btn-danger @(IsCurrentUser(Model)? "disabled" : "")">
+                            <i class="fa-solid fa-trash-can"></i> Törlés
+                        </button>
+                    </span>
+
+                </div>
+            </div>
+        </div>
     }
 </div>

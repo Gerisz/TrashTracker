@@ -7,6 +7,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
 {
     public class UserDetails
     {
+        public String UserId { get; set; } = null!;
         [DisplayName("Felhasználónév")]
         public String UserName { get; set; } = null!;
         [DisplayName("E-mail cím")]
@@ -20,6 +21,7 @@ namespace TrashTracker.Data.Models.DTOs.Out
             (String role, String imageUrlBase, PaginatedList<Trash>? trashes)
             => user => new UserDetails()
             {
+                UserId = user.Id,
                 UserName = user.UserName!,
                 Email = user.Email!,
                 EmailConfirmed = user.EmailConfirmed,

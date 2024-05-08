@@ -9,16 +9,18 @@
 <div class="container">
     <h1>@Html.DisplayFor(m => m.Id). szemétpont szerkesztése</h1>
     <hr />
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Edit", "Trashes",
+    new { backUrl = previousPage }, FormMethod.Post, null,
+    new { enctype = "multipart/form-data" }))
     {
         @Html.HiddenFor(_ => previousPage)
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <legend>Lokáció</legend>
         <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.Lat, "",
+                        @Html.EditorFor(m => m.Lat, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -27,14 +29,14 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.Lat)
-                        @Html.ValidationMessageFor(_ => Model.Lat, "",
+                        @Html.LabelFor(m => m.Lat)
+                        @Html.ValidationMessageFor(m => m.Lat, "",
                                  new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.Long, "",
+                        @Html.EditorFor(m => m.Long, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -43,8 +45,8 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.Long)
-                        @Html.ValidationMessageFor(_ => Model.Long, "",
+                        @Html.LabelFor(m => m.Long)
+                        @Html.ValidationMessageFor(m => m.Long, "",
                                  new { @class = "text-danger" })
                     </div>
                 </div>
@@ -60,7 +62,7 @@
             <div class="row">
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.Locality, "",
+                        @Html.EditorFor(m => m.Locality, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -69,14 +71,14 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.Locality)
-                        @Html.ValidationMessageFor(_ => Model.Locality, "",
+                        @Html.LabelFor(m => m.Locality)
+                        @Html.ValidationMessageFor(m => m.Locality, "",
                                  new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-floating">
-                        @Html.EditorFor(_ => Model.SubLocality, "",
+                        @Html.EditorFor(m => m.SubLocality, "",
                                  new
                                  {
                                      htmlAttributes = new
@@ -85,8 +87,8 @@
                                          placeholder = ""
                                      }
                                  })
-                        @Html.LabelFor(_ => Model.SubLocality)
-                        @Html.ValidationMessageFor(_ => Model.SubLocality, "",
+                        @Html.LabelFor(m => m.SubLocality)
+                        @Html.ValidationMessageFor(m => m.SubLocality, "",
                                  new { @class = "text-danger" })
                     </div>
                 </div>
@@ -103,18 +105,27 @@
         })),
                      new { @class = "form-select" })
         </div>
-        <legend>Hozzáférhetőség</legend>
+        <legend>@Html.LabelFor(m => m.Status)</legend>
         <div class="form-group m-3">
+            @Html.DropDownListFor(m => m.Status,
+                     new List<SelectListItem>(((Status[])Enum.GetValues(typeof(Status)))
+                     .Select(s => new SelectListItem()
+        {
+            Value = s.ToString(),
+            Text = EnumHelper<Status>.GetDisplayValue(s)
+        })),
+                     new { @class = "form-select" })
+        </div>
+        <legend>Hozzáférhetőség</legend>
+        <div class="form-group m-3 d-flex flex-wrap justify-content-around">
             @foreach (var value in Enum.GetValues<Accessibility>())
             {
-                @Html.CheckBox(value.ToString(),
-                         (Boolean)Model.GetType().GetProperty($"{value}")!.GetValue(Model, null)!,
-                         new
-                         {
-                             @class = "btn-check",
-                             id = $"{nameof(Accessibility)}.{value}",
-                             name = $"{nameof(Accessibility)}.{value}"
-                         })
+                @Html.CheckBox(value.ToString(), false, new
+                    {
+                        @class = "btn-check",
+                        id = $"{value}",
+                        name = $"{value}"
+                    })
                 var displayValue = EnumHelper<Accessibility>
                 .GetDisplayValue(value);
                 var displayIconClass = EnumHelper<Accessibility>
@@ -122,23 +133,21 @@
                 @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
                          new
                          {
-                             @class = "btn btn-outline-primary me-2",
-                             @for = $"{nameof(Accessibility)}.{value}"
-                         })
+                             @class = "btn btn-outline-primary m-1",
+                             @for = $"{value}"
+                         }, true)
             }
         </div>
-        <legend>Szeméttípusok</legend>
-        <div class="form-group m-3">
+        <legend>Szeméttípus</legend>
+        <div class="form-group m-3 d-flex flex-wrap justify-content-around">
             @foreach (var value in Enum.GetValues<TrashType>())
             {
-                @Html.CheckBox(value.ToString(),
-                         (Boolean)Model.GetType().GetProperty($"{value}")!.GetValue(Model, null)!,
-                         new
-                         {
-                             @class = "btn-check",
-                             id = $"{nameof(Accessibility)}.{value}",
-                             name = $"{nameof(Accessibility)}.{value}"
-                         })
+                @Html.CheckBox(value.ToString(), false, new
+                    {
+                        @class = "btn-check",
+                        id = $"{value}",
+                        name = $"{value}"
+                    })
                 var displayValue = EnumHelper<TrashType>
                 .GetDisplayValue(value);
                 var displayIconClass = EnumHelper<TrashType>
@@ -146,9 +155,9 @@
                 @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
                          new
                          {
-                             @class = "btn btn-outline-primary me-2",
-                             @for = $"{nameof(Accessibility)}.{value}"
-                         })
+                             @class = "btn btn-outline-primary m-1",
+                             @for = $"{value}"
+                         }, true)
             }
         </div>
         <div class="form-group m-3">
@@ -167,6 +176,21 @@
             </div>
         </div>
         <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.Images,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Images)
+                @Html.ValidationMessageFor(m => m.Images, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group m-3">
             <div class="row">
                 <div class="col">
                     <a href="@previousPage" class="btn btn-secondary m-3">
@@ -174,8 +198,8 @@
                     </a>
                 </div>
                 <div class="col d-flex justify-content-end">
-                    <button type="submit" class="btn btn-success m-3">
-                        <i class="fa-solid fa-plus"></i> Bejelentés
+                    <button type="submit" class="btn btn-warning m-3">
+                        <i class="fa-solid fa-pen-to-square"></i> Módosítás
                     </button>
                 </div>
             </div>
@@ -187,6 +211,6 @@
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        //await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }

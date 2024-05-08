@@ -1,20 +1,50 @@
-﻿@using TrashTracker.Web.Controllers
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using TrashTracker.Web.Controllers
 @model UserDetails
+
+@inject IAuthorizationService AuthorizationService
+@inject SignInManager<TrashTrackerUser> SignInManager
+
 @{
     ViewData["title"] = "Profil";
 }
 
-<div class="container">
+<div class="container mt-3">
     <div class="row">
-        <div class="col-md-3">
-            <img src="@Model.Image" class="img-thumbnail" />
-        </div>
+        @if (Model.Image != null)
+        {
+            <div class="col-md-3 d-flex align-items-center justify-content-center">
+                <img src="@Model.Image" class="img-thumbnail" />
+            </div>
+        }
+        else
+        {
+            <div class="col-md-3 d-flex align-items-center justify-content-center">
+            <i>Nincs profilkép</i>
+            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.UserId)
+            {
+                <i>
+                    Hozzáadáshoz @Html.ActionLink("szerkessze profilját", "Edit", "User",
+                new { UserName = Model.UserName })!
+                </i>
+            }
+            </div>
+        }
         <div class="col-md-9 align-self-end">
             <h1>@Model.UserName</h1>
             @Html.IconActionLink(Model.Email, "fa-solid fa-envelope", $"mailto:{Model.Email}",
                      Model.EmailConfirmed
                      ? new { @class = "btn btn-info" }
                      : new { @class = "btn btn-info", disabled = "" })
+            @if (User.FindFirstValue(ClaimTypes.NameIdentifier)! == Model.UserId
+            || (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
+            {
+                @Html.IconActionLink("Profil szerkesztése", "fa-solid fa-user-pen", "Edit", "User",
+                         new { UserName = Model.UserName },
+                         new { @class = "btn btn-warning" })
+            }
             <hr />
         </div>
     </div>

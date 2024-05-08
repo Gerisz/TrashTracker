@@ -14,193 +14,195 @@
 
 @await Html.PartialAsync("~/Views/Trashes/_Pagination.cshtml")
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Forrás
-            </th>
-            <th>
-                @Html.DisplayNameFor(_ => new Trash().Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(_ => new Trash().CreateTime)
-            </th>
-            <th>
-                Címkék
-            </th>
-            <th>
-                @Html.DisplayNameFor(_ => new Trash().Note)
-            </th>
-            <th class="text-end">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),
-                             new
-                             {
-                                 @class = "btn btn-success",
-                                 data_bs_toggle = "tooltip",
-                                 data_bs_title = "Hozzáadás"
-                             })
-                }
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in trashes)
-        {
-            @Html.HiddenFor(_ => item.UpdateNeeded)
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @(item.TrashoutId != null
-                        ? Html.IconActionLink($"Trashout/{item.TrashoutId}",
-                        "fa-solid fa-leaf",
-                        $"https://admin.trashout.ngo/trash-management/detail/{item.TrashoutId}",
-                        new
-                        {
-                            @class = "btn btn-success",
-                            data_bs_toggle = "tooltip",
-                            data_bs_title = "Megtekintés Trashout-on"
-                        })
-                        : Html.IconActionLink($"{item.User!.UserName}",
-                        "fa-solid fa-user", "Details", "User",
-                        new { userName = item.User!.UserName },
-                        new
-                        {
-                            @class = "btn btn-info",
-                            data_bs_toggle = "tooltip",
-                            data_bs_title = "Profil megtekintése"
-                        }))
-                </td>
-                <td>
-                    @Html.IconActionLink($"{item.Location.X},\n {item.Location.Y}",
-                             "fa-solid fa-map-location-dot", "Index", "Home",
-                             new { lat = item.Location.X, lon = item.Location.Y, },
-                             new
-                             {
-                                 @class = "btn btn-info",
-                                 data_bs_toggle = "tooltip",
-                                 data_bs_title = "Megtekintés térképen"
-                             })
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.CreateTime)
-                    @if (item.CreateTime != item.UpdateTime)
+                <th>
+                    Forrás
+                </th>
+                <th>
+                    @Html.DisplayNameFor(_ => new Trash().Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(_ => new Trash().CreateTime)
+                </th>
+                <th>
+                    Címkék
+                </th>
+                <th>
+                    @Html.DisplayNameFor(_ => new Trash().Note)
+                </th>
+                <th class="text-end" style="width: 0px">
+                    @if (SignInManager.IsSignedIn(User))
                     {
-                        var updateTimeDisplay =
-                        $"(frissítve: {@Html.DisplayFor(_ => item.UpdateTime)})";
-                        Html.Display(updateTimeDisplay);
+                        @Html.IconActionLink("", "fa-solid fa-plus", "Create", "Trashes", new(),
+                                 new
+                                 {
+                                     @class = "btn btn-success",
+                                     data_bs_toggle = "tooltip",
+                                     data_bs_title = "Hozzáadás"
+                                 })
                     }
-
-                </td>
-                <td>
-                    @if (item.Types == 0)
-                    {
-                        <i><small>típus nincs megadva</small></i>
-                    }
-                    else
-                    {
-                        @foreach (var value in Enum.GetValues<TrashType>())
-                        {
-                            if ((item.Types & value) == value)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in trashes)
+            {
+                @Html.HiddenFor(_ => item.UpdateNeeded)
+                <tr>
+                    <td>
+                        @(item.TrashoutId != null
+                            ? Html.IconActionLink($"Trashout/{item.TrashoutId}",
+                            "fa-solid fa-leaf",
+                            $"https://admin.trashout.ngo/trash-management/detail/{item.TrashoutId}",
+                            new
                             {
-                                <span class="badge text-bg-primary m-1">
-                                    <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
-                                    <br />
-                                    @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
-                                </span>
-                            }
-                        }
-                    }
-                    <br />
-                    @if (item.Accessibilities == 0)
-                    {
-                        <i><small>hozzáférhetőség nincs megadva</small></i>
-                    }
-                    else
-                    {
-                        @foreach (var value in Enum.GetValues<Accessibility>())
-                        {
-                            if ((item.Accessibilities & value) == value)
+                                @class = "btn btn-success",
+                                data_bs_toggle = "tooltip",
+                                data_bs_title = "Megtekintés Trashout-on"
+                            })
+                            : Html.IconActionLink($"{item.User!.UserName}",
+                            "fa-solid fa-user", "Details", "User",
+                            new { userName = item.User!.UserName },
+                            new
                             {
-                                <span class="badge text-bg-primary m-1">
-                                    <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
-                                    <br />
-                                    @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
-                                </span>
-                            }
-                        }}
-                    <br />
-                    @if (item.Size == 0)
-                    {
-                        <i><small>méret nincs megadva</small></i>
-                    }
-                    else
-                    {
-                        <span class="badge text-bg-primary m-1">
-                            <i class="@(EnumHelper<Size>.GetDisplayIconClass(item.Size))"></i>
-                            <br />
-                            @Html.Raw(EnumHelper<Size>.GetDisplayValue(item.Size))
-                        </span>
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Note)
-                </td>
-                <td class="justify-content-end">
-                    <div class="btn-group btn-group-table">
-                        @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
-                                 parentController, new { id = item.Id },
+                                @class = "btn btn-info",
+                                data_bs_toggle = "tooltip",
+                                data_bs_title = "Profil megtekintése"
+                            }))
+                    </td>
+                    <td>
+                        @Html.IconActionLink($"{item.Location.X},\n {item.Location.Y}",
+                                 "fa-solid fa-map-location-dot", "Index", "Home",
+                                 new { lat = item.Location.X, lon = item.Location.Y, },
                                  new
                                  {
                                      @class = "btn btn-info",
                                      data_bs_toggle = "tooltip",
-                                     data_bs_title = "Részletek"
+                                     data_bs_title = "Megtekintés térképen"
                                  })
-
-                        @if (SignInManager.IsSignedIn(User))
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.CreateTime)
+                        @if (item.CreateTime != item.UpdateTime)
                         {
-                            <span class="d-inline-block btn-group btn-group-table"
-                                  data-bs-title="@(item.TrashoutId != null ? "Nem módosítható" : "")"
-                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
-                                  data-bs-trigger="hover focus">
-                                @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
-                                         parentController, new { id = item.Id },
-                                         item.TrashoutId != null
-                                         ? new { @class = "btn btn-warning disabled" }
-                                         : new
-                                         {
-                                             @class = "btn btn-warning",
-                                             data_bs_toggle = "tooltip",
-                                             data_bs_title = "Módosítás"
-                                         })
+                            var updateTimeDisplay =
+                            $"(frissítve: {@Html.DisplayFor(_ => item.UpdateTime)})";
+                            Html.Display(updateTimeDisplay);
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.Types == 0)
+                        {
+                            <i><small>típus nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            @foreach (var value in Enum.GetValues<TrashType>())
+                            {
+                                if ((item.Types & value) == value)
+                                {
+                                    <span class="badge text-bg-primary m-1">
+                                        <i class="@(EnumHelper<TrashType>.GetDisplayIconClass(value))"></i>
+                                        <br />
+                                        @Html.Raw(EnumHelper<TrashType>.GetDisplayValue(value))
+                                    </span>
+                                }
+                            }
+                        }
+                        <br />
+                        @if (item.Accessibilities == 0)
+                        {
+                            <i><small>hozzáférhetőség nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            @foreach (var value in Enum.GetValues<Accessibility>())
+                            {
+                                if ((item.Accessibilities & value) == value)
+                                {
+                                    <span class="badge text-bg-primary m-1">
+                                        <i class="@(EnumHelper<Accessibility>.GetDisplayIconClass(value))"></i>
+                                        <br />
+                                        @Html.Raw(EnumHelper<Accessibility>.GetDisplayValue(value))
+                                    </span>
+                                }
+                            }}
+                        <br />
+                        @if (item.Size == 0)
+                        {
+                            <i><small>méret nincs megadva</small></i>
+                        }
+                        else
+                        {
+                            <span class="badge text-bg-primary m-1">
+                                <i class="@(EnumHelper<Size>.GetDisplayIconClass(item.Size))"></i>
+                                <br />
+                                @Html.Raw(EnumHelper<Size>.GetDisplayValue(item.Size))
                             </span>
                         }
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Moderator")).Succeeded)
-                        {
-                            <span class="d-inline-block btn-group btn-group-table"
-                                  data-bs-title="@(
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.Note)
+                    </td>
+                    <td style="width: 0px">
+                        <div class="btn-group btn-group-table">
+                            @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
+                                     parentController, new { id = item.Id },
+                                     new
+                                     {
+                                         @class = "btn btn-info",
+                                         data_bs_toggle = "tooltip",
+                                         data_bs_title = "Részletek"
+                                     })
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <span class="d-inline-block btn-group btn-group-table"
+                                      data-bs-title="@(item.TrashoutId != null ? "Nem módosítható" : "")"
+                                      data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                      data-bs-trigger="hover focus">
+                                    @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
+                                             parentController, new { id = item.Id },
+                                             item.TrashoutId != null
+                                             ? new { @class = "btn btn-warning disabled" }
+                                             : new
+                                             {
+                                                 @class = "btn btn-warning",
+                                                 data_bs_toggle = "tooltip",
+                                                 data_bs_title = "Módosítás"
+                                             })
+                                </span>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Moderator")).Succeeded)
+                            {
+                                <span class="d-inline-block btn-group btn-group-table"
+                                      data-bs-title="@(
                            item.TrashoutId != null
                            ? "Nem törölhető" : "")"
-                                  data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
-                                  data-bs-trigger="hover focus">
-                                @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
-                                         parentController, new { id = item.Id },
-                                         item.TrashoutId != null
-                                         ? new { @class = "btn btn-danger disabled" }
-                                         : new
-                                         {
-                                             @class = "btn btn-danger",
-                                             data_bs_toggle = "tooltip",
-                                             data_bs_title = "Törlés"
-                                         })
-                            </span>
-                        }
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                                      data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
+                                      data-bs-trigger="hover focus">
+                                    @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
+                                             parentController, new { id = item.Id },
+                                             item.TrashoutId != null
+                                             ? new { @class = "btn btn-danger disabled" }
+                                             : new
+                                             {
+                                                 @class = "btn btn-danger",
+                                                 data_bs_toggle = "tooltip",
+                                                 data_bs_title = "Törlés"
+                                             })
+                                </span>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @await Html.PartialAsync("~/Views/Trashes/_Pagination.cshtml")

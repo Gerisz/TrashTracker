@@ -1,20 +1,19 @@
-﻿@using TrashTracker.Data.Models.Enums
-@model PaginatedList<UserIndex>
+﻿@model PaginatedList<UserIndex>
 
 @{
     Boolean showCleaned = (Boolean)(ViewData["showCleaned"] ?? false);
-    ViewData["Title"] = "Szemétpontok";
+    ViewData["Title"] = "Felhasználók";
 }
 
 <div class="container">
-    <h1>Szemétpontok</h1>
+    <h1>@Html.DisplayName((String)ViewData["Title"]!)</h1>
     <hr />
     <div class="row">
-        <div class="col-md">
+        <div class="col-md m-1">
             <input type="text" class="form-control" id="searchString"
                    placeholder="Felhasználónév vagy e-mail cím" value="@ViewData["currentFilter"]" />
         </div>
-        <div class="col-md">
+        <div class="col-md m-1">
             <select class="form-select" id="pageSize">
                 <option value="50">50</option>
                 <option value="100">100</option>
@@ -23,9 +22,9 @@
             </select>
 
         </div>
-        <div class="col-md-auto">
+        <div class="col-md-auto m-1 d-flex align-items-end justify-content-between">
             @Html.IconActionLink("Vissza a teljes listához", "fa-solid fa-arrow-left",
-                     "Index", "Users", new(), new { @class = "btn btn-secondary" })
+                     "Index", "Users", new(), new { @class = "btn btn-secondary me-3" })
             <a href="#" class="btn btn-primary" onclick="filter()">
                 <i class="fa-solid fa-magnifying-glass"></i> Keresés
             </a>

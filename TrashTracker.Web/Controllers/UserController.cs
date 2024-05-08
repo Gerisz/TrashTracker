@@ -15,18 +15,21 @@ namespace TrashTracker.Web.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IAuthorizationService _authorizationService;
         private readonly TrashTrackerDbContext _context;
-        private readonly UserManager<TrashTrackerUser> _userManager;
         private readonly SignInManager<TrashTrackerUser> _signInManager;
+        private readonly UserManager<TrashTrackerUser> _userManager;
 
         private string ImageURL => Url
             .Action(action: "Image", controller: "User",
             values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
 
-        public UserController(TrashTrackerDbContext context,
-            UserManager<TrashTrackerUser> userManager,
-            SignInManager<TrashTrackerUser> signInManager)
+        public UserController(IAuthorizationService authorizationService,
+            TrashTrackerDbContext context,
+            SignInManager<TrashTrackerUser> signInManager,
+            UserManager<TrashTrackerUser> userManager)
         {
+            _authorizationService = authorizationService;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,7 +46,7 @@ namespace TrashTracker.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(Login login, String? returnUrl = null)
+        public async Task<IActionResult> Login(UserLogin login, String? returnUrl = null)
         {
             ViewData["returnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -58,7 +61,8 @@ namespace TrashTracker.Web.Controllers
                     return View(login);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user, login.Password, false, false);
+                var result = await _signInManager
+                    .PasswordSignInAsync(user, login.Password, false, false);
 
                 if (result.Succeeded)
                     return RedirectToLocal(returnUrl);
@@ -78,7 +82,7 @@ namespace TrashTracker.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(Register register, String? returnUrl = null)
+        public async Task<IActionResult> Register(UserRegister register, String? returnUrl = null)
         {
             ViewData["returnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -168,14 +172,15 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Edit/5
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Edit(String userName)
         {
             var user = await _userManager.FindByNameAsync(userName);
 
             if (user == null)
                 return NotFound();
-            if (IsCurrentUser(user))
+            if (!IsCurrentUser(user)
+                && !(await _authorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
                 return Forbid();
 
             ViewData["previousPage"] = Request.Headers.Referer.ToString();
@@ -191,33 +196,58 @@ namespace TrashTracker.Web.Controllers
         }
 
         // POST: Trashes/Edit/5
-        [Authorize(Policy = "Admin")]
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit
             (String userName, UserEdit userEdit, String previousPage)
         {
+            var user = await _userManager.FindByNameAsync(userName);
+            var conflictingUserByNewUserName = await _userManager
+                .FindByNameAsync(userEdit.NewUserName);
+            var conflictingUserByEmail = await _userManager
+                .FindByEmailAsync(userEdit.Email);
+
+            if (conflictingUserByNewUserName != null && user != conflictingUserByNewUserName)
+                ModelState.AddModelError("", "A felhasználónév már foglalt!");
+            if (conflictingUserByEmail != null && user != conflictingUserByEmail)
+                ModelState.AddModelError("", "Az e-mail cím már foglalt!");
+
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(userName);
 
                 if (user == null)
                     return NotFound();
-                if (IsCurrentUser(user))
+                if (!IsCurrentUser(user)
+                    && !(await _authorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
                     return Forbid();
 
-                var result = await _userManager
-                    .RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
+                if (!IsCurrentUser(user)
+                    && (await _authorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
+                {
+                    var result = await _userManager
+                        .RemoveFromRolesAsync(user, await _userManager.GetRolesAsync(user));
 
-                if (!result.Succeeded)
-                    return BadRequest(result.Errors);
+                    if (!result.Succeeded)
+                        return BadRequest(result.Errors);
 
-                result = await _userManager.AddToRoleAsync(user, $"{userEdit.Role}");
+                    result = await _userManager.AddToRoleAsync(user, $"{userEdit.Role}");
 
-                if (result.Succeeded)
-                    return RedirectToLocal(previousPage);
+                    if (!result.Succeeded)
+                        return BadRequest(result.Errors);
+                }
 
-                return BadRequest(result.Errors);
+                if (user.UserName != userEdit.NewUserName)
+                    previousPage = $"{new Uri(previousPage).Query
+                        .Replace(userName, userEdit.NewUserName)}";
+
+                await user.UpdateAsync(_userManager, userEdit);
+                await _context.SaveChangesAsync();
+
+                if (IsCurrentUser(user))
+                    await _signInManager.SignInAsync(user, false);
+
+                return RedirectToLocal(previousPage);
             }
 
             return View(userEdit);

@@ -43,4 +43,8 @@
     <ProjectReference Include="..\TrashTracker.Data\TrashTracker.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\App_Code\" />
+  </ItemGroup>
+
 </Project>

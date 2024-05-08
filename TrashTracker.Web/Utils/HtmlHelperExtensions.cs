@@ -78,7 +78,8 @@ namespace TrashTracker.Web.Utils
             Expression<Func<TModel, TValue>> expression,
             String labelText,
             String iconClass,
-            Object htmlAttributes)
+            Object htmlAttributes,
+            Boolean breakLine = false)
         {
             var label = helper.LabelFor(expression, "", htmlAttributes);
             var icon = "";
@@ -89,7 +90,7 @@ namespace TrashTracker.Web.Utils
                 iconBuilder.WriteTo(writer, HtmlEncoder.Default);
                 icon = writer.ToString();
             }
-            ((TagBuilder)label).InnerHtml.AppendHtml($"{icon} {labelText}");
+            ((TagBuilder)label).InnerHtml.AppendHtml($"{icon}{(breakLine ? "<br>" : "")} {labelText}");
             if (htmlAttributes != null)
                 foreach (var prop in htmlAttributes.GetType().GetProperties())
                     ((TagBuilder)label).MergeAttribute(prop.Name.Replace("_", "-"),

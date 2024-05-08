@@ -168,7 +168,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Delete/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Moderator")]
         public async Task<IActionResult> Delete(Int32? id)
         {
             if (id == null)
@@ -186,7 +186,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // POST: Trashes/Delete/5
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Moderator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Int32 id, String previousPage)
@@ -224,7 +224,7 @@ namespace TrashTracker.Web.Controllers
             if (Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             else
-                return RedirectToAction(nameof(TrashesController.Index), "Trashes");
+                return RedirectToAction(nameof(Index), "Trashes");
         }
 
         private bool TrashExists(Int32 id)

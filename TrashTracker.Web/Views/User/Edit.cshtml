@@ -1,24 +1,86 @@
-﻿@using TrashTracker.Data.Models.Defaults
+﻿@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using TrashTracker.Data.Models.Defaults
 @model UserEdit
+
+@inject IAuthorizationService AuthorizationService
 
 @{
     var previousPage = ViewData["previousPage"];
+    var userName = Context.Request.Query["userName"];
 }
 
 <div class="container">
-    <h1>@Html.DisplayFor(m => m.UserName) nevű felhasználó szerkesztése</h1>
+    <h1>@Html.DisplayName(userName) nevű felhasználó szerkesztése</h1>
     <hr />
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Edit", "User",
+    new { }, FormMethod.Post, null,
+    new { enctype = "multipart/form-data" }))
     {
-        <div class="form-group">
-            @Html.DropDownListFor(m => m.Role,
-                     new List<SelectListItem>(((Roles[])Enum.GetValues(typeof(Roles)))
-                     .Select(s => new SelectListItem()
+        @Html.HiddenFor(_ => previousPage)
+        @Html.HiddenFor(_ => userName)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.NewUserName,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.NewUserName)
+                @Html.ValidationMessageFor(m => m.NewUserName, "",
+                         new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.Email,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Email)
+                @Html.ValidationMessageFor(m => m.Email, "",
+                         new { @class = "text-danger" })
+            </div>
+        </div>
+        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Id
+       || (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
+        {
+            <div class="form-group m-3">
+                @Html.DropDownListFor(m => m.Role,
+                         new List<SelectListItem>(((Roles[])Enum.GetValues(typeof(Roles)))
+                         .Select(s => new SelectListItem()
         {
             Value = s.ToString(),
             Text = EnumHelper<Roles>.GetDisplayValue(s)
         })),
-                     new { @class = "form-select" })
+                         new { @class = "form-select" })
+            </div>
+        }
+        <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.Image,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Image)
+                @Html.ValidationMessageFor(m => m.Image, "",
+                         new { @class = "text-danger" })
+            </div>
         </div>
         <div class="form-group">
             <div class="row">
@@ -29,7 +91,7 @@
                 </div>
                 <div class="col d-flex justify-content-end">
                     <button type="submit" class="btn btn-warning m-3">
-                        <i class="fa-solid fa-pen-to-square"></i> Módosítás
+                        <i class="fa-solid fa-user-pen"></i> Módosítás
                     </button>
                 </div>
             </div>

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using CleanTiszaMap.Data.Attributes;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
@@ -11,7 +13,7 @@ namespace TrashTracker.Data.Models.DTOs.In
         [DisplayName("Szélesség")]
         [Localizable(false)]
         [Range(-180.0, 180.0,
-            ErrorMessage = "A koordináta nem lehet kevesebb, mint {0} és több, mint {1}.")]
+            ErrorMessage = "A koordináta nem lehet kevesebb, mint {0}° és több, mint {1}°.")]
         [Required(ErrorMessage = "Szélesség megadása kötelező!")]
         public Double Lat { get; set; }
 
@@ -58,8 +60,12 @@ namespace TrashTracker.Data.Models.DTOs.In
         #endregion
 
         [DisplayName("Megjegyzés")]
-        [StringLength(2000, ErrorMessage = "{0} karaternél nem lehet hosszabb a megjegyzés!")]
+        [StringLength(2000, ErrorMessage = "{0} karakternél nem lehet hosszabb a megjegyzés!")]
         public String? Note { get; set; }
+
+        [DisplayName("Képek hozzáadása")]
+        [ValidImage]
+        public IEnumerable<IFormFile?> Images { get; set; } = [];
 
         public TrashFromUser() { }
 
@@ -87,6 +93,5 @@ namespace TrashTracker.Data.Models.DTOs.In
             Plastic = (trash.Types & TrashType.Plastic) != 0;
             Note = trash.Note;
         }
-
     }
 }

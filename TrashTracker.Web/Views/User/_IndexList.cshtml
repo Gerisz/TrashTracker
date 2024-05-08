@@ -1,75 +1,89 @@
-﻿@using TrashTracker.Data.Models.Enums
+﻿@using System.Security.Claims
 @model (PaginatedList<UserIndex> Users, RouteValueDictionary ParentRouteValue)
 
 @{
     var parentAction = (String)Model.ParentRouteValue["action"]!;
     var parentController = (String)Model.ParentRouteValue["controller"]!;
     var users = Model.Users;
+
+    Boolean IsCurrentUser(UserIndex user)
+    {
+        return user.Id == User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }
-    
+
 @await Html.PartialAsync("~/Views/User/_Pagination.cshtml")
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(_ => new UserIndex().UserName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(_ => new UserIndex().Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(_ => new UserIndex().RegistrationTime)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in users)
-        {
+<div class="table-responsive">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(_ => item.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(_ => item.RegistrationTime)
-                </td>
-                <td>
-                <td class="justify-content-end">
-                    <div class="btn-group btn-group-table">
-                            @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
-                                     parentController, new { UserName = item.UserName },
-                                     new
-                                     {
-                                         @class = "btn btn-info",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Profil"
-                                     })
-                            @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
-                                     parentController, new { UserName = item.UserName },
-                                     new
-                                     {
-                                         @class = "btn btn-warning",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Módosítás"
-                                     })
-                            @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
-                                     parentController, new { UserName = item.UserName },
-                                     new
-                                     {
-                                         @class = "btn btn-danger",
-                                         data_bs_toggle = "tooltip",
-                                         data_bs_title = "Törlés"
-                                     })
-                    </div>
-                </td>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(_ => new UserIndex().UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(_ => new UserIndex().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(_ => new UserIndex().RegistrationTime)
+                </th>
+                <th style="width: 0px"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(_ => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => item.RegistrationTime)
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            <div class="btn-group btn-group-table">
+                                @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
+                                         parentController, new { UserName = item.UserName },
+                                         new
+                                         {
+                                             @class = "btn btn-info",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Profil"
+                                         })
+                                @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
+                                         parentController, new { UserName = item.UserName },
+                                         new
+                                         {
+                                             @class = "btn btn-warning",
+                                             data_bs_toggle = "tooltip",
+                                             data_bs_title = "Módosítás"
+                                         })
+                                <span class="d-inline-block btn-group btn-group-table"
+                                      data-bs-title="@(IsCurrentUser(item) ? "Nem törölhető" : "")"
+                                      data-bs-toggle="@(IsCurrentUser(item) ? "tooltip" : "")"
+                                      data-bs-trigger="hover focus">
+                                    @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
+                                             parentController, new { UserName = item.UserName },
+                                             IsCurrentUser(item)
+                                             ? new { @class = "btn btn-danger disabled" }
+                                             : new
+                                             {
+                                                 @class = "btn btn-danger",
+                                                 data_bs_toggle = "tooltip",
+                                                 data_bs_title = "Törlés"
+                                             })
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @await Html.PartialAsync("~/Views/User/_Pagination.cshtml")

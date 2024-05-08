@@ -1,27 +1,37 @@
-﻿@model Trash
+﻿@using TrashTracker.Data.Models.Tables
+@model Trash
 
 @{
-    ViewData["Title"] = "Törlés";
+    ViewData["Title"] = "Szemétpont törlése";
     var previousPage = ViewData["previousPage"];
 }
 
 <div class="container">
-    <h1>@Html.DisplayFor(_ => Model.Id). szemétpont</h1>
+    <h1>@Html.DisplayFor(_ => Model.Id). szemétpont végleges törlése</h1>
+    <hr />
     <h3>Biztosan törölni szeretné ezt a pontot?</h3>
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(_ => previousPage)
-        <a class="btn btn-success" href="@previousPage">
-            <i class="fa-solid fa-arrow-left"></i> Vissza
-        </a>
-        <span data-bs-title="@(Model.TrashoutId != null ? "Nem törölhető" : "")"
-              data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
-              data-bs-trigger="hover focus">
-            <button type="submit"
-                    class="btn btn-danger @(Model.TrashoutId != null ? "disabled" : "")">
-                <i class="fa-solid fa-trash-can"></i> Törlés
-            </button>
-        </span>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <a href="@previousPage" class="btn btn-secondary m-3">
+                        <i class="fa-solid fa-arrow-left"></i> Vissza
+                    </a>
+                </div>
+                <div class="col d-flex align-items-center justify-content-end">
+                    <span data-bs-title="@(Model.TrashoutId != null ? "Nem törölhető" : "")"
+                          data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
+                          data-bs-trigger="hover focus">
+                        <button type="submit"
+                                class="btn btn-danger @(Model.TrashoutId != null ? "disabled" : "")">
+                            <i class="fa-solid fa-trash-can"></i> Törlés
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
     }
 </div>

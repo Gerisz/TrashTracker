@@ -33,7 +33,7 @@ namespace TrashTracker.Web.Utils
             return new IdentityError()
             {
                 Code = nameof(DuplicateUserName),
-                Description = "Ez az felhasználónév már foglalt!"
+                Description = "Ez a felhasználónév már foglalt!"
             };
         }
 

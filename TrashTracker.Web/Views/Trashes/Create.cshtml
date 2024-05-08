@@ -9,9 +9,190 @@
 <div class="container">
     <h1>Új hulladékpont bejelentése</h1>
     <hr />
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Create", "Trashes",
+    new { backUrl = previousPage }, FormMethod.Post, null,
+    new { enctype = "multipart/form-data" }))
     {
-        @await Html.PartialAsync("_CreateForm")
+        @Html.HiddenFor(_ => previousPage)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <legend>Lokáció</legend>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(m => m.Lat, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(m => m.Lat)
+                        @Html.ValidationMessageFor(m => m.Lat, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(m => m.Long, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(m => m.Long)
+                        @Html.ValidationMessageFor(m => m.Long, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-md-auto d-flex align-items-center">
+                    <button class="btn btn-primary" onclick="getPosition(); return false;">
+                        <i class="fa-solid fa-location-crosshairs"></i> Jelenlegi hely meghatározása
+                    </button>
+                </div>
+            </div>
+        </div>
+        <legend>Település</legend>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(m => m.Locality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(m => m.Locality)
+                        @Html.ValidationMessageFor(m => m.Locality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        @Html.EditorFor(m => m.SubLocality, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         placeholder = ""
+                                     }
+                                 })
+                        @Html.LabelFor(m => m.SubLocality)
+                        @Html.ValidationMessageFor(m => m.SubLocality, "",
+                                 new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <legend>@Html.LabelFor(m => m.Size)</legend>
+        <div class="form-group m-3">
+            @Html.DropDownListFor(m => m.Size,
+                     new List<SelectListItem>(((Size[])Enum.GetValues(typeof(Size)))
+                     .Select(s => new SelectListItem()
+        {
+            Value = s.ToString(),
+            Text = EnumHelper<Size>.GetDisplayValue(s)
+        })),
+                     new { @class = "form-select" })
+        </div>
+        <legend>Hozzáférhetőség</legend>
+        <div class="form-group m-3 d-flex flex-wrap justify-content-around">
+            @foreach (var value in Enum.GetValues<Accessibility>())
+            {
+                @Html.CheckBox(value.ToString(), false, new
+                    {
+                        @class = "btn-check",
+                        id = $"{value}",
+                        name = $"{value}"
+                    })
+                var displayValue = EnumHelper<Accessibility>
+                .GetDisplayValue(value);
+                var displayIconClass = EnumHelper<Accessibility>
+                .GetDisplayIconClass(value);
+                @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary m-1",
+                             @for = $"{value}"
+                         }, true)
+            }
+        </div>
+        <legend>Szeméttípus</legend>
+        <div class="form-group m-3 d-flex flex-wrap justify-content-around">
+            @foreach (var value in Enum.GetValues<TrashType>())
+            {
+                @Html.CheckBox(value.ToString(), false, new
+                    {
+                        @class = "btn-check",
+                        id = $"{value}",
+                        name = $"{value}"
+                    })
+                var displayValue = EnumHelper<TrashType>
+                .GetDisplayValue(value);
+                var displayIconClass = EnumHelper<TrashType>
+                .GetDisplayIconClass(value);
+                @Html.IconLabelFor(_ => value, displayValue, displayIconClass,
+                         new
+                         {
+                             @class = "btn btn-outline-primary m-1",
+                             @for = $"{value}"
+                         }, true)
+            }
+        </div>
+        <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.Note,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Note)
+                @Html.ValidationMessageFor(m => m.Note, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group m-3">
+            <div class="form-floating">
+                @Html.EditorFor(m => m.Images,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 placeholder = ""
+                             }
+                         })
+                @Html.LabelFor(m => m.Images)
+                @Html.ValidationMessageFor(m => m.Images, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group m-3">
+            <div class="row">
+                <div class="col">
+                    <a href="@previousPage" class="btn btn-secondary m-3">
+                        <i class="fa-solid fa-arrow-left"></i> Vissza
+                    </a>
+                </div>
+                <div class="col d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success m-3">
+                        <i class="fa-solid fa-plus"></i> Bejelentés
+                    </button>
+                </div>
+            </div>
+        </div>
     }
 </div>
 

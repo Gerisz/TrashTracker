@@ -17,27 +17,28 @@ namespace TrashTracker.Data.Models
             // for every role defined in DefaultRoles.cs
             foreach (var role in Enum.GetValues(typeof(Roles)))
             {
-                var user = await userManager.FindByNameAsync(role.ToString()!);
+                var user = await userManager.FindByNameAsync($"{role}");
                 // if user with said role doesn't exist
                 if (user == null)
                 {
                     // then create a default user for that role
                     user = new TrashTrackerUser()
                     {
-                        UserName = role.ToString()!.ToLower(),
-                        Email = $"{role}@example.com",
+                        UserName = $"{role}".ToLower(),
+                        Email = $"{role}@example.com".ToLower(),
                         EmailConfirmed = true
                     };
-                    await userManager.CreateAsync(user, role.ToString()!.ToLower());
-                    await userManager.AddToRoleAsync(user, role.ToString()!);
+                    await userManager.CreateAsync(user, $"{role}{role}1");
+                    await userManager.AddToRoleAsync(user, $"{role}");
                 }
                 else
                 {
-                    user.UserName = role.ToString()!.ToLower();
+                    user.UserName = $"{role}".ToLower();
+                    user.Email = $"{role}@example.com".ToLower();
                     user.EmailConfirmed = true;
 
                     await userManager.UpdateAsync(user);
-                    await userManager.AddToRoleAsync(user, role.ToString()!);
+                    await userManager.AddToRoleAsync(user, $"{role}");
                 }
             }
         }
@@ -48,9 +49,9 @@ namespace TrashTracker.Data.Models
             foreach (var role in Enum.GetValues(typeof(Roles)))
             {
                 // if there's no said role
-                if (!await roleManager.RoleExistsAsync(role.ToString()!))
+                if (!await roleManager.RoleExistsAsync($"{role}"))
                     // then create that role
-                    await roleManager.CreateAsync(new TrashTrackerIdentityRole(role.ToString()!));
+                    await roleManager.CreateAsync(new TrashTrackerIdentityRole($"{role}"));
             }
         }
     }

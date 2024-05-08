@@ -12,22 +12,27 @@ namespace TrashTracker.Data.Models.DTOs.Out
         public Int32? TrashoutId { get; set; }
         public String? UserName { get; set; }
 
-        [DisplayName("Koordináták")]
+        [DisplayName("Szélesség")]
         public Double Latitude { get; set; }
-        [DisplayName("Koordináták")]
+
+        [DisplayName("Hosszúság")]
         public Double Longitude { get; set; }
 
         [DisplayName("Ország")]
         public Country? Country { get; set; }
+
         [DisplayName("Település")]
         public String? Locality { get; set; }
+
         [DisplayName("Településrész")]
         public String? SubLocality { get; set; }
 
         [DisplayName("Bejelentés ideje")]
         public DateTime? CreateTime { get; set; }
+
         [DisplayName("Legutóbbi frissítés ideje")]
         public DateTime? UpdateTime { get; set; }
+
         [DisplayName("Frissítésre szorul-e")]
         public Boolean? UpdateNeeded { get; set; }
 
@@ -37,10 +42,13 @@ namespace TrashTracker.Data.Models.DTOs.Out
 
         [DisplayName("Állapot")]
         public Status Status { get; set; }
+
         [DisplayName("Mennyiség")]
         public Size Size { get; set; }
+
         [DisplayName("Szeméttípusok")]
         public TrashType Types { get; set; }
+
         [DisplayName("Hozzáférhetőség")]
         public Accessibility Accessibilities { get; set; }
 
@@ -71,6 +79,5 @@ namespace TrashTracker.Data.Models.DTOs.Out
 
         public static TrashDetails Create(Trash place, String imageUrlBase)
             => Projection(imageUrlBase).Compile().Invoke(place);
-
     }
 }

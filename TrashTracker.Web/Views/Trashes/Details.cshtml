@@ -1,6 +1,11 @@
-﻿@using Microsoft.AspNetCore.Html
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Identity
 @using TrashTracker.Data.Models.Enums
 @model TrashDetails
+
+@inject IAuthorizationService AuthorizationService
+@inject SignInManager<TrashTrackerUser> SignInManager
 
 @{
     ViewData["Title"] = "Részletek";
@@ -176,34 +181,40 @@
         </dd>
     </dl>
     <hr />
-    <span data-bs-title="@(Model.TrashoutId != null
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <span data-bs-title="@(Model.TrashoutId != null
       ? "Nem módosítható" : "")"
-          data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
-          data-bs-trigger="hover focus">
-        @Html.IconActionLink("Módosítás", "fa-solid fa-pen-to-square", "Edit", "Trashes",
-                 new { id = Model.Id },
-                 Model.TrashoutId != null
-                 ? new { @class = "btn btn-warning disabled" }
-                 : new
-                 {
-                     @class = "btn btn-warning",
-                     data_bs_toggle = "tooltip",
-                     data_bs_title = "Módosítás"
-                 })
-    </span>
-    <span data-bs-title="@(Model.TrashoutId != null
+              data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
+              data-bs-trigger="hover focus">
+            @Html.IconActionLink("Módosítás", "fa-solid fa-pen-to-square", "Edit", "Trashes",
+                     new { id = Model.Id },
+                     Model.TrashoutId != null
+                     ? new { @class = "btn btn-warning disabled" }
+                     : new
+                     {
+                         @class = "btn btn-warning",
+                         data_bs_toggle = "tooltip",
+                         data_bs_title = "Módosítás"
+                     })
+        </span>
+    }
+    @if ((await AuthorizationService.AuthorizeAsync(User, "Moderator")).Succeeded)
+    {
+        <span data-bs-title="@(Model.TrashoutId != null
       ? "Nem törölhető" : "")"
-          data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
-          data-bs-trigger="hover focus">
-        @Html.IconActionLink("Törlés", "fa-solid fa-trash-can", "Delete", "Trashes",
-                 new { id = Model.Id },
-                 Model.TrashoutId != null
-                 ? new { @class = "btn btn-danger disabled" }
-                 : new
-                 {
-                     @class = "btn btn-danger",
-                     data_bs_toggle = "tooltip",
-                     data_bs_title = "Törlés"
-                 })
-    </span>
+              data-bs-toggle="@(Model.TrashoutId != null ? "tooltip" : "")"
+              data-bs-trigger="hover focus">
+            @Html.IconActionLink("Törlés", "fa-solid fa-trash-can", "Delete", "Trashes",
+                     new { id = Model.Id },
+                     Model.TrashoutId != null
+                     ? new { @class = "btn btn-danger disabled" }
+                     : new
+                     {
+                         @class = "btn btn-danger",
+                         data_bs_toggle = "tooltip",
+                         data_bs_title = "Törlés"
+                     })
+        </span>
+    }
 </div>

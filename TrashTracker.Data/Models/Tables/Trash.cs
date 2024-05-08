@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TrashTracker.Data.Models.Tables
 {
@@ -134,6 +136,12 @@ namespace TrashTracker.Data.Models.Tables
                 | (trashFromUser.Metal ? TrashType.Metal : 0)
                 | (trashFromUser.Organic ? TrashType.Organic : 0)
                 | (trashFromUser.Plastic ? TrashType.Plastic : 0);
+
+
+            Images = trashFromUser.Images
+                .Where(i => i != null)
+                .Select(i => new TrashImage(userId, i))
+                .ToList();
         }
 
         /// <summary>
@@ -164,6 +172,6 @@ namespace TrashTracker.Data.Models.Tables
             return this;
         }
 
-        private const int WGS_SRID = 4326;
+        private const Int32 WGS_SRID = 4326;
     }
 }

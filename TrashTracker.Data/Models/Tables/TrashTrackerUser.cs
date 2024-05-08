@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Win32;
 using TrashTracker.Data.Models.DTOs.In;
 
 namespace TrashTracker.Data.Models.Tables
@@ -11,14 +12,29 @@ namespace TrashTracker.Data.Models.Tables
         public DateTime RegistrationTime { get; set; }
 
         public TrashTrackerUser() { }
-        public TrashTrackerUser(Register register, Boolean? emailConfirmed = false)
+
+        public TrashTrackerUser(UserRegister register, Boolean? emailConfirmed = false)
         {
             UserName = register.UserName;
             Email = register.Email;
             EmailConfirmed = emailConfirmed ?? false;
             Image = register.Image != null
-                ? new UserImage(register.Image) : null;
+                ? new UserImage(register.Image)
+                : null;
             RegistrationTime = DateTime.UtcNow;
+        }
+
+        public async Task<TrashTrackerUser> UpdateAsync(UserManager<TrashTrackerUser> userManager,
+            UserEdit user)
+        {
+            if (UserName != user.NewUserName)
+                await userManager.SetUserNameAsync(this, user.NewUserName);
+            if (Email != user.Email)
+                await userManager.SetEmailAsync(this, user.Email);
+            if (user.Image != null && Image != user.Image)
+                Image = new UserImage(user.Image);
+
+            return this;
         }
     }
 }

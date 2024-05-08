@@ -53,12 +53,13 @@ Az weboldal használtat közben négy felhasználói típusról beszélhetünk: 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\textwidth]{usecase_guest}
+	\includegraphics[width=0.6\textwidth]{usecase_guest}
 	\caption{Felhasználói esetek vendégként}
 	\label{fig:usecase_guest}
 \end{figure}
 
-\subsection{Felület általános leírása}
+\subsection{Felület áttekintése}
+\label{subsec:nav_guest}
 
 A weboldal látogatása során több felület is megjelenik, viszont ezek általánosan leírhatóak. Minden lap tetején egy navigációs sáv van, melynek segítségével több funkciót is gyorsan elérhetünk. A sáv bal oldalán a weboldal neve, illetve a "Térkép" felirat egyaránt a térképre, azaz a főoldalra irányít, a mellette szereplő "Lista" pedig a pontok listájához. A másik oldalon (jobbról balra) egy fizikai kapcsolót imitáló gomb, melynek segítségével válthatunk az előbb említett színsémák között, illetve amellett egy "Nincs bejelentkezve" feliratú listát lenyitva tudunk a regisztráció, illetve a bejelentkezés közül választani.\par
 Ha a felhasználó nem egy széles képernyőn (pl. asztali számítógép vagy fektetett táblagép) látogatja meg az oldalt, akkor a sáv bár hasonlóan ott van, viszont a könnyebb használat érdekében a menüpontok egy, a jobb oldalon található \hspace{0.1cm}\boldmath\(\equiv\)\hspace{0.1cm} ikonra kattintva lehet ezeket elérni.
@@ -121,6 +122,7 @@ Egy pontra való kattintáskor afelett megjelenik egy modális "buborék", amely
 \end{figure}
 
 \subsection{Pont részletezése}
+\label{subsec:trash_details}
 
 Ezt az oldalt az előző bekezdésben említett "Részletek" gombra kattintva, vagy a következő bekezdésben tárgyalt \faIcon{info-circle} ikonra kattintva lehet elérni. Itt az egyszerű tulajdonságok részletezésén túl megtalálható a pont pontos helyzete, illetve annak forrása (felhasználó esetén bejelentője). Előbbire kattintva a térképen levő helyére, utóbbira pedig annak forrására (TrashOut esetén az ottani adatlapjára, felhasználó esetén annak a profiljára) lehet navigálni.
 
@@ -132,6 +134,7 @@ Ezt az oldalt az előző bekezdésben említett "Részletek" gombra kattintva, v
 \end{figure}
 
 \subsection{Listanézet}
+\label{subsec:trash_index}
 
 A pontokat nem csak térképen, hanem listaként is megtekinthetjük. Ennek célja, hogy a bejelentés/frissítés dátuma szerint rendezve könnyedén fel lehessen fedezni a legrelevánsabb szemétlerakatokat. A lista minden sora egy-egy pontot, annak oszlopai pedig annak a fejlécben szereplő tulajdonságát tartalmazzák. Egy adott rekord részletezésére is lehetőség van, a jobb oldalon található \faIcon{info-circle} ikonra kattintva. Az oldal tetején lehetőség van alapvető szűrésekre is, opcionálisan belefoghatjuk a listába a már megtisztított pontokat, kereshetünk a bejelentő felhasználónevében, illetve az ahhoz tartozó megjegyzéseiben, illetve állíthatjuk az egy oldalon szereplő találatok maximális számát. Ha több találat van, mint ami az oldalon elfér, akkor a lista tetején, illetve alján található nyilakkal és számokkal könnyedén navigálhatunk azok között.
 
@@ -167,6 +170,7 @@ A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívá
 \end{figure}
 
 \subsubsection{Hibaüzenetek}
+\label{subsubsec:user_register_errors}
 
 A regisztrációkor megadott adatok több követelménynek is meg kell hogy feleljenek, melyek "megsértésekor" hibaüzenetek jelenhetnek meg az űrlap kitöltése közben vagy után. Az első ilyen követelmény, hogy minden felhasználónévnek egyedinek kell lennie. Ezt az űrlap helyes kitöltése és elküldése után egy "\textcolor{red}{Ez a felhasználónév már foglalt!}" felirat jelzi.
 
@@ -230,218 +234,148 @@ Sikeres bejelentkezést (vagy regisztrációt) követően a felhasználó vendé
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{usecase_user}
+	\includegraphics[width=1.0\textwidth]{usecase_user}
 	\caption{Felhasználói esetek (bejelentkezett) felhasználóként}
 	\label{fig:usecase_user}
 \end{figure}
 
 \subsection{Pont bejelentése}
 
-Új pont bejelentésére a listanézet tetején található \faIcon{plus} ikonra kattintva van lehetőség, mely elnavigál annak az űrlapjára. Ezen az űrlapon meg kell adni a szemét pontos helyzetét koordinátákként, amely megadásának segítségül szolgál a szöveges mezőjük melletti "Jelenlegi hely meghatározása", mely megnyomásával a böngésző meghatározza a bejelentőnek a lehető legpontosabb koordinátáit. A méret jellemzése mellett ajánlott a szemét típusát és hozzáférhetőségét is megadni, melynek kezelése hasonló a térképen való szűrés gombjaihoz. Az utolsó, többsoros szöveges mezőben megjegyzést lehet írni, mely segíti a listanézetben való keresését a pontnak.
+Új pont bejelentésére a listanézet tetején található \faIcon{plus} ikonra kattintva van lehetőség, mely elnavigál annak az űrlapjára. Ezen az űrlapon meg kell adni a szemét pontos helyzetét koordinátákként, amely megadásának segítségül szolgál a szöveges mezőjük melletti "Jelenlegi hely meghatározása", mely megnyomásával a böngésző meghatározza a bejelentőnek a lehető legpontosabb koordinátáit. A méret jellemzése mellett ajánlott a szemét típusát és hozzáférhetőségét is megadni, melynek kezelése hasonló a térképen való szűrés gombjaihoz. Az utolsó, többsoros szöveges mezőben megjegyzést lehet írni, mely segíti a listanézetben való keresését a pontnak. Az űrlap alján a "Vissza" gombbal lehet az előbb meglátogatott oldalra navigálni, illetve a "Bejelentés" gombra kattintva is ide lesz átirányítva a felhasználó
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{trash_create}
+	\caption{Szemétpont bejelentésének űrlapja}
+	\label{fig:trash_create}
+\end{figure}
 
 \subsubsection{Hibaüzenetek}
+\label{subsubsec:trash_create_errors}
+
+Egy pont bejelentésekor egyedül a koordináták megadása kötelező, de erősen ajánlott további adatok leírása, illetve fénykép csatolása is. Ha a felhasználó nem ad meg egy kötelező adatot vagy beküldés előtt törli azt, akkor az űrlap egy "\textcolor{red}{<adat> megadása kötelező!}" hibaüzenettel jelzi azt az adott mező alatt. A koordinátákkal kapcsolatosan vannak triviális követelmények is, mely szerint nem lehet kevesebb, mint -180 és több, mint 180, mely megsértésekor egy "\textcolor{red}{A koordináta nem lehet kevesebb, mint -180° és több, mint 180°.}". Emellett az elfogadott formátum a tizedesvessző (tehát nem a -pont) használata. A megjegyzésbe bármit lehet írni, viszont biztonsági okokból az nem lehet több, mint 2000 karakter, mely túllépése esetén egy "\textcolor{red}{2000 karakternél nem lehet hosszabb a megjegyzés!}". A képekkel kapcsolatosan van a legtöbb technikai követelmény, melyek kizárólag fájlok, azon belül is kép, ahol csak ".jpg" (vagy ".jpeg"), illetve ".png" formátumúak lehetnek, amelyek nem léphetik túl az 1 MB méretet. Ezen pontok megsértésekor rendre "\textcolor{red}{Az objektum nem fájl!}", "\textcolor{red}{A fájl nem egy kép!}", "\textcolor{red}{Ez a kép formátuma nem támogatott! Támogatott formátumok: ".jpg", ".jpeg", ".png".}", illetve "\textcolor{red}{Ez a kép túl nagy! Maximális méret: 1024KB.}" hibaüzenetekkel találkozhat a felhasználó. \textbf{A bejelentés csak akkor véglegesedik, ha hiba nélkül sikerül megadni az adatokat!}
 
 \subsection{Pont módosítása}
 
-Egy már meglévő pont adatainak módosítására az azt részletező adatlap alján található "Módosítás", vagy a listanézet egyes soraiban található \faIcon{edit} ikonra kattintva érhető el. Az ezen az oldalon található űrlap hasonló, a pont létrehozáskor használtéhoz, a szemét állapotának lenyíló menüjét leszámítva, melynek megadása létrehozáskor még értelmetlen lenne.
+Egy már meglévő pont adatainak módosítására az azt részletező adatlap alján található "Módosítás", vagy a listanézet egyes soraiban található \faIcon{edit} ikonra kattintva érhető el. Az ezen az oldalon található űrlap hasonló, a pont létrehozáskor használtéhoz, a szemét állapotának lenyíló menüjét leszámítva, melynek megadása létrehozáskor még értelmetlen lenne. Emellett a meglevő képek felülírása helyett az itt megadottak (a hozzátartozó mező leírásához hűen) a ponthoz hozzáadásra kerülnek, a régieket megtartva.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{trash_edit}
+	\caption{Szemétpont módosításának űrlapja}
+	\label{fig:trash_edit}
+\end{figure}
 
 \subsubsection{Hibaüzenetek}
 
-\section{Felsorolások}
+Az itt megjelenő hibaüzenetek azonosak a \ref{subsubsec:trash_create_errors} bekezdésben tárgyaltakkal.
 
-Etiam vel odio ante. Etiam pulvinar nibh quis massa auctor congue. Pellentesque quis odio vitae sapien molestie vestibulum sit amet et quam. Pellentesque vel dui eget enim hendrerit finibus at sit amet libero. Quisque sollicitudin ultrices enim, nec porta magna imperdiet vitae. Cras condimentum nunc dui, eget molestie nunc accumsan vel.
+\subsection{Saját profil megtekintése}
+\label{subsec:user_details}
 
-\begin{itemize}
-	\item Fusce in aliquet neque, in pretium sem.
-	\item Donec tincidunt tellus id lectus pretium fringilla.
-	\item Nunc faucibus, erat pretium tempus tempor, tortor mi fringilla neque, ac congue ex dui vitae mauris.
-\end{itemize}
-
-Donec dapibus sodales ante, at scelerisque nunc laoreet sit amet. Mauris porttitor tincidunt neque, vel ullamcorper neque pulvinar et. Integer eu lorem euismod, faucibus lectus sed, accumsan felis. Nunc ornare mi at augue vulputate, eu venenatis magna mollis. Nunc sed posuere dui, et varius nulla. Sed mollis nibh augue, eget scelerisque eros ornare nec.
-
-\begin{enumerate}
-	\item\label{step:first} Donec pretium et quam a cursus. Ut sollicitudin tempus urna et mollis.
-	\item Aliquam et aliquam turpis, sed fermentum mauris. Nulla eget ex diam.
-	\item Donec eget tellus pharetra, semper neque eget, rutrum diam \ref{step:first}.~lépés.
-\end{enumerate}
-
-Praesent porta, metus eget eleifend consequat, eros ligula eleifend ex, a pellentesque mi est vitae urna. Vivamus turpis nunc, iaculis non leo eget, mattis vulputate tellus. Maecenas rutrum eros sem, pharetra interdum nulla porttitor sit amet. In vitae viverra ante. Maecenas sit amet placerat orci, sed tincidunt velit. Vivamus mattis, enim vel suscipit elementum, quam odio venenatis elit\footnote{Phasellus faucibus varius purus, nec tristique enim porta vitae.}, et mollis nulla nunc a risus. Praesent purus magna, tristique sed lacus sit amet, convallis malesuada magna. 
-
-\begin{description}
-	\item[Vestibulum venenatis] malesuada enim, ac auctor erat vestibulum et. Phasellus id purus a leo suscipit accumsan.
-	\item[Orci varius natoque] penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam interdum rhoncus nisl, vel pharetra arcu euismod sagittis. Vestibulum ac turpis auctor, viverra turpis at, tempus tellus.
-	\item[Morbi dignissim] erat ut rutrum aliquet. Nulla eu rutrum urna. Integer non urna at mauris scelerisque rutrum sed non turpis.
-\end{description}
-
-\subsection{Szoros térközű felsorolások}
-
-Phasellus ultricies, sapien sit amet ultricies placerat, velit purus viverra ligula, id consequat ipsum odio imperdiet enim:
-\begin{compactenum}
-	\item Maecenas eget lobortis leo.
-	\item Donec eget libero enim.
-	\item In eu eros a eros lacinia maximus ullamcorper eget augue.
-\end{compactenum}
-
-\bigskip
-
-In quis turpis metus. Proin maximus nibh et massa eleifend, a feugiat augue porta. Sed eget est purus. Duis in placerat leo. Donec pharetra eros nec enim convallis:
-\begin{compactitem}
-	\item Pellentesque odio lacus.
-	\item Maximus ut nisl auctor.
-	\item Sagittis vulputate lorem.
-\end{compactitem}
-
-\bigskip
-
-Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed lorem libero, dignissim vitae gravida a, ornare vitae est.
-\begin{compactdesc}
-	\item[Cras maximus] massa commodo pellentesque viverra.
-	\item[Morbi sit] amet ante risus. Aliquam nec sollicitudin mauris
-	\item[Ut aliquam rhoncus sapien] luctus viverra arcu iaculis posuere
-\end{compactdesc}
-
-
-\section{Képek, ábrák}
-
-Aliquam vehicula luctus mi a pretium. Nulla quam neque, maximus nec velit in, aliquam mollis tortor. Aliquam erat volutpat. Curabitur vitae laoreet turpis. Integer id diam ligula. Nulla sodales purus id mi consequat, eu venenatis odio pharetra. Cras a arcu quam. Suspendisse augue risus, pulvinar a turpis et, commodo aliquet turpis. Nulla aliquam scelerisque mi eget pharetra. Mauris sed posuere elit, ac lobortis metus. Proin lacinia sit amet diam sed auctor. Nam viverra orci id sapien sollicitudin, a aliquam lacus suscipit, \ref{fig:example-1}.~ábra:
+A felhasználó regisztrálásával mindenki egy saját profil oldalra is szert tesz. A saját megtekintéséhez a navigációs sáv jobb oldalán, a felhasználónévre kattintva lenyíló menüben a "Saját profil" menüpontra nyomva van lehetőség.\\
+Minden profiloldal fejlécében a bal oldalon a profilkép (ha van, ellenben egy "\textit{Nincs profilkép}" felirat), mellette pedig a felhasználó neve, illetve elérhetősége (e-mail címe) található. Ha a saját profilunk böngésszük, akkor az elérhetőségünk mellett találjuk a "Profil szerkesztése" gombot, mely értelemszerűen annak a szerkesztését segítő űrlapra navigál. Ez alatt az adott felhasználó által bejelentett pontok listanézete található, amely használata azonos a \ref{subsec:trash_index} bekezdésben tárgyaltakkal, a szűrési lehetőségeket leszámítva.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth,height=100px]{elte_cimer_szines}
-	\caption{Quisque ac tincidunt leo}
-	\label{fig:example-1}
+	\includegraphics[width=0.7\textwidth]{user_details}
+	\caption{Példa egy felhasználói profilra}
+	\label{fig:user_details}
 \end{figure}
 
-\subsection{Képek szegélyezése}
+\subsubsection{Más felhasználó profiljának megtekintése}
 
-Ut aliquet nec neque eget fermentum. Cras volutpat tellus sed placerat elementum. Quisque neque dui, consectetur nec finibus eget, blandit id purus. Nam eget ipsum non nunc placerat interdum.
+Egyszerű felhasználói fiókkal nincs lehetőség további felhasználók "felderítésére", csak az általuk bejelentett pontokon levő hivatkozásokkal. Mind a pontok listanézetében (\ref{subsec:trash_index} bekezdés), illetve azok adatlapján (\ref{subsec:trash_details} bekezdés) találhatóak ezek, ahol az adott fejezetekben tárgyaltak szerinti \faIcon{user} ikonnal ellátott gombokra kattintva van lehetőség.
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.6\textwidth,height=100px,frame]{elte_cimer_szines}
-	\caption{Quisque ac tincidunt leo}
-\end{figure}
+\subsection{Saját profil szerkesztése}
+\label{subsec:user_edit}
 
-\subsection{Képek csoportosítása}
-
-In non ipsum fermentum urna feugiat rutrum a at odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla tincidunt mattis nisl id suscipit. Sed bibendum ac felis sed volutpat. Nam pharetra nisi nec facilisis faucibus. Aenean tristique nec libero non commodo. Nulla egestas laoreet tempus. Nunc eu aliquet nulla, quis vehicula dui. Proin ac risus sodales, gravida nisi vitae, efficitur neque, \ref{fig:example-2}.~ábra:
+A saját profil megtekintésekor (\ref{subsec:user_details} bekezdés) a "Profil szerkesztése" gombra kattintva van lehetőség a felhasználónév, e-mail cím és profilkép módosítására. Ehhez is egy űrlap áll a rendelkezésre, mely a gombra kattintáskor jelenik meg, az előbb említett adatok mezőivel. Az alján található "Módosítás"-ra nyomva azok a mezők, melyek tartalmaznak adatot, és ha tartalmaznak akkor újat, módosulni fognak, feltéve ha hiba nélkül megy végbe az.
 
 \begin{figure}[H]
 	\centering
-	\subcaptionbox{Vestibulum quis mattis urna}{
-		\includegraphics[width=0.45\linewidth]{elte_cimer_szines}}
+	\subcaptionbox{Profil szerkesztésének űrlapja}{
+		\includegraphics[width=0.4\textwidth]{user_edit}}
 	\hspace{5pt}
-	\subcaptionbox{Donec hendrerit quis dui sit amet venenatis}{
-		\includegraphics[width=0.45\linewidth]{elte_cimer_szines}}
-	\caption{Aenean porttitor mi volutpat massa gravida}
-	\label{fig:example-2}
+	\subcaptionbox{Szerkesztés utáni profiloldal}{
+		\includegraphics[width=0.55\linewidth]{user_details_edited}}
+	\caption{Profil szerkesztése és annak eredménye}
+	\label{fig:user_edit}
 \end{figure}
 
-Nam et nunc eget elit tincidunt sollicitudin. Quisque ligula ipsum, tempor vitae tortor ut, commodo rhoncus diam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus vehicula quam dui, eu convallis metus porta ac.
+\subsubsection{Hibaüzenetek}
 
+Az űrlap elküldésekor van lehetőség, hogy sikeres módosítás helyett hibaüzenetet kapunk (ilyenkor az adatok nem módosulnak  még). Mivel minden felhasználónévnek és e-mail címnek egyedinek kell lennie, így ha azok mégsem lennének a módosítás után, 
+akkor rendre "\textcolor{red}{A felhasználónév már foglalt!}", illetve "\textcolor{red}{Az e-mail cím már foglalt!}" üzenetekkel találkozhat a felhasználó. Emellett ez e-mail címnek érvényes formátumúnak kell lennie, és a profilképnek is meg kell felelnie a regisztráláskor definiáltakkal, mely a \ref{subsubsec:user_register_errors} bekezdésben van tárgyalva.
 
-\section{Táblázatok}
-
-Nam magna ex, euismod nec interdum sed, sagittis nec leo. Nam blandit massa bibendum mattis tristique. Phasellus tortor ligula, sodales a consectetur vitae, placerat vitae dolor. Aenean consequat in quam ac mollis. 
-
-\begin{table}[H]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ | m{0.25\textwidth} | m{0.65\textwidth} | }
-		\hline
-		\textbf{Phasellus tortor} & \textbf{Aenean consequat} \\
-		\hline \hline
-		\emph{Sed malesuada} & Aliquam aliquam velit in convallis ultrices. \\
-		\hline
-		\emph{Purus sagittis} &  Quisque lobortis eros vitae urna lacinia euismod. \\
-		\hline
-		\emph{Pellentesque} & Curabitur ac lacus pellentesque, eleifend sem ut, placerat enim. Ut auctor tempor odio ut dapibus. \\
-		\hline
-	\end{tabular}
-	\caption{Maecenas tincidunt non justo quis accumsan}
-	\label{tab:example-1}
-\end{table}
+	\includegraphics[width=0.7\textwidth]{user_edit_errors}
+	\caption{Profil szerkesztésének űrlapja}
+	\label{fig:user_edit_errors}
+\end{figure}
 
-\subsection{Sorok és oszlopok egyesítése}
+\section{Funkciók moderátorként}
 
-Mauris a dapibus lectus. Vestibulum commodo nibh ante, ut maximus magna eleifend vel. Integer vehicula elit non lacus lacinia, vitae porttitor dolor ultrices. Vivamus gravida faucibus efficitur. Ut non erat quis arcu vehicula lacinia. Nulla felis mauris, laoreet sed malesuada in, euismod et lacus. Aenean at finibus ipsum. Pellentesque dignissim elit sit amet lacus congue vulputate.
+A moderátor szintű felhasználói fiókok mindenre jogosultak, mint az egyszerű felhasználók, viszont képesek bejelentett pontok törlésére, ezzel az esetleges "spam" moderálására.
 
-\begin{table}[htb]
+\begin{figure}[H]
 	\centering
-	\begin{tabular}{ | c | r | r | r | r | r | r | }
-		\hline
-		\multirow{2}{*}{\textbf{Quisque}} & \multicolumn{2}{ c | }{\textbf{Suspendisse}} & \multicolumn{2}{ c | }{\textbf{Aliquam}} & \multicolumn{2}{ c | }{\textbf{Vivamus}} \\
-		\cline{2-7}
-		& Proin & Nunc & Proin & Nunc & Proin & Nunc \\
-		\hline \hline		
-		Leo & 2,80 MB & 100\% & 232 KB & 8,09\% & 248 KB & 8,64\% \\
-		\hline
-		Vel & 9,60 MB & 100\% & 564 KB & 5,74\% & 292 KB & 2,97\% \\
-		\hline
-		Auge & 78,2 MB & 100\% & 52,3 MB & 66,88\% & 3,22 MB & 4,12\% \\
-		\hline 
-	\end{tabular}
-	\caption[Rövid cím a táblázatjegyzékbe]{Vivamus ac arcu fringilla, fermentum neque sed, interdum erat. Mauris bibendum mauris vitae enim mollis, et eleifend turpis aliquet.}
-	\label{tab:example-2}
-\end{table}
+	\includegraphics[width=1.0\textwidth]{usecase_moderator}
+	\caption{Felhasználói esetek moderátorként}
+	\label{fig:usecase_moderator}
+\end{figure}
 
-\subsection{Több oldalra átnyúló táblázatok}
+\subsection{Pont törlése}
+\label{subsec:trash_delete}
 
-Nunc porta placerat leo, sit amet porttitor dui porta molestie. Aliquam at fermentum mi. Maecenas vitae lorem at leo tincidunt volutpat at nec tortor. Vivamus semper lacus eu diam laoreet congue. Vivamus in ipsum risus. Nulla ullamcorper finibus mauris non aliquet. Vivamus elementum rhoncus ex ut porttitor.
+Egy pont törlésére azok listanézetéből a \faIcon{trash} ikonra vagy annak adatlapján található "Törlés" gombra kattintva van lehetőség. A "balesetek" elkerülése érdekében először egy megerősítő oldalra navigál, ahol "Vissza" és "Törlés" opciók közül lehet választani, melyek rendre az előző oldalra navigálnak (törlés nélkül), illetve véglegesen törlik az adott pontot.
 
-\begin{center}
-	\begin{longtable}{ | p{0.3\textwidth} | p{0.7\textwidth} | }
-		
-		\hline
-		\multicolumn{2}{|c|}{\textbf{Praesent aliquam mauris enim}}
-		\\ \hline
-		
-		\emph{Suspendisse potenti} & \emph{Lorem ipsum dolor sit amet}
-		\\ \hline \hline
-		\endfirsthead % első oldal fejléce
-		
-		\hline
-		\emph{Suspendisse potenti} & \emph{Lorem ipsum dolor sit amet}
-		\\ \hline \hline
-		\endhead % többi oldal fejléce
-		
-		\hline
-		\endfoot % többi oldal lábléce
-		
-		\endlastfoot % utolsó oldal lábléce
-		
-		\emph{Praesent}
-		& Nulla ultrices et libero sit amet fringilla. Nunc scelerisque ante tempus sapien placerat convallis.
-		\\ \hline
-		
-		\emph{Luctus}
-		& Integer hendrerit erat massa, non hendrerit risus convallis at. Curabitur ultrices, justo in imperdiet condimentum, neque tortor luctus enim, luctus posuere massa erat vitae nibh.
-		\\ \hline
-		
-		\emph{Egestas}
-		& Duis fermentum feugiat augue in blandit. Mauris a tempor felis. Pellentesque ultricies tristique dignissim. Pellentesque aliquam semper tristique. Nam nec egestas dolor. Vestibulum id elit quis enim fringilla tempor eu a mauris. Aliquam vitae lacus tellus. Phasellus mauris lectus, aliquam id leo eget, auctor dapibus magna. Fusce lacinia felis ac elit luctus luctus.
-		\\ \hline
-		
-		\emph{Dignissim}
-		& Praesent aliquam mauris enim, vestibulum posuere massa facilisis in. Suspendisse potenti. Nam quam purus, rutrum eu augue ut, varius vehicula tellus. Fusce dui diam, aliquet sit amet eros at, sollicitudin facilisis quam. Phasellus tempor metus vel augue gravida pretium. Proin aliquam aliquam blandit. Nulla id tempus mi. Fusce in aliquam tortor.
-		\\ \hline
-		
-		\emph{Pellentesque}
-		& Donec felis nibh, imperdiet a arcu non, vehicula gravida nibh. Quisque interdum sapien eu massa commodo, ac elementum felis faucibus.
-		\\ \hline
-		
-		\emph{Molestie}
-		& Cras ullamcorper tellus et auctor ultricies. Maecenas tincidunt euismod lectus nec venenatis. Suspendisse potenti. Pellentesque pretium nunc ut euismod cursus. Nam venenatis condimentum quam. Curabitur suscipit efficitur aliquet. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-		\\ \hline
-		
-		\emph{Vivamus semper}
-		& In purus purus, faucibus eu libero vulputate, tristique sodales nunc. Nulla ut gravida dolor. Fusce vel pellentesque mi, vel efficitur eros. Nunc vitae elit tellus. Sed vestibulum auctor consequat. 
-		\\ \hline
-		
-		\emph{Condimentum}
-		& Nulla scelerisque, leo et facilisis pretium, risus enim cursus turpis, eu suscipit ipsum ipsum in mauris. Praesent eget pulvinar ipsum, suscipit interdum nunc. Nam varius massa ut justo ullamcorper sollicitudin. Vivamus facilisis suscipit neque, eu fermentum risus. Ut at mi mauris.
-		\\ \hline
-		
-		\caption{Praesent ullamcorper consequat tellus ut eleifend}
-		\label{tab:example-3}		
-	\end{longtable}
-\end{center}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{trash_delete}
+	\caption{Pont törlésének megerősítő űrlapja}
+	\label{fig:trash_delete}
+\end{figure}
+
+\section{Funkciók adminisztrátorként}
+
+Az adminisztrátori szintű fiókok mindenre jogosultak, tehát az előbb említett funkciók mellett képes a felhasználói fiókok listázására, azok módosítására, illetve törlésére is.
+
+\subsection{Felület áttekintése}
+\label{subsec:nav_admin}
+
+A \ref{subsec:nav_guest} bekezdésben tárgyalt navigációs felületen adminisztrátorként egy újabb hivatkozás válik elérhetővé "Felhasználók" névvel. Erre való kattintással elérhető az összes felhasználói fiók listázása.
+
+\subsection{Felhasználói fiókok listázása}
+
+Ez a felület a \ref{subsec:nav_admin} bekezdésben tárgyalt navigációs sávban található menüponttal érhető el, ha adminisztrátori szintű fiókkal van a felhasználó bejelentkezve. Kezelése hasonló a \ref{subsec:trash_index} bekezdésben tárgyalt szemétpontok listanézetével. A lista tetején ugyanúgy megtalálható a már megismert szűrő beállítások, ahol felhasználó vagy e-mail cím alapján lehet keresni, illetve a találatok lapszámát állítani. Ez alatt található a lista, ahol minden fiók felhasználónevét, e-mail címét és regisztrálási idejét (ha alapértelmezetten generált fiók, akkor az érték "0001. 01. 01. 0:00:00") lehet megtalálni, regisztrálás ideje szerint sorrendben (azaz a legfrissebb fiókok vannak előbb). Emellett minden rekord végén található három gomb, mely rendre az adott fiókhoz tartozó profil megtekintésére, -szerkesztésére és törlésére szolgál.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{user_index}
+	\caption{Felhasználói fiókok listanézetének felülete}
+	\label{fig:user_index}
+\end{figure}
+
+\subsection{Felhasználói fiókok módosítása}
+
+A módosítás űrlapja hasonló, a \ref{subsec:user_edit} bekezdésben tárgyaltakkal, viszont itt lehetőség van egy adott felhasználói fiók hozzáférési szintjét állítani egy lenyíló lista segítségével. Biztonsági okok miatt a saját felhasználó jogosultsági köre nem módosítható, az erre való lista nem jelenik meg az űrlapon.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{user_edit_admin}
+	\caption{Felhasználói fiókok szerkesztési űrlapja adminisztrátorként}
+	\label{fig:user_edit_admin}
+\end{figure}
+
+\subsection{Felhasználói fiókok törlése}
+
+A törlés folyamata is megegyezik a \ref{subsec:trash_delete} bekezdésben tárgyalt pontéval. Biztonsági okok miatt, a saját felhasználót törölni nem lehet, a listában is az erre mutató gombhivatkozás nem kattintható.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{user_delete}
+	\caption{Felhasználói fiókok törlésének megerősítő űrlapja}
+	\label{fig:user_delete}
+\end{figure}
