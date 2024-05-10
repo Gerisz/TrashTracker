@@ -1,12 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TrashTracker.Data.Models.Tables
 {

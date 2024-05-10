@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Win32;
 using TrashTracker.Data.Models.DTOs.In;
 
 namespace TrashTracker.Data.Models.Tables
