@@ -45,11 +45,18 @@
 \select@language {hungarian} \contentsline {subsection}{\numberline {3.2.1}Perzisztencia-réteg}{26}{subsection.3.2.1}%
 \select@language {hungarian} \contentsline {subsubsection}{Adatbázis}{27}{section*.38}%
 \select@language {hungarian} \contentsline {subsection}{\numberline {3.2.2}DTO-réteg}{29}{subsection.3.2.2}%
-\select@language {hungarian} \contentsline {chapter}{\numberline {4}Összegzés}{31}{chapter.4}%
-\select@language {hungarian} \contentsline {chapter}{Köszönetnyilvánítás}{32}{chapter*.40}%
-\select@language {hungarian} \contentsline {chapter}{\numberline {A}Szimulációs eredmények}{33}{appendix.A}%
-\select@language {hungarian} \contentsline {chapter}{Irodalomjegyzék}{35}{section*.41}%
-\select@language {hungarian} \contentsline {chapter}{Ábrajegyzék}{35}{section*.42}%
-\select@language {hungarian} \contentsline {chapter}{Táblázatjegyzék}{36}{section*.43}%
-\select@language {hungarian} \contentsline {chapter}{Algoritmusjegyzék}{37}{section*.44}%
-\select@language {hungarian} \contentsline {chapter}{Forráskódjegyzék}{38}{section*.46}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.2.3}Vezérlő-réteg}{31}{subsection.3.2.3}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.2.4}Nézet-réteg}{33}{subsection.3.2.4}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.2.5}Kliensoldal}{34}{subsection.3.2.5}%
+\select@language {hungarian} \contentsline {section}{\numberline {3.3}Megvalósítás}{35}{section.3.3}%
+\select@language {hungarian} \contentsline {section}{\numberline {3.4}Tesztelés}{35}{section.3.4}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.4.1}Tesztesetek}{35}{subsection.3.4.1}%
+\select@language {hungarian} \contentsline {subsection}{\numberline {3.4.2}Fejlesztési lehetőségek}{35}{subsection.3.4.2}%
+\select@language {hungarian} \contentsline {chapter}{\numberline {4}Összegzés}{36}{chapter.4}%
+\select@language {hungarian} \contentsline {chapter}{Köszönetnyilvánítás}{37}{chapter*.40}%
+\select@language {hungarian} \contentsline {chapter}{\numberline {A}Szimulációs eredmények}{38}{appendix.A}%
+\select@language {hungarian} \contentsline {chapter}{Irodalomjegyzék}{40}{section*.41}%
+\select@language {hungarian} \contentsline {chapter}{Ábrajegyzék}{40}{section*.42}%
+\select@language {hungarian} \contentsline {chapter}{Táblázatjegyzék}{41}{section*.43}%
+\select@language {hungarian} \contentsline {chapter}{Algoritmusjegyzék}{42}{section*.44}%
+\select@language {hungarian} \contentsline {chapter}{Forráskódjegyzék}{43}{section*.46}%

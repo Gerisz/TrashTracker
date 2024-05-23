@@ -36,21 +36,15 @@ namespace TrashTracker.Web.Controllers
         public async Task<IActionResult> GetPointByIdOnMapDetailsAsync(Int32 id)
         {
             var trash = await _context.Trashes.FindAsync(id);
+
             if (trash == null)
                 return NotFound();
+
             return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, ImageDownloadURL)));
         }
 
 
         public IActionResult Index(Int32? lat, Int32? lon)
-        {
-            // TODO: implement zoom to coord when parameters are fully given
-            if (lat == null || lon == null)
-                return View();
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }

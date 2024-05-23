@@ -175,6 +175,13 @@ Az adatbázis-kontextus osztály az ASP.NET Core \texttt{IdentityDbContext} oszt
 \begin{note}
 	A fentebbi felsorolásban csak a program szempontjából releváns táblák lettek felsorolva. Az ASP.NET Core több táblát is definiál (pl. felhasználókhoz vagy szerepkörökhöz jogokhoz \texttt{AspNetUserClaims} és \texttt{AspNetRoleClaims} táblákat), viszont ezek nincsenek felhasználva a program működése során.
 \end{note}
+A szemétpontokon található címkéknek (pl. típus, méret) külön felsoroló adattípus került definiálásra, melyek biztosítják, hogy az adott attribútum csak bizonyos értékeket vehessen fel. Ezek között vannak olyan felsoroló típusok, melyek egyszerre több értéket is felvehet, a 2-es szám hatványainak tulajdonságát kihasználva. Ezek a felsorolások a \texttt{TrashTracker.Data.Models.Enums} névtérben találhatóak:
+\begin{compactitem}
+	\item \texttt{Accessibility}: a megközelíthetőségeket sorolja fel
+	\item \texttt{Size}: a méretet tartalmazza
+	\item \texttt{Status}: a mennyiség változását tartalmazza a bejelentés óta
+	\item \texttt{TrashType}: a szemét típusait sorolja fel
+\end{compactitem}
 
 \begin{figure}[H]
 	\centering
@@ -202,10 +209,86 @@ A \texttt{TrashTracker.Data.DTOs} névtérben találhatóak az ún. DTO-k, magya
 \end{compactitem}
 \texttt{TrashTracker.Data.DTOs.Out} (kizárólag kimenő adatokhoz, validációk nélkül)
 \begin{compactitem}
-	\item \texttt{TrashDetails}
-	\item \texttt{TrashIndex}
-	\item \texttt{TrashMap}
-	\item \texttt{TrashMapDetails}
-	\item \texttt{UserDetails}
-	\item \texttt{UserIndex}
+	\item \texttt{TrashDetails}: egy bejelentett pont adatlapján szereplő adatokat (azaz a képeket is) tartalmazza, mely egy \texttt{Trash} objektumból áll elő
+	\item \texttt{TrashIndex}: egy bejelentett pont listanézetén szereplő adatokat tartalmazza, mely egy \texttt{Trash} objektumból áll elő
+	\item \texttt{TrashMap}: egy bejelentett pont térképen levő koordinátái és szűrési tulajdonságait tartalmazza, mely egy \texttt{Trash} objektumból áll elő
+	\item \texttt{TrashMapDetails}: egy bejelentett pont térképen levő adatlapján szereplő adatokat tartalmazza, mely egy \texttt{Trash} objektumból áll elő
+	\item \texttt{UserDetails}: egy felhasználói profil oldalán szereplő adatokat tartalmazza, mely egy \texttt{TrashTrackerUser} objektumból áll elő
+	\item \texttt{UserIndex}: egy felhasználói profil listanézetén szereplő adatokat tartalmazza, mely egy \texttt{TrashTrackerUser} objektumból áll elő
 \end{compactitem}
+
+\subsection{Vezérlő-réteg}
+
+Ez a réteg felel minden beérkező kérés kiszolgálásáért, melyre több vezérlőosztály és a bennük található akció metódusok állnak rendelkezésre. Ezek az akciók általában a vezérlő és annak akciójából, illetve (ha van) paramétereiből összeállított "\texttt{/kontroller/akcio?param1=ertek1\&param2=ertek2}" formájú útvonalon érthetőek el.\\
+Minden akcióhoz tartozik egy annotáció, mely megmondja mely HTTP-kérésre fussanak le. Ha egy akciót csak bizonyos szerepkörrel lehet elérni, akkor ahhoz is szerepel egy annotáció, mely megmondja melyik az a legalacsonyabb szerepkör, mellyel hozzáférhető az.\\
+A kérés típusától független minden akció ad vissza valamilyen választ, mely lehet egy nézet, HTTP-állapotkód vagy egy JSON formátumú objektum, mely utóbbi a térképnek szolgáltatott adatokhoz szükséges.\\
+Minden vezérlőt az ASP.NET Core keretrendszer példányosít, mely a HTTP-kérés beérkezésekor történik meg, mely példányon a megfelelő akciót futtatja le. A létrehozáshoz szükséges konstruktor paramétereit (pl. adatbázis-kontextus vagy felhasználó-kezelő) szintén ez a keretrendszer szolgáltatja ún. függőségi befecskendezéssel.\\
+\texttt{HomeController}: A főoldal, azaz a térképen található adatok szolgáltatásáért felelős.
+\begin{compactitem}
+	\item \texttt{/OnMap}: az összes pont koordinátáit és szűrési tulajdonságait adja vissza \texttt{TrashMap} objektumokban
+	\item \texttt{/OnMapDetails}: egy, a térképen való pontra kattintáskor megjelenő ablakban szereplő adatok adja vissza egy \texttt{TrashMapDetails} objektumban
+\end{compactitem}
+\texttt{TrashesController}: Az összes ponttal kapcsolatos, nem térképen megjelenő adatok nézeteinek szolgáltatásáért felelős
+\begin{compactitem}
+	\item \texttt{/Trashes?pageNumber=1\&pageSize=100\&searchString=abc\&showCleaned=false}: A pontok lapozható listanézetét adja vissza, melynek valamennyi paramétere opcionális. A paraméterek rendre az adott oldalszám, az oldal méret (hány pont legyen egy oldalon), a keresési szöveg, illetve a megtisztított pontok listázásának logikai értéke. Mivel a paraméterek opcionálisak, így ezek tetszőlegesen kihagyhatóak.
+	\item \texttt{/Trashes/Details/id}: Egy ponthoz tartozó adatlapnak a nézetét adja vissza, ahol az \texttt{id} egy kötelező paraméter, mely meghatározza hányas sorszámú pontnak az adatlapja kerül visszaadásra.
+	\item \texttt{/Trashes/Create}: GET kéréskor egy pont létrehozásához szükséges űrlap nézetét, POST kéréskor, benne az űrlap adataival pedig siker esetén egy átirányítást az előző oldalra, ellenben a GET kéréskor kapott űrlap nézetét a már kitöltött adatokat és hibaüzeneteit adja vissza.
+	\item \texttt{/Trashes/Edit/id}: GET kéréskor egy pont módosításához szükséges űrlap nézetét, POST kéréskor, benne az űrlap adataival pedig siker esetén egy átirányítást az előző oldalra, ellenben a GET kéréskor kapott űrlap nézetét a már kitöltött adatokat és hibaüzeneteit adja vissza.
+	\item \texttt{/Trashes/Delete/id}: GET kéréskor egy pont törléséhez tartózó megerősítő kérdés nézetét adja vissza, POST kéréskor pedig siker esetén átirányítást az előző oldalra.
+\end{compactitem}
+\texttt{UserController}: Az összes felhasználói fiókkal kapcsolatos, felhasználó-, bejelentkezés- és szerepkör-kezelésért felelős.
+\begin{compactitem}
+	\item \texttt{/User?pageNumber=1\&pageSize=100\&searchString=abc}: A felhasználói fiókok lapozható listanézetét adja vissza, melynek valamennyi paramétere opcionális. A paraméterek rendre az adott oldalszám, az oldal méret (hány fiók legyen egy oldalon), illetve a keresési szöveg. Mivel a paraméterek opcionálisak, így ezek tetszőlegesen kihagyhatóak.
+	\item \texttt{/User/Details?userName=felhasznalo}: Egy felhasználói fiókhoz tartozó profiloldalnak a nézetét adja vissza, ahol az \texttt{userName} egy kötelező paraméter, mely meghatározza kinek a profilja kerül visszaadásra.
+	\item \texttt{/User/Register}: GET kéréskor a fiók létrehozásához szükséges regisztrációs űrlap nézetét, POST kéréskor, benne az űrlap adataival pedig siker esetén egy átirányítást az főoldalra (illetve az új fiókba bejelentkezve), ellenben a GET kéréskor kapott űrlap nézetét a már kitöltött adatokat és hibaüzeneteit adja vissza.
+	\item \texttt{/User/Login}: GET kéréskor a fiókba bejelentkezéshez szükséges űrlap nézetét, POST kéréskor, benne az űrlap adataival pedig siker esetén egy átirányítást az főoldalra (illetve a fiókba bejelentkezve), ellenben a GET kéréskor kapott űrlap nézetét a már kitöltött adatokat és hibaüzeneteit adja vissza.
+	\item \texttt{/User/Delete/id}: GET kéréskor felhasználói fiók törléséhez tartózó megerősítő kérdés nézetét adja vissza, POST kéréskor pedig siker esetén átirányítást az előző oldalra.
+\end{compactitem}
+
+\subsection{Nézet-réteg}
+
+Ez a réteg felel az egyes akciók által visszaadott nézetek definiálásáért. A \texttt{TrashTracker.Web.Views} névtérben található osztályok nem a C\# hagyományos szintaxisával, hanem a Razor-ével íródtak, mely tulajdonképpen egy \texttt{.html} formátumú fájl, benne C\# kódrészletekkel, ebből is adódik ezen fájlok kiterjesztésének a \texttt{.cshtml} neve.\\
+Minden nézet kontrollerenként van csoportosítva, és minden nézetet visszaadó akciónak pontosan egy \texttt{.cshtml} formátumú nézetfájlja van. Ezek mellett a vannak ún. parciális nézetek is, melyek az egyes oldalakon szereplő, több helyen is ismétlődő tartalmat emelik ki külön fájlba, ezzel elkerülve az önismétlést. Ezen parciális nézetek fájljainak nevei az "\texttt{\_}" karakterrel kezdődnek, melyeknek többsége a Shared mappában található (pl. navigációs sáv, illetve az abban lévő fiók menüje).\\
+\texttt{Home}
+\begin{compactitem}
+	\item \texttt{Index}: A főoldalon található térkép, illetve az ahhoz tartozó szűrési menüt tartalmazó nézet. A térkép viselkedése nem itt, hanem a \texttt{../../wwwroot/js/home.js} fájlban van definiálva, mivel a térképes megjelenítés dinamikája nem szerver-, hanem kilensoldalon történik a JavaScript nyelven íródott OpenLayers könyvtárcsomag segítségével.
+\end{compactitem}
+\texttt{Trashes}
+\begin{compactitem}
+	\item \texttt{Index}: A bejelentett pontok listanézetét megjelenítő nézet. Magát a listát az ebből az osztályból meghívott \texttt{\_IndexList} parciális nézet tartalmazza, ez csupán a szűrési menüt definiálja.
+	\begin{compactitem}
+		\item \texttt{\_IndexList}: A bejelentett pontok listanézetének a listáját tartalmazó parciális nézet, melynek tetején és alján található lapszámozás külön, \texttt{\_Pagination} nevű parciális nézetben kap helyet.
+	\end{compactitem}
+	\item \texttt{Details}: Egy bejelentett pont adatlapját megjelenítő nézet.
+	\item \texttt{Create}: Egy pont bejelentésének űrlapját megjelenítő nézet.
+	\item \texttt{Edit}: Egy bejelentett pont módosításának űrlapját megjelenítő nézet.
+	\item \texttt{Delete}: Egy bejelentett pont törlését megerősítő üzenetét megjelenítő nézet.
+\end{compactitem}
+\texttt{User}
+\begin{compactitem}
+\item \texttt{Index}: A felhasználói fiókok listanézetét megjelenítő nézet. Magát a listát az ebből az osztályból meghívott \texttt{\_IndexList} parciális nézet tartalmazza.
+\begin{compactitem}
+	\item \texttt{\_IndexList}: A felhasználói fiókok listanézetének a listáját tartalmazó parciális nézet, melynek tetején és alján található lapszámozás külön, \texttt{\_Pagination} nevű parciális nézetben kap helyet.
+\end{compactitem}
+\item \texttt{Details}: Egy felhasználói fiók profiloldalát megjelenítő nézet, mely tartalmazza a \texttt{Trashes/\_IndexList} parciális nézetet, mely az adott fiók által bejelentett pontokat listázza.
+\item \texttt{Login}: A bejelentkezési űrlapot megjelenítő nézet.
+\item \texttt{Register}: A regisztrálási űrlapot megjelenítő nézet.
+\item \texttt{Edit}: A profil szerkesztésének űrlapját megjelenítő nézet. Adminisztrátori fiókkal kiegészül az adott felhasználó szerepkörének módosításával.
+\item \texttt{Delete}: Egy felhasználói fiók törlését megerősítő üzenetét megjelenítő nézet.
+\end{compactitem}
+
+\subsection{Kliensoldal}
+
+Vannak olyan aloldalak (túlnyomó részben a főoldal/térkép), melyhez külön JavaScript nyelven írt kliensoldali programkódra is szükség van. Ezek a forráskódok a \texttt{TrashTracker.Web} projekt \texttt{wwwroot/js} könyvtárában találhatóak.\\
+A \texttt{Home/Index} nézethez készült és hivatkozott \texttt{home.js} állomány tartalmazza magának a térkép objektumának a definícióját, illetve a szűrési menükben található gombok megnyomása esetén azt a függvényt, mely gombok állapota szerint változnak a térképen található pontok, melyek megfelelnek a feltételeknek. Emellett a pontra való kattintáskor megjelenő modális buborék is megjelenítésére szolgáló függvény is itt kap helyet.\\
+A \texttt{Trashes/Index} nézet tetején található szűrési beállításokhoz készült a \texttt{index.js} segédprogram, mely segít az oldalra navigáláskor az adott szűrési feltételeket a hozzá megfelelő mezőbe beilleszteni.\\
+A \texttt{Trashes/Create} és \texttt{Trashes/Edit} nézethez készült \texttt{position.js} fájl tartalmazza a "Jelenlegi hely meghatározása" gombra kattintáskor történő helymeghatározást, illetve annak megfelelő mezőibe való beillesztést.\\
+Emellett a színséma alkalmazásáért és aloldalakon történő navigálások esetén való perzisztálásáért felel a \texttt{site.js} fájl, mely a közös, navigációs sávot is tartalmazó \texttt{Shared/\_Layout} nézetben van beszúrva, ezzel minden oldalon betöltésre kerül.
+
+\section{Megvalósítás}
+
+\section{Tesztelés}
+
+\subsection{Tesztesetek}
+
+\subsection{Fejlesztési lehetőségek}

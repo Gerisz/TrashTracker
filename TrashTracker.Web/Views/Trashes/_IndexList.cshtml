@@ -151,7 +151,7 @@
                     <td style="width: 0px">
                         <div class="btn-group btn-group-table">
                             @Html.IconActionLink("", "fa-solid fa-circle-info", "Details",
-                                     parentController, new { id = item.Id },
+                                     "Trashes", new { id = item.Id },
                                      new
                                      {
                                          @class = "btn btn-info",
@@ -166,7 +166,7 @@
                                       data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
                                       data-bs-trigger="hover focus">
                                     @Html.IconActionLink("", "fa-solid fa-pen-to-square", "Edit",
-                                             parentController, new { id = item.Id },
+                                             "Trashes", new { id = item.Id },
                                              item.TrashoutId != null
                                              ? new { @class = "btn btn-warning disabled" }
                                              : new
@@ -186,7 +186,7 @@
                                       data-bs-toggle="@(item.TrashoutId != null ? "tooltip" : "")"
                                       data-bs-trigger="hover focus">
                                     @Html.IconActionLink("", "fa-solid fa-trash-can", "Delete",
-                                             parentController, new { id = item.Id },
+                                             "Trashes", new { id = item.Id },
                                              item.TrashoutId != null
                                              ? new { @class = "btn btn-danger disabled" }
                                              : new
