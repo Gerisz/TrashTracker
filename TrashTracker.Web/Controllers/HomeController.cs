@@ -9,31 +9,29 @@ namespace TrashTracker.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly TrashTrackerDbContext _context;
 
         private string ImageDownloadURL => Url
             .Action(action: "DownloadPlaceImage", controller: "Places",
             values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
 
-        public HomeController(ILogger<HomeController> logger, TrashTrackerDbContext context)
+        public HomeController(TrashTrackerDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
         [HttpGet("OnMap")]
-        public IActionResult GetPointsOnMap()
+        public async Task<ActionResult<TrashMap>> GetPointsOnMapAsync()
         {
             var points = TrashMap.Create(_context.Trashes.AsNoTracking());
 
-            var json = Serializer.Serialize(points);
+            var json = await Serializer.SerializeAsync(points);
 
             return Ok(json);
         }
 
         [HttpGet("OnMapDetails/{id}")]
-        public async Task<IActionResult> GetPointByIdOnMapDetailsAsync(Int32 id)
+        public async Task<ActionResult<TrashMapDetails>> GetPointByIdOnMapDetailsAsync(Int32 id)
         {
             var trash = await _context.Trashes.FindAsync(id);
 
