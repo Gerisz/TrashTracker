@@ -7,7 +7,9 @@ using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Test
 {
-    
+    /// <summary>
+    /// Test class meant to test API endpoints of <see cref="HomeController"/>.
+    /// </summary>
     public class HomeTest : IDisposable
     {
         private static TrashTrackerDbContext _context = null!;
@@ -49,7 +51,8 @@ namespace TrashTracker.Web.Test
         {
             // Act
             var id = (await _context.Trashes.FirstOrDefaultAsync())!.Id;
-            var result = (await _controller.GetPointByIdOnMapDetailsAsync(id)).Result as OkObjectResult;
+            var result = (await _controller.GetPointByIdOnMapDetailsAsync(id)).Result
+                as OkObjectResult;
 
             // Assert
             var content = Assert.IsAssignableFrom<TrashMapDetails>(Serializer.Deserialize<TrashMapDetails>((String)result?.Value!));

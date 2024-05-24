@@ -16,9 +16,10 @@ namespace TrashTracker.Web.Controllers
     {
         private readonly TrashTrackerDbContext _context;
 
-        private string ImageURL => Url
-            .Action(action: "Image", controller: "Trashes",
-            values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
+        private String ImageURL => Url != null
+            ? Url.Action(action: "Image", controller: "Trashes",
+                values: new { id = "0" }, protocol: Request.Scheme)![0..^2]
+            : "";
 
         public TrashesController(TrashTrackerDbContext context)
         {
@@ -26,7 +27,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/5
-        public async Task<ActionResult<PaginatedList<Trash>>> Index(String? searchString,
+        public async Task<IActionResult> Index(String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize, Boolean? showCleaned)
         {
             // query every trash from database
@@ -72,7 +73,7 @@ namespace TrashTracker.Web.Controllers
         }
 
         // GET: Trashes/Details/5
-        public async Task<ActionResult<TrashDetails>> Details(Int32? id)
+        public async Task<IActionResult> Details(Int32? id)
         {
             if (id == null)
                 return NotFound();
@@ -84,7 +85,8 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            if(Request != null)
+                ViewData["previousPage"] = Request.Headers.Referer.ToString();
 
             return View(TrashDetails
                 .Create(trash, ImageURL));

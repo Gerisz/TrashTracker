@@ -3,28 +3,38 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Geometries;
 using TrashTracker.Data.Models.Defaults;
-using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Tables;
 using TrashTracker.Data.Models.Enums;
-using System.Runtime.InteropServices;
 
 namespace TrashTracker.Data.Models
 {
-    public class DbInitializer
+    /// <summary>
+    /// A <see langword="static"/> <see langword="class"/> containing several functions,
+    /// to help initialize the database with some default values.
+    /// </summary>
+    public static class DbInitializer
     {
+        /// <summary>
+        /// Initializes <paramref name="context"/> by migrating it when it's a relational database,
+        /// otherwise seed it with some data (e. g. to test with).
+        /// </summary>
+        /// <param name="context">A <see cref="TrashTrackerDbContext"/> to initalize.</param>
+        /// <returns>A <see cref="Task"> that represents the asynchronous operation.</returns>
         public static async Task InitializeAsync(TrashTrackerDbContext context)
         {
-            // do not migrate when testing
             if (context.Database.IsRelational())
                 context.Database.Migrate();
-            // instead seed database with a few trashes and save them to test with
             else
-            {
                 await SeedTrashesAsync(context, 10);
-            }
-
         }
 
+        /// <summary>
+        /// Seeds the <paramref name="userManager"/> with default users.
+        /// </summary>
+        /// <param name="userManager">
+        /// A <see cref="UserManager{TrashTrackerUser}"/> to seed users with.
+        /// </param>
+        /// <returns>A <see cref="Task"> that represents the asynchronous operation.</returns>
         public static async Task SeedUsersAsync(UserManager<TrashTrackerUser> userManager)
         {
             // for every role defined in DefaultRoles.cs
@@ -56,6 +66,11 @@ namespace TrashTracker.Data.Models
             }
         }
 
+        /// <summary>
+        /// Seeds the <paramref name="roleManager"/> with default users.
+        /// </summary>
+        /// <param name="roleManager"></param>
+        /// <returns>A <see cref="Task"> that represents the asynchronous operation.</returns>
         public static async Task SeedRolesAsync(RoleManager<TrashTrackerIdentityRole> roleManager)
         {
             // for every role defined in DefaultRoles.cs
@@ -68,22 +83,63 @@ namespace TrashTracker.Data.Models
             }
         }
 
+        /// <summary>
+        /// Seeds the <paramref name="context"/> with <paramref name="count"/>
+        /// amount of <see cref="Trash"/>.
+        /// </summary>
+        /// <param name="context">
+        /// A <see cref="TrashTrackerDbContext"/> to seed <paramref name="context"/> into.
+        /// </param>
+        /// <param name="count">
+        /// How many <see cref="Trash"/> to seed into <paramref name="context"/>
+        /// </param>
+        /// <returns>A <see cref="Task"> that represents the asynchronous operation.</returns>
         public static async Task SeedTrashesAsync(TrashTrackerDbContext context, Int32 count)
         {
             ICollection<Trash> trashes = [];
+            Random random = new();
+
+            var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(4326);
 
             for (Int32 i = 0; i < count; i++)
-                trashes.Add(CreateTrash());
+                trashes.Add(CreateRandomTrash(random, gf));
+
+            trashes.Add(new Trash
+            {
+                Location = (Point)GeometryFixer.Fix(gf.CreatePoint(
+                new Coordinate()
+                {
+                    X = Math.Round(random.NextDouble() + 47, 6),
+                    Y = Math.Round(random.NextDouble() * 2 + 19, 6)
+                })),
+                Country = Country.Hungary,
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.UtcNow,
+                UpdateNeeded = false,
+                Note = "uniqueNote",
+                Accessibilities = 0,
+                Size = Size.Wheelbarrow,
+                Status = Status.Cleaned,
+                Types = 0,
+                Images = []
+            });
 
             await context.Trashes.AddRangeAsync(trashes);
             await context.SaveChangesAsync();
         }
 
-        private static Trash CreateTrash()
+        /// <summary>
+        /// Creates a <see cref="Trash"/> with random values and returns it.
+        /// </summary>
+        /// <param name="random">
+        /// A <see cref="Random"/> to generate the location and filter properties with.
+        /// </param>
+        /// <param name="gf">
+        /// A <see cref="GeometryFactory"/> to create the location's <see cref="Point"/> with.
+        /// </param>
+        /// <returns>The <see cref="Trash"/> created by this function.</returns>
+        private static Trash CreateRandomTrash(Random random, GeometryFactory gf)
         {
-            Random random = new();
-            var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(4326);
-
             Accessibility accessibilities = new();
             TrashType types = new();
             Enum.GetValues<Accessibility>().ToList()
