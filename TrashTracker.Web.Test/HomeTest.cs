@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Web.Controllers;
+using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Test
 {
-    [TestClass]
+    
     public class HomeTest : IDisposable
     {
-        private readonly TrashTrackerDbContext _context;
-        private readonly HomeController _controller;
+        private static TrashTrackerDbContext _context = null!;
+        private static HomeController _controller = null!;
 
         public HomeTest()
         {
@@ -19,7 +20,7 @@ namespace TrashTracker.Web.Test
                 .Options;
 
             _context = new TrashTrackerDbContext(options);
-            DbInitializer.Initialize(_context, "");
+            Task.Run(() => DbInitializer.InitializeAsync(_context)).Wait();
 
             _context.ChangeTracker.Clear();
 
@@ -32,28 +33,29 @@ namespace TrashTracker.Web.Test
             _context.Dispose();
         }
 
-        [TestMethod]
-        public async Task GetPointsOnMapTest()
+        [Fact]
+        public void GetPointsOnMapTest()
         {
             // Act
-            var result = await _controller.GetPointsOnMapAsync();
+            var result = _controller.GetPointsOnMap().Result as OkObjectResult;
 
             // Assert
-            Assert.IsInstanceOfType<ActionResult<TrashMap>>(result);
-            Assert.AreEqual(_context.Trashes.Count(), result.Value?.Features.Count());
+            var content = Assert.IsAssignableFrom<TrashMap>(Serializer.Deserialize<TrashMap>((String)result?.Value!));
+            Assert.Equal(_context.Trashes.Count(), content.Features.Count());
         }
 
-        [TestMethod]
-        public async Task TestOnMapDetails()
+        [Fact]
+        public async Task GetPointByIdOnMapDetailsTest()
         {
-
             // Act
             var id = (await _context.Trashes.FirstOrDefaultAsync())!.Id;
-            var result = await _controller.GetPointByIdOnMapDetailsAsync(id);
+            var result = (await _controller.GetPointByIdOnMapDetailsAsync(id)).Result as OkObjectResult;
 
             // Assert
-            Assert.IsInstanceOfType<ActionResult<TrashMapDetails>>(result);
-            Assert.AreEqual(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, ""), result.Value);
+            var content = Assert.IsAssignableFrom<TrashMapDetails>(Serializer.Deserialize<TrashMapDetails>((String)result?.Value!));
+            Assert.Equal(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, "").Id, content.Id);
+            Assert.Equal(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, "").Location, content.Location);
+            Assert.Equal(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, "").Note, content.Note);
         }
     }
 }
