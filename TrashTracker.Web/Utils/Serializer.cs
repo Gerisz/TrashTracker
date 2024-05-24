@@ -11,7 +11,7 @@ namespace TrashTracker.Web.Utils
     /// </summary>
     public class Serializer
     {
-        private static readonly ThreadLocal<JsonSerializerOptions> _options = new ThreadLocal<JsonSerializerOptions>(() =>
+        private static readonly ThreadLocal<JsonSerializerOptions> _options = new(() =>
         {
             var options = new JsonSerializerOptions
             {

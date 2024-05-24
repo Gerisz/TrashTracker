@@ -87,8 +87,7 @@ app.MapControllers();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<TrashTrackerDbContext>();
-    string imageSource = app.Configuration.GetValue<string>("ImageSource");
-    DbInitializer.Initialize(context, imageSource);
+    await DbInitializer.InitializeAsync(context);
 
     // Seed the database with the default roles and users
     await DbInitializer.SeedRolesAsync(serviceScope.ServiceProvider.GetRequiredService<RoleManager<TrashTrackerIdentityRole>>());

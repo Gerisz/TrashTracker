@@ -46,7 +46,7 @@ namespace TrashTracker.Data.Models.Tables
         [DisplayName("Hozzáférhetőség")]
         public Accessibility Accessibilities { get; set; }
 
-        public virtual List<TrashImage> Images { get; set; } = [];
+        public virtual IEnumerable<TrashImage> Images { get; set; } = [];
 
         public Trash() { }
 
@@ -164,8 +164,9 @@ namespace TrashTracker.Data.Models.Tables
             Types = trash.Types;
             Accessibilities = trash.Accessibilities;
 
-            Images.Clear();
-            Images.AddRange(trash.Images);
+            Images = [];
+            foreach(var image in trash.Images) 
+                Images.Append(image);
 
             return this;
         }

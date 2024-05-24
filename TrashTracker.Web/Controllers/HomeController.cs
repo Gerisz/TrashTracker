@@ -11,7 +11,7 @@ namespace TrashTracker.Web.Controllers
     {
         private readonly TrashTrackerDbContext _context;
 
-        private string ImageDownloadURL => Url
+        private String ImageDownloadURL => Url
             .Action(action: "DownloadPlaceImage", controller: "Places",
             values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
 
@@ -21,11 +21,11 @@ namespace TrashTracker.Web.Controllers
         }
 
         [HttpGet("OnMap")]
-        public async Task<ActionResult<TrashMap>> GetPointsOnMapAsync()
+        public ActionResult<TrashMap> GetPointsOnMap()
         {
             var points = TrashMap.Create(_context.Trashes.AsNoTracking());
 
-            var json = await Serializer.SerializeAsync(points);
+            var json = Serializer.Serialize(points);
 
             return Ok(json);
         }
@@ -38,9 +38,15 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, ImageDownloadURL)));
+            try
+            {
+                return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, ImageDownloadURL)));
+            }
+            catch (NullReferenceException)
+            {
+                return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, "")));
+            }
         }
-
 
         public IActionResult Index(Int32? lat, Int32? lon)
         {

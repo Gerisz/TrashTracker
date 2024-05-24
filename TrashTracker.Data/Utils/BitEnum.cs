@@ -9,6 +9,11 @@ namespace CleanTiszaMap.Data.Utils
     public class BitEnum<T>(T Value = default) : IEnumerable<T>, ICollection<T>
         where T : struct, Enum
     {
+        /// <summary>
+        /// Default constructor meant to used by deserializer
+        /// </summary>
+        public BitEnum() : this(default) {}
+
         public int Count => BitOperations.PopCount(Convert.ToUInt32(Value));
         
         public bool IsReadOnly => false;

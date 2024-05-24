@@ -21,7 +21,8 @@ namespace TrashTracker.Data.Models.DTOs.Out
                         ? trash.SubLocality
                         : trash.Locality + ", " + trash.SubLocality,
                 Note = trash.Note,
-                Images = trash.Images.Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
+                Images = trash.Images
+                    .Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
             };
 
         public static TrashMapDetails Create(Trash place, String imageUrlBase)
