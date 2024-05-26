@@ -91,7 +91,8 @@ namespace TrashTracker.Data.Models
         /// A <see cref="TrashTrackerDbContext"/> to seed <paramref name="context"/> into.
         /// </param>
         /// <param name="count">
-        /// How many <see cref="Trash"/> to seed into <paramref name="context"/>
+        /// How many random <see cref="Trash"/> to seed into <paramref name="context"/>
+        /// (will contain some extra default trashes, regardless the value of this parameter).
         /// </param>
         /// <returns>A <see cref="Task"> that represents the asynchronous operation.</returns>
         public static async Task SeedTrashesAsync(TrashTrackerDbContext context, Int32 count)
@@ -124,6 +125,26 @@ namespace TrashTracker.Data.Models
                 Images = []
             });
 
+            trashes.Add(new Trash
+            {
+                Location = (Point)GeometryFixer.Fix(gf.CreatePoint(
+                new Coordinate()
+                {
+                    X = Math.Round(random.NextDouble() + 47, 6),
+                    Y = Math.Round(random.NextDouble() * 2 + 19, 6)
+                })),
+                Country = Country.Hungary,
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.UtcNow,
+                UpdateNeeded = false,
+                Note = "uniqueNote",
+                Accessibilities = 0,
+                Size = Size.Wheelbarrow,
+                Status = Status.StillHere,
+                Types = 0,
+                Images = []
+            });
+
             await context.Trashes.AddRangeAsync(trashes);
             await context.SaveChangesAsync();
         }
@@ -138,7 +159,7 @@ namespace TrashTracker.Data.Models
         /// A <see cref="GeometryFactory"/> to create the location's <see cref="Point"/> with.
         /// </param>
         /// <returns>The <see cref="Trash"/> created by this function.</returns>
-        private static Trash CreateRandomTrash(Random random, GeometryFactory gf)
+        public static Trash CreateRandomTrash(Random random, GeometryFactory gf)
         {
             Accessibility accessibilities = new();
             TrashType types = new();

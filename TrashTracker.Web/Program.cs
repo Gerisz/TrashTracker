@@ -23,7 +23,7 @@ builder.Services.AddDbContext<TrashTrackerDbContext>(options =>
         options => options.UseNetTopologySuite()
     );
 
-    // Use lazy loading (don't forget the virtual keyword on novigation properties)
+    // Use lazy loading (don't forget the virtual keyword on navigation properties)
     options.UseLazyLoadingProxies();
 });
 
@@ -36,7 +36,7 @@ builder.Services.AddIdentity<TrashTrackerUser, TrashTrackerIdentityRole>(options
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = true;
 
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedAccount = false;
 })
 .AddEntityFrameworkStores<TrashTrackerDbContext>()
 .AddErrorDescriber<TrashTrackerIdentityErrorDescriber>()
@@ -93,5 +93,6 @@ using (var serviceScope = app.Services.CreateScope())
     await DbInitializer.SeedRolesAsync(serviceScope.ServiceProvider.GetRequiredService<RoleManager<TrashTrackerIdentityRole>>());
     await DbInitializer.SeedUsersAsync(serviceScope.ServiceProvider.GetRequiredService<UserManager<TrashTrackerUser>>());
 }
+
 
 app.Run();

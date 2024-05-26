@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries.Utilities;
+using NetTopologySuite.Geometries;
+using System;
 using TrashTracker.Data.Models;
+using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Data.Models.Enums;
 using TrashTracker.Data.Models.Tables;
@@ -30,6 +35,7 @@ namespace TrashTracker.Web.Test
 
             _controller = new TrashesController(_context);
         }
+
         public void Dispose()
         {
             _context.Database.EnsureDeleted();
@@ -79,7 +85,7 @@ namespace TrashTracker.Web.Test
 
             // Assert
             Assert.Contains(searchString, model!.Select(t => t.Note)!);
-            Assert.Single(model!);
+            Assert.Equal(2, model?.Count);
         }
 
         [Fact]
@@ -97,13 +103,14 @@ namespace TrashTracker.Web.Test
         [Fact]
         public async Task IndexMultipleConditionsTest()
         {
-
+            // Act
             var searchString = "uniqueNote";
             var pageSize = 100;
             var model = ((await _controller.Index(searchString, "", 1, pageSize, false))
                 as ViewResult)?.Model
                 as PaginatedList<Trash>;
 
+            // Assert
             Assert.DoesNotContain(Status.Cleaned, model!.Select(t => t.Status));
             Assert.Contains(searchString, model!.Select(t => t.Note)!);
         }
@@ -111,37 +118,129 @@ namespace TrashTracker.Web.Test
         [Fact]
         public async Task DetailsTest()
         {
+            // Act
             var trash = await _context.Trashes.FirstOrDefaultAsync();
-            var model = ((await _controller.Details(trash.Id))
+            var model = ((await _controller.Details(trash!.Id))
                 as ViewResult)?.Model
                 as TrashDetails;
 
+            // Assert
             Assert.Equal(TrashDetails.Create(trash!, ""), model);
         }
 
         [Fact]
         public async Task DetailsWithWrongIdTest()
         {
+            // Assert
             Assert.IsAssignableFrom<NotFoundResult>(await _controller.Details(null));
             Assert.IsAssignableFrom<NotFoundResult>(await _controller.Details(-1));
         }
 
         [Fact]
-        public async Task CreateTest()
+        public void CreateGetTest()
         {
+            // Act
+            var model = (_controller.Create() as ViewResult)!.Model as TrashFromUser;
 
+            // Assert
+            Assert.IsAssignableFrom<TrashFromUser>(model);
+            Assert.Equal(new TrashFromUser(), model);
         }
 
         [Fact]
-        public async Task EditTest()
+        public async Task CreatePostTest()
         {
+            // Act
+            var count = _context.Trashes.Count() + 1;
+            var trash = DbInitializer.CreateRandomTrash(new Random(),
+                NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID));
+            var model = await _controller.Create(new TrashFromUser(trash), "");
 
+            // Assert
+            Assert.IsAssignableFrom<RedirectToActionResult>(model);
+            Assert.Equal(count, _context.Trashes.Count());
+            Assert.NotEmpty(_context.Trashes.Where(t => t.Location == trash.Location));
         }
 
         [Fact]
-        public async Task DeleteTest()
+        public async Task EditGetTest()
         {
+            // Act
+            var trash = await _context.Trashes.FirstOrDefaultAsync();
+            var model = (await _controller.Edit(trash!.Id) as ViewResult)!.Model as TrashEdit;
 
+            // Assert
+            Assert.IsAssignableFrom<TrashEdit>(model);
+            Assert.Equal(new TrashEdit(trash), model);
         }
+
+        [Fact]
+        public async Task EditPostTest()
+        {
+            // Act
+            var count = _context.Trashes.Count();
+            var trash = await _context.Trashes.FirstOrDefaultAsync();
+            var newTrash = DbInitializer.CreateRandomTrash(new Random(),
+                NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID));
+            newTrash.Id = trash!.Id;
+
+            // Assert
+            Assert.IsAssignableFrom<RedirectToActionResult>
+                (await _controller.Edit(trash!.Id, new TrashEdit(newTrash)));
+            Assert.Equal(count, _context.Trashes.Count());
+            Assert.NotNull(_context.Trashes.Where(t => t.Location == newTrash.Location));
+        }
+
+        [Fact]
+        public async Task DeleteGetTest()
+        {
+            // Act
+            var trash = await _context.Trashes.FirstOrDefaultAsync();
+            var model = (await _controller.Delete(trash!.Id) as ViewResult)!.Model as Trash;
+
+            // Assert
+            Assert.IsAssignableFrom<Trash>(model);
+            Assert.Equal(trash, model);
+        }
+
+        [Fact]
+        public async Task DeleteGetWrongIdTest()
+        {
+            // Act
+            var count = _context.Trashes.Count();
+            var model = await _controller.Delete(-1);
+
+            // Assert
+            Assert.IsAssignableFrom<NotFoundResult>(model);
+            Assert.Equal(count, _context.Trashes.Count());
+        }
+
+        [Fact]
+        public async Task DeletePostTest()
+        {
+            // Act
+            var count = _context.Trashes.Count() - 1;
+            var trash = await _context.Trashes.FirstOrDefaultAsync();
+            var model = await _controller.DeleteConfirmed(trash.Id);
+
+            // Assert
+            Assert.IsAssignableFrom<RedirectToActionResult>(model);
+            Assert.Null(await _context.Trashes.FindAsync(trash.Id));
+            Assert.Equal(count, _context.Trashes.Count());
+        }
+
+        [Fact]
+        public async Task DeletePostWrongIdTest()
+        {
+            // Act
+            var count = _context.Trashes.Count();
+            var model = await _controller.DeleteConfirmed(-1);
+
+            // Assert
+            Assert.IsAssignableFrom<NotFoundResult>(model);
+            Assert.Equal(count, _context.Trashes.Count());
+        }
+
+        private const Int32 WGS_SRID = 4326;
     }
 }

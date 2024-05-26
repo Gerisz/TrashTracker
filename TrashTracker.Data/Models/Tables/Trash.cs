@@ -3,6 +3,7 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
 
@@ -169,6 +170,15 @@ namespace TrashTracker.Data.Models.Tables
                 Images.Append(image);
 
             return this;
+        }
+        public override Boolean Equals(Object? obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+                return false;
+
+            return GetType().GetProperties().ToList()
+                .Where(p => p.GetValue(this) != null && obj.GetType().GetProperty(p.Name)!.GetValue(obj) != null)
+                .All(p => p.GetValue(this)!.Equals(obj.GetType().GetProperty(p.Name)!.GetValue(obj)));
         }
 
         private const Int32 WGS_SRID = 4326;

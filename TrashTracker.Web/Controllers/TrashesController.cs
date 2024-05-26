@@ -85,7 +85,7 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            if(Request != null)
+            if (Request != null)
                 ViewData["previousPage"] = Request.Headers.Referer.ToString();
 
             return View(TrashDetails
@@ -96,7 +96,9 @@ namespace TrashTracker.Web.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            if (Request != null)
+                ViewData["previousPage"] = Request.Headers.Referer.ToString();
+
             return View(new TrashFromUser());
         }
 
@@ -106,12 +108,15 @@ namespace TrashTracker.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TrashFromUser trashFromUser, String previousPage)
+        public async Task<IActionResult> Create(TrashFromUser trashFromUser,
+            String previousPage = "")
         {
             if (ModelState.IsValid)
             {
-                _context.Add(new Trash(trashFromUser,
-                    User.FindFirstValue(ClaimTypes.NameIdentifier)!));
+                await _context.AddAsync(new Trash(trashFromUser,
+                    User != null
+                        ? User.FindFirstValue(ClaimTypes.NameIdentifier)!
+                        : ""));
                 await _context.SaveChangesAsync();
 
                 return RedirectToLocal(previousPage);
@@ -129,7 +134,9 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            if (Request != null)
+                ViewData["previousPage"] = Request.Headers.Referer.ToString();
+
             return View(new TrashEdit(trash));
         }
 
@@ -139,7 +146,8 @@ namespace TrashTracker.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit, String previousPage)
+        public async Task<IActionResult> Edit(Int32 id, TrashEdit trashEdit,
+            String previousPage = "")
         {
             if (id != trashEdit.Id)
                 return NotFound();
@@ -183,7 +191,9 @@ namespace TrashTracker.Web.Controllers
             if (trash == null)
                 return NotFound();
 
-            ViewData["previousPage"] = Request.Headers.Referer.ToString();
+            if (Request != null)
+                ViewData["previousPage"] = Request.Headers.Referer.ToString();
+
             return View(trash);
         }
 
@@ -191,13 +201,14 @@ namespace TrashTracker.Web.Controllers
         [Authorize(Policy = "Moderator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Int32 id, String previousPage)
+        public async Task<IActionResult> DeleteConfirmed(Int32 id, String previousPage = "")
         {
             var trash = await _context.Trashes.FindAsync(id);
 
-            if (trash != null)
-                _context.Trashes.Remove(trash);
+            if (trash == null)
+                return NotFound();
 
+            _context.Trashes.Remove(trash!);
             await _context.SaveChangesAsync();
             return RedirectToLocal(previousPage);
         }
@@ -223,7 +234,7 @@ namespace TrashTracker.Web.Controllers
 
         private IActionResult RedirectToLocal(String? returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            if (Url != null && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
             else
                 return RedirectToAction(nameof(Index), "Trashes");

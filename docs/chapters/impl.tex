@@ -14,6 +14,8 @@ A weboldal használatakor négy típusú felhasználó különböztethető meg: 
 			\item Alapvető irányítási lehetőségek: mozgatás, forgatás, nagyítás/kicsinyítés
 			\item Az összes pont helyzetének megfelelő megjelenítése, fontosabb információk jelölésével
 			\item Pontra kattintáskor sorszám, kép és megjegyzés megtekintése, hivatkozás annak adatlapjára
+			\item Megjelenítendő pontok szűrése több tulajdonság alapján egy beúszó menüről
+			\item Az összes pont letöltése .csv formátumban egy "Letöltés" gombra kattintva
 		\end{compactitem}
 	\item Pont részletezése:
 		\begin{compactitem}
@@ -287,9 +289,38 @@ A \texttt{Trashes/Create} és \texttt{Trashes/Edit} nézethez készült \texttt{
 Emellett a színséma alkalmazásáért és aloldalakon történő navigálások esetén való perzisztálásáért felel a \texttt{site.js} fájl, mely a közös, navigációs sávot is tartalmazó \texttt{Shared/\_Layout} nézetben van beszúrva, ezzel minden oldalon betöltésre kerül.
 
 \section{Megvalósítás}
+\label{sec:implementation}
+
+A webalkalmazás forráskódja túlnyomó részben C\# nyelven, az ASP.NET Core keretrendszer segítségével lett implementálva. Ennek oka, hogy a keretrendszer támogatja az MVC architektúrát, amely tökéletesen megfelel a webes környezetnek. Az előbb említett keretrendszer mellett az Entity Framework objektum-relációs leképzőrendszer is nagy segítség, mind a fejlesztést, illetve futtatást is hatékonyabbá téve. Ezen technológiák futtatására csak a .NET Core Runtime-ra van szükség, mely elérhető Windows, Linux és macOS rendszereken egyaránt.\\
+A forráskód rétegekre bontása jelentősen elősegíti a jövőbeli továbbfejleszthetőségét a programnak, pl. egy perzisztencia- és DTO-rétegre épülő webszolgáltatással (Rest API-val) lehetőség van akár egy asztali alkalmazás fejlesztésére is, az előbb említett rétegek minimális módosításával, illetve azok redundanciája nélkül. Emellett a már meglévő funkciók is úgy lettek implementálva, hogy lehetőség szerint azokhoz a legkevesebb refaktorálásra legyen szükség (pl. új attribútumok-, új szerepkörök hozzáadása).
+
+\subsection{Projektek szervezése}
+
+A megvalósított forráskód két projektben kapott helyet.\\
+Az első a \texttt{TrashTracker.Data}, mely tartalmazza a perzisztencia- és DTO-rétegeket, ezzel egy adatszolgáltatási projektként leszeparálva. Ennek oka, hogy az előző \ref{sec:implementation} szakaszban említett továbbfejlesztési lehetőség esetén ez a projekt akár módosítás nélkül is képes feladatának az ellátására.\\
+A második a \texttt{TrashTracker.Web}, mely tartalmazza magát a webalkalmazást, az előzőleg említett projekten keresztül kinyert adatok kontrollerekkel való továbbítását a nézeteknek. Ennek oka, hogy az előbb említett továbbfejlesztés esetén ezek a kódrészek nem relevánsak, illetve ehhez a projekthez akár fejleszthető saját adatszolgáltatási projekt, mely kompatibilis ezzel az alkalmazással.
+
+\subsubsection{Adatszolgáltatás}
+
+
+
+\subsubsection{Webalkalmazás}
+
+Az alkalmazás belépési pontja a projekt gyökérkönyvtárában található \texttt{Program} osztály, mely felkonfigurálja, majd elindítja azt. A különféle szolgáltatásokat egy \texttt{WebApplicationBuilder} objektumba gyűjti össze, melybe először az adatbázis kontextusát regisztrálja annak \textit{connection string}-jével. Itt van megadva a földrajzi adatok használata, illetve a lusta betöltés proxyjainak bekapcsolása.\\
+Ezt követően felkonfigurálja a használt felhasználó- és szerepkörtípusokat, mely a rendre a \texttt{TrashTrackerUser} és \texttt{TrashTrackerIdentityRole} típusok mellett kikötéseket is tartalmaz egy-egy felhasználó adataira (pl. hány és milyen karakterekből álljon egy felhasználónév vagy jelszó).\\
+Ezt követően a \texttt{TrashTracker.Web.Utils} névtérben egyedileg készített \texttt{PolicyBuilder} statikus osztály a webalkalmazást építő objektumba legenerálja a szerepköröket, illetve azok hierarchiáját, mely szerepkörök a \texttt{TrashTracker.Data.Models.Defaults} névtérben definiált \texttt{Roles} felsoroló adattípusban találhatóak, azok sorrendje adja az "alá-/fölérendeltséget". Ezek a szerepkörök szabadon bővíthetőek az előbb említett felsoroló módosításával.\\
+Ezután történik a vezérlők és az azokhoz tartozó nézetek regisztrációja, illetve a TrashOut-tal kapcsolatot definiáló \texttt{TrashoutService} és az azt időszakosan meghívó \texttt{TrashoutTimedHostedService} szolgáltatás.\\
+Az "összeszedett" szolgáltatások itt \textit{build}-elésre kerülnek, mely a \texttt{WebApplicationBuilder}-ből egy \texttt{WebApplication} objektumot hoz létre. Itt történik meg a TrashOut-tal való kapcsolat létrehozása, a HTTP kérések HTTPS-re való átirányításának-, a végpontok \textit{routing}-jának-, az autentikációnak és autorizációnak a bekapcsolása, illetve a főoldal útvonalának megadása. A forráskód fájljának végén kerül az adatbázis inicializálásra, mely "éles" környezetben az adatbázis migrációját, teszt környezetben pedig annak alapértelmezett- és minta adatokkal való ellátását biztosítja. Emellett a már előbb említett szerepkörök létrehozásra/frissítésre kerülnek, illetve minden szerepkörhöz (melyhez addig nem volt) egy alapértelmezett fiók is regisztrálásra kerül.\\
+A \texttt{Program} osztály lefutását követően a legutolsó sorban található eljárás blokkolja az azt végrehajtó szálat (a leállításig), mellyel ténylegesen elindítja a webalkalmazást.
 
 \section{Tesztelés}
 
-\subsection{Tesztesetek}
+A vezérlő-rétegben található végpontok egy, a \texttt{TrashTracker.Web.Test} nevű XUnit projektben található automatikus egységtesztekkel lett tesztelve. Ezek az egységtesztek a legtöbb végpont bemeneti és kimeneti specifikációja szerint teszteli azok helyes viselkedését, illetve a perzisztenciában bekövetkezett változások helyességét.\\
+A nézet-rétegben található nézetek manuálisan, a \ref{ch:user} fejezetben szereplő felhasználói eseteket figyelembe véve lettek tesztelve, mely folyamata a \ref{subsec:manual_test} alszakaszban van naplózva.
 
-\subsection{Fejlesztési lehetőségek}
+\subsection{Vezérlő-réteg automatikus tesztesetei}
+
+\subsection{Nézet-réteg manuális tesztelése}
+\label{subsec:manual_test}
+
+\section{Fejlesztési lehetőségek}

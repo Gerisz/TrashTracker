@@ -18,5 +18,15 @@ namespace TrashTracker.Data.Models.DTOs.In
             TrashoutId = trash.TrashoutId;
             Status = trash.Status;
         }
+
+        public override Boolean Equals(Object? obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+                return false;
+
+            return GetType().GetProperties().ToList()
+                .Where(p => p.GetValue(this) != null && obj.GetType().GetProperty(p.Name)!.GetValue(obj) != null)
+                .All(p => p.GetValue(this)!.Equals(obj.GetType().GetProperty(p.Name)!.GetValue(obj)));
+        }
     }
 }

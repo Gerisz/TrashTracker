@@ -12,6 +12,12 @@
        data-bs-toggle="offcanvas" data-bs-target="#filter-menu">
         <i class="fa-solid fa-filter"></i>
     </a>
+    <a class="btn btn-primary position-absolute bottom-0 end-0"
+       data-bs-toggle="offcanvas" data-bs-target="#filter-menu">
+        <i class="fa-solid fa-filter"></i>
+    </a>
+    @Html.IconActionLink("", "fa-solid fa-download", "./TrashCsv",
+            new { @class = "btn btn-success position-absolute bottom-0 end-0" })
     <aside id="filter-menu" class="offcanvas offcanvas-bottom" tabindex="-1"
            data-bs-backdrop="false">
         <div class="offcanvas-header">

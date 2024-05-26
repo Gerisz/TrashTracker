@@ -1,6 +1,8 @@
+using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Globalization;
 using TrashTracker.Data.Models;
 using TrashTracker.Data.Models.DTOs.Out;
 using TrashTracker.Web.Utils;
@@ -40,6 +42,22 @@ namespace TrashTracker.Web.Controllers
                 return NotFound();
 
             return Ok(Serializer.Serialize(TrashMapDetails.Create(trash, ImageDownloadURL)));
+        }
+
+        [HttpGet("TrashCsv")]
+        public async Task<FileResult> GetTrashCsvAsync(Int32? count)
+        {
+            var trashes = await _context.Trashes
+                .Take(count ?? _context.Trashes.Count())
+                .Select(TrashCsv.Projection)
+                .ToListAsync();
+
+            using (StringWriter writer = new())
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(trashes);
+                return File(new System.Text.UTF8Encoding().GetBytes(writer.ToString()!), "text/csv");
+            }
         }
 
         public IActionResult Index(Int32? lat, Int32? lon)

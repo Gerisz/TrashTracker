@@ -79,5 +79,15 @@ namespace TrashTracker.Data.Models.DTOs.Out
 
         public static TrashDetails Create(Trash place, String imageUrlBase)
             => Projection(imageUrlBase).Compile().Invoke(place);
+
+        public override Boolean Equals(Object? obj)
+        {
+            if (obj == null || obj.GetType() != GetType())
+                return false;
+
+            return GetType().GetProperties().ToList()
+                .Where(p => p.GetValue(this) != null && obj.GetType().GetProperty(p.Name)!.GetValue(obj) != null)
+                .All(p => p.GetValue(this)!.Equals(obj.GetType().GetProperty(p.Name)!.GetValue(obj)));
+        }
     }
 }
