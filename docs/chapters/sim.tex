@@ -1,8 +1,825 @@
-\chapter{Szimulációs eredmények}
+\chapter{Manuális teszteredmények}
 \label{appx:simulation}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque facilisis in nibh auctor molestie. Donec porta tortor mauris. Cras in lacus in purus ultricies blandit. Proin dolor erat, pulvinar posuere orci ac, eleifend ultrices libero. Donec elementum et elit a ullamcorper. Nunc tincidunt, lorem et consectetur tincidunt, ante sapien scelerisque neque, eu bibendum felis augue non est. Maecenas nibh arcu, ultrices et libero id, egestas tempus mauris. Etiam iaculis dui nec augue venenatis, fermentum posuere justo congue. Nullam sit amet porttitor sem, at porttitor augue. Proin bibendum justo at ornare efficitur. Donec tempor turpis ligula, vitae viverra felis finibus eu. Curabitur sed libero ac urna condimentum gravida. Donec tincidunt neque sit amet neque luctus auctor vel eget tortor. Integer dignissim, urna ut lobortis volutpat, justo nunc convallis diam, sit amet vulputate erat eros eu velit. Mauris porttitor dictum ante, commodo facilisis ex suscipit sed.
+\section{Vendég}
+\label{sec:sim_guest}
 
-Sed egestas dapibus nisl, vitae fringilla justo. Donec eget condimentum lectus, molestie mattis nunc. Nulla ac faucibus dui. Nullam a congue erat. Ut accumsan sed sapien quis porttitor. Ut pellentesque, est ac posuere pulvinar, tortor mauris fermentum nulla, sit amet fringilla sapien sapien quis velit. Integer accumsan placerat lorem, eu aliquam urna consectetur eget. In ligula orci, dignissim sed consequat ac, porta at metus. Phasellus ipsum tellus, molestie ut lacus tempus, rutrum convallis elit. Suspendisse arcu orci, luctus vitae ultricies quis, bibendum sed elit. Vivamus at sem maximus leo placerat gravida semper vel mi. Etiam hendrerit sed massa ut lacinia. Morbi varius libero odio, sit amet auctor nunc interdum sit amet.
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Navigációs sáv} (\ref{subsec:nav_guest} alszakasz)} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & valamelyik aloldalra navigálni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & azt az aloldalt elérjem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a navigációs sávban a "Térkép" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & a főoldalra/térképre leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a navigációs sávban a "Lista" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & a pontok listanézetére leszek navigálva \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a navigációs sávban a "Nincs bejelentkezve" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & lenyílik egy almenü, benne "Bejelentkezés" és "Regisztráció" feliratokkal \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & bármely oldalon vagyok, a "Nincs bejelentkezve" feliratra kattintva \\
+		\cline{2-3}
+		& WHEN & a lenyíló almenüben a "Bejelentkezés" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & a bejelentkezési űrlapra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & bármely oldalon vagyok, a "Nincs bejelentkezve" feliratra kattintva \\
+		\cline{2-3}
+		& WHEN & a lenyíló almenüben a "Regisztráció" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & a regisztrációs űrlapra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a jobb oldalon található színséma kapcsolóra kattintok \\
+		\cline{2-3}
+		& THEN & a weboldalak színsémája átvált sötét és világos között a másikba \\
+		\hline
+		\multirow{3}{*}{7} & GIVEN & bármely oldalon vagyok, nem az alapértelmezett (sötét) színsémával \\
+		\cline{2-3}
+		& WHEN & átnavigálok bármely aloldalra \\
+		\cline{2-3}
+		& THEN & a színséma megmarad az aloldalon is \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_guest_navigation}
+\end{center}
 
-Aenean non mauris accumsan, rutrum nisi non, porttitor enim. Maecenas vel tortor ex. Proin vulputate tellus luctus egestas fermentum. In nec lobortis risus, sit amet tincidunt purus. Nam id turpis venenatis, vehicula nisl sed, ultricies nibh. Suspendisse in libero nec nisi tempor vestibulum. Integer eu dui congue enim venenatis lobortis. Donec sed elementum nunc. Nulla facilisi. Maecenas cursus id lorem et finibus. Sed fermentum molestie erat, nec tempor lorem facilisis cursus. In vel nulla id orci fringilla facilisis. Cras non bibendum odio, ac vestibulum ex. Donec turpis urna, tincidunt ut mi eu, finibus facilisis lorem. Praesent posuere nisl nec dui accumsan, sed interdum odio malesuada.
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Térkép} (\ref{subsec:map_guest} alszakasz)} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég (vagy felhasználó, moderátor, adminisztrátor) \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & térképen böngészni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a térképet böngésszem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a főoldalon/térképen vagyok egy asztali számítógépen \\
+		\cline{2-3}
+		& WHEN & a térképre bal egérgombot húzva \\
+		\cline{2-3}
+		& THEN & a térképet mozgatom \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a főoldalon/térképen vagyok egy asztali számítógépen \\
+		\cline{2-3}
+		& WHEN & a térképre egérgörgőt felfelé, illetve lefelé görgetve \\
+		\cline{2-3}
+		& THEN & a térképet nagyítom, illetve kicsinyítem \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a főoldalon/térképen vagyok egy asztali számítógépen \\
+		\cline{2-3}
+		& WHEN & a térképre Shift billentyű nyomása mellett jobb egérgombot húzva \\
+		\cline{2-3}
+		& THEN & a térképet nagyítom/kicsinyítem és forgatom, az egérgomb lehúzásának kezdeti pozíciójához mérten \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a főoldalon/térképen vagyok egy érintőképernyős eszközön \\
+		\cline{2-3}
+		& WHEN & a térképre nyomva ujjat húzva \\
+		\cline{2-3}
+		& THEN & a térképet mozgatom \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a főoldalon/térképen vagyok egy érintőképernyős eszközön \\
+		\cline{2-3}
+		& WHEN & a térképre nyomva két ujjat széttolva, illetve összehúzva \\
+		\cline{2-3}
+		& THEN & a térképet nagyítom, illetve kicsinyítem \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a főoldalon/térképen vagyok \\
+		\cline{2-3}
+		& WHEN & a térkép bal alsó sarkában található \faIcon{filter} gombra kattintva \\
+		\cline{2-3}
+		& THEN & a szűrési menü beúszik alulról \\
+		\hline
+		\multirow{3}{*}{7} & GIVEN & a főoldalon/térképen vagyok, a szűrési menüt megnyitva \\
+		\cline{2-3}
+		& WHEN & a menü bármely tulajdonságot ábrázoló gombjára kattintva \\
+		\cline{2-3}
+		& THEN & annak logikai állapota átvált és a térképen található pontok azoknak megfelelően szűrődnek \\
+		\hline
+		\multirow{3}{*}{8} & GIVEN & a főoldalon/térképen vagyok, a szűrési menüt megnyitva \\
+		\cline{2-3}
+		& WHEN & a menü jobb felső sarkában található $\times$ gombra kattintva \\
+		\cline{2-3}
+		& THEN & a szűrési menü bezárul \\
+		\hline
+		\multirow{3}{*}{9} & GIVEN & a főoldalon/térképen vagyok \\
+		\cline{2-3}
+		& WHEN & a térkép jobb alsó sarkában található \faIcon{download} gombra kattintva \\
+		\cline{2-3}
+		& THEN & a pontok .csv-be szedett formátumban fájlként letöltésre kerülnek \\
+		\hline
+		\multirow{3}{*}{10} & GIVEN & a főoldalon/térképen vagyok \\
+		\cline{2-3}
+		& WHEN & a térképen megjelenített pontra kattintva \\
+		\cline{2-3}
+		& THEN & a ponton egy modális buborékban megjelenik annak sorszáma, egy képe és megjegyzése, egy hivatkozással annak adatlapjára \\
+		\hline
+		\multirow{3}{*}{11} & GIVEN & a főoldalon/térképen vagyok, egy azon található pontra kattintva \\
+		\cline{2-3}
+		& WHEN & a modális buborékban található "Részletek" gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak adatlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{12} & GIVEN & a főoldalon/térképen vagyok, egy azon található pontra kattintva \\
+		\cline{2-3}
+		& WHEN & a modális buborékra kétszer kattintok \\
+		\cline{2-3}
+		& THEN & a buborékot bezárom \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_guest_map}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pont részletezése (\ref{subsec:trash_details} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & pont adatlapját megtekinteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a pont adatlapján szereplő adatokat megismerni \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont adatlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a pont feltöltőjére vagy forrására kattintok \\
+		\cline{2-3}
+		& THEN & a pont feltöltőjének profiljára vagy annak forrására leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont adatlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a pont koordinátáira kattintok \\
+		\cline{2-3}
+		& THEN & a térképre leszek navigálva, az adott pontra nagyítva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_guest_trash_details}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pontok listanézete (\ref{subsec:trash_index} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & pontok listanézetét megtekinteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a pontok listanézetben böngésszem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a szűrési feltételeket megadva a "Keresés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a listát az azoknak megfelelő pontokkal az ott megadott oldalméretben kapom vissza \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza a teljes listához" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a listát alapértelmezett (100 pont/oldal, meg nem tisztított összes pont) keresési feltételeivel kapom vissza \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & egy oldalszámra vagy a \faIcon{angle-double-left}, \faIcon{angle-left}, \faIcon{angle-right}, \faIcon{angle-double-right} ikonok valamelyikére kattintok \\
+		\cline{2-3} 
+		& THEN & az adott számú, vagy az első, előző, következő, illetve utolsó oldalra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) feltöltőjére vagy forrására kattintok \\
+		\cline{2-3}
+		& THEN & az adott pont feltöltőjének profiljára vagy forrására leszek navigálva \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) koordinátáira kattintok \\
+		\cline{2-3}
+		& THEN & a térképre leszek navigálva, az adott pontra nagyítva \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{info-circle} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak adatlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_guest_trash_index}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Regisztráció (\ref{subsec:register} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & regisztrálni egy felhasználói fiókot \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & hozzáférhessek további funkciókhoz \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a "Bejelentkezés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a bejelentkezési űrlapra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & az adatokat helyesen töltöttem ki és a "Regisztráció" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a kezdőoldalra leszek navigálva, az új fiókommal automatikusan bejelentkeztetve \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & felhasználónevet üresen hagyva, vagy már használtat választva a "Regisztráció" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & az e-mail címet üresen hagyva, nem megfelelő formátumú (azaz nem e-mail címet), vagy már használtat választva a "Regisztráció" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a jelszót üresen hagyva, vagy nem megfelelő formátumút (azaz kevesebb, mint 6 karakter, illetve nem tartalmaz legalább egy kis- és nagybetűt, illetve számot) választva, a "Regisztráció" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a jelszó megerősítését nem a jelszóval megegyező adattal kitöltve, a "Regisztráció" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{7} & GIVEN & a regisztrációs űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a "Fájl kiválasztása" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & megnyílik egy fájlválasztós ablak \\
+		\hline
+		\multirow{3}{*}{8} & GIVEN & a regisztrációs űrlapon vagyok, a "Fájl kiválasztása" gombbal megnyitott fájlválasztós ablakkal\\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely kép és .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Profilkép" mezőbe \\
+		\hline
+		\multirow{3}{*}{9} & GIVEN & a regisztrációs űrlapon vagyok, a "Fájl kiválasztása" gombbal megnyitott fájlválasztós ablakkal\\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely nem .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintása után a "Regisztráció" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Profilkép" mezőbe, majd újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_register}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Bejelentkezés (\ref{subsec:login} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & vendég \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & bejelentkezni a saját fiókomba \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & hozzáférni adataimhoz és funkcióihoz \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a bejelentkezési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a "Regisztráció" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a regisztrációs űrlapra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a bejelentkezési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & az adatokat helyesen töltöttem ki és a "Bejelentkezés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a kezdőoldalra leszek navigálva, a megadott adatokkal egyező fiókkal bejelentkeztetve \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a bejelentkezési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & felhasználónevet üresen hagyva, a "Bejelentkezés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a bejelentkezési oldalra leszek navigálva, az eddig kitöltött adatokkal és egy általános hibaüzenettel \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a bejelentkezési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a jelszót üresen hagyva, a "Bejelentkezés" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & újra a bejelentkezési oldalra leszek navigálva, az eddig kitöltött adatokkal és egy általános hibaüzenettel \\
+		\hline
+		\end{longtable}
+	\label{tab:sim_login}
+\end{center}\newpage
+
+\section{Bejelentkezett felhasználó}
+\label{sec:sim_user}
+
+Minden, amik az előző, \ref{sec:sim_guest} szakaszban felsorolt felhasználói történetek, azok egyaránt vonatkoznak a nála magasabb hozzáféréssel rendelkező fiókokra, így egy bejelentkezett felhasználóra is. Ha egy funkció kiegészült további funkciókkal, akkor itt \textbf{csak a kiegészítések szerepelnek}.
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pontok listanézete (\ref{subsec:trash_index} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & pontok listanézetét megtekinteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a pontokat listanézetben böngésszem, azokat bővítsem és/vagy szerkesszem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a lista tetejének jobb végén található \faIcon{plus} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak szerkesztési űrlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{edit} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak szerkesztési űrlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_user_trash_index}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pont bejelentése (\ref{subsec:trash_create} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & bejelenteni egy illegális szemétlerakatot \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a térképen és listában megjelenjen \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az (legalább kötelező) adatokat helyesen kitöltve a "Bejelentés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva, illetve a bejelentett pontom megjelenik a térképen, a listanézeten és a profiloldalamon \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva\\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & legalább az egyik koordinátát nem -180° és 180° között kitöltve a "Bejelentés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a bejelentési űrlapra leszek navigálva, az eddig kitöltött adatokkal és releváns hibaüzenettel \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a megjegyzést több, mint 2000 karakterrel kitöltve a "Bejelentés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a bejelentési űrlapra leszek navigálva, az eddig kitöltött adatokkal és releváns hibaüzenettel \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely kép és .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Képek hozzáadása" mezőbe \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a pont bejelentési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy (vagy több) fájl(oka)t, amely nem .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintása után a "Bejelentés" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Képek hozzáadása" mezőbe, majd újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_trash_create}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pont szerkesztése (\ref{subsec:trash_edit} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & szerkeszteni egy pontot \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & frissítsem annak adatait \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az (legalább kötelező) adatokat helyesen kitöltve a "Módosítás" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva, illetve a bejelentett pontom megjelenik a térképen, a listanézeten és a profiloldalamon \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva\\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & legalább az egyik koordinátát nem -180° és 180° között kitöltve a "Módosítás" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a bejelentési űrlapra leszek navigálva, az eddig kitöltött adatokkal és releváns hibaüzenettel \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a megjegyzést több, mint 2000 karakterrel kitöltve a "Módosítás" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a bejelentési űrlapra leszek navigálva, az eddig kitöltött adatokkal és releváns hibaüzenettel \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely kép és .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Képek hozzáadása" mezőbe \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a pont szerkesztési űrlapján oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy (vagy több) fájl(oka)t, amely nem .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintása után a "Módosítás" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Képek hozzáadása" mezőbe, majd újra a regisztrációs oldalra leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_trash_edit}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Saját (illetve más) profil megtekintése (\ref{subsec:user_details} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & megtekinteni saját vagy más profiloldalát \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & lássam a profilon található képet, nevet és elérhetőséget, illetve a bejelentett pontjait \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a e-mail cím gombjára kattintok \\
+		\cline{2-3}
+		& THEN & az alapértelmezett levelező programban megnyílik az adott e-mail címre egy új üzenet írása \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a saját profilom oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a "Profil szerkesztése" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a profil szerkesztésének űrlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & egy oldalszámra vagy a \faIcon{angle-double-left}, \faIcon{angle-left}, \faIcon{angle-right}, \faIcon{angle-double-right} ikonok valamelyikére kattintok \\
+		\cline{2-3} 
+		& THEN & az adott számú, vagy az első, előző, következő, illetve utolsó oldalra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) feltöltőjére kattintok \\
+		\cline{2-3}
+		& THEN & az adott pont feltöltőjének profiljára (azaz ismét ide) leszek navigálva \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) koordinátáira kattintok \\
+		\cline{2-3}
+		& THEN & a térképre leszek navigálva, az adott pontra nagyítva \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{info-circle} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak adatlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{7} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a lista tetejének jobb végén található \faIcon{plus} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak szerkesztési űrlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{8} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{edit} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak szerkesztési űrlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+\label{tab:sim_user_details}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Saját profil szerkesztése (\ref{subsec:user_edit} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó, moderátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & szerkeszteni a saját profilomat \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & frissítsem annak adatait \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a profil szerkesztési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a profil szerkesztési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & az adatokat helyesen töltöttem ki és a "Módosítás" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a előző oldalra leszek navigálva, az fiókom adatait frissítve \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a profil szerkesztési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & felhasználónevet üresen hagyva, vagy már használtat választva a "Módosítás" gombra kattintok \\
+		\cline{2-3}
+		& THEN & újra a szerkesztési űrlap oldalára leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a profil szerkesztési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & az e-mail címet üresen hagyva, nem megfelelő formátumú (azaz nem e-mail címet), vagy már használtat választva a "Módosítás" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & újra a szerkesztési űrlap oldalára leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a profil szerkesztési űrlapon vagyok \\
+		\cline{2-3}
+		& WHEN & a "Fájl kiválasztása" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & megnyílik egy fájlválasztós ablak \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a profil szerkesztési űrlapon vagyok, a "Fájl kiválasztása" gombbal megnyitott fájlválasztós ablakkal \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely kép és .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Profilkép" mezőbe \\
+		\hline
+		\multirow{3}{*}{7} & GIVEN & a profil szerkesztési űrlapon vagyok, a "Fájl kiválasztása" gombbal megnyitott fájlválasztós ablakkal \\
+		\cline{2-3}
+		& WHEN & kiválasztok egy fájlt, amely nem .jpg (vagy .jpeg) vagy .png formátumú, majd az ablak "Megnyitás" gombjára kattintása után a "Regisztráció" gombra kattintok \\
+		\cline{2-3} 
+		& THEN & bezárul az ablak és beillesztésre kerül a fájl a "Profilkép" mezőbe, majd újra a a szerkesztési űrlap oldalára leszek navigálva, az eddig kitöltött adatokkal és a releváns hibaüzenetekkel \\
+		\hline
+	\end{longtable}
+\label{tab:sim_user_edit}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Kijelentkezés (\ref{subsec:logout} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & bejelentkezett felhasználó, moderátor, adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & kijelentkezni a saját fiókomból \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & többé ne lehessen hozzáférni adataimhoz és funkcióihoz, egy újabb bejelentkezésig \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a navigációs sáv jobb szélén található profilnevemre kattintva lenyíló menüben a "Kijelentkezés" pontra kattintok \\
+		\cline{2-3}
+		& THEN & a főoldalra leszek navigálva és kijelentkeztetésre kerülök \\
+		\hline
+	\end{longtable}
+\label{tab:sim_logout}
+\end{center}
+
+\section{Moderátor}
+\label{sec:sim_moderator}
+
+Minden, amik az előző, \ref{sec:sim_user} szakaszban felsorolt felhasználói történetek, azok egyaránt vonatkoznak a nála magasabb hozzáféréssel rendelkező fiókokra, így egy moderátorra is. Ha egy funkció kiegészült további funkciókkal, akkor itt \textbf{csak a kiegészítések szerepelnek}.
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pontok listanézete (\ref{subsec:trash_index} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & moderátor, adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & pontok listanézetét megtekinteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & a pontokat listanézetben böngésszem, azokat bővítsem, szerkesszem és/vagy töröljem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{trash} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak törlésének megerősítő üzenetének űrlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_moderator_trash_index}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Saját (illetve más) profil megtekintése (\ref{subsec:user_details} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & moderátor, adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & megtekinteni saját vagy más profiloldalát \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & lássam a profilon található képet, nevet és elérhetőséget, illetve a bejelentett pontjait \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & egy profil oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik pont (sor) jobb végén található \faIcon{trash} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak törlésének megerősítő üzenetének űrlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_moderator_user_details}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Pont törlése (\ref{subsec:trash_delete} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & moderátor, adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & törölni egy pontot \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & többé ne jelenjen meg a térképen és listákban \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a pont törlésének megerősítő kérdésének űrlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a "Törlés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva és a pont törlésre kerül \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a pont törlésének megerősítő kérdésének űrlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_trash_delete}
+\end{center}
+
+\section{Adminisztrátor}
+\label{sec:sim_admin}
+
+Minden, amik az előző, \ref{sec:sim_moderator} szakaszban felsorolt felhasználói történetek, azok egyaránt vonatkoznak a nála magasabb hozzáféréssel rendelkező fiókokra, így egy adminisztrátorra is. Ha egy funkció kiegészült további funkciókkal, akkor itt \textbf{csak a kiegészítések szerepelnek}.
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Navigációs sáv} (\ref{subsec:nav_guest} alszakasz)} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & valamelyik aloldalra navigálni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & azt az aloldalt elérjem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & bármely oldalon vagyok \\
+		\cline{2-3}
+		& WHEN & a navigációs sávban a "Felhasználók" feliratra kattintok \\
+		\cline{2-3}
+		& THEN & a felhasználók listanézetére leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_admin_navigation}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Felhasználói fiókok listanézete (\ref{subsec:user_index} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & a felhasználói fiókok listanézetét megtekinteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & azokat listanézetben böngésszem, szerkesszem és/vagy töröljem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a szűrési feltételeket megadva a "Keresés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a listát az azoknak megfelelő fiókokkal az ott megadott oldalméretben kapom vissza \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza a teljes listához" gombra kattintok \\
+		\cline{2-3}
+		& THEN & a listát alapértelmezett (100 fiók/oldal) keresési feltételeivel kapom vissza \\
+		\hline
+		\multirow{3}{*}{3} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & egy oldalszámra vagy a \faIcon{angle-double-left}, \faIcon{angle-left}, \faIcon{angle-right}, \faIcon{angle-double-right} ikonok valamelyikére kattintok \\
+		\cline{2-3} 
+		& THEN & az adott számú, vagy az első, előző, következő, illetve utolsó oldalra leszek navigálva \\
+		\hline
+		\multirow{3}{*}{4} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik fiók (sor) jobb végén található \faIcon{info-circle} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak profiloldalára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{5} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik fiók (sor) jobb végén található \faIcon{edit} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak szerkesztési űrlapjára leszek navigálva \\
+		\hline
+		\multirow{3}{*}{6} & GIVEN & a fiókok listanézetének oldalán vagyok \\
+		\cline{2-3}
+		& WHEN & az egyik fiók (sor) jobb végén található \faIcon{trash} gombra kattintok \\
+		\cline{2-3}
+		& THEN & annak törlésének megerősítő kérdésének űrlapjára leszek navigálva \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_user_index}
+\end{center}
+
+\begin{note}
+	Az alábbi felhasználói esetek lényegében megegyeznek a saját profil szerkesztésénél tárgyaltakkal. Adminisztrátorként viszont lehetőség van más profiljának módosítására, illetve ha a szerkesztés alatt álló profil nem saját, akkor akár még annak szerepkörének megváltoztatására is.
+\end{note}
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Felhasználói fiók szerkesztése (\ref{subsec:user_edit} alszakasz)}} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & egy felhasználói fiókot szerkeszteni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & annak adatait frissítsem és/vagy szerepkörét megváltoztassam \\
+		\hline
+	\end{longtable}
+	\label{tab:sim_admin_user_edit}
+\end{center}
+
+\begin{center}
+	\centering
+	\begin{longtable}{ | m{0.025\textwidth}| m{0.1\textwidth} | m{0.75\textwidth} | }
+		\hline
+		\multicolumn{3}{ | c | }{\textbf{Felhasználói fiók törlése} (\ref{subsec:user_delete} alszakasz)} \\
+		\hline
+		\multicolumn{2}{ | l | }{AS A} & adminisztrátor \\
+		\hline
+		\multicolumn{2}{ | l | }{I WANT TO} & valamelyik aloldalra navigálni \\
+		\hline
+		\multicolumn{2}{ | l | }{SO THAT} & azt az aloldalt elérjem \\
+		\hline
+		\multirow{3}{*}{1} & GIVEN & a fiók törlésének megerősítő kérdésének űrlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a "Törlés" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva és a fiók törlésre kerül \\
+		\hline
+		\multirow{3}{*}{2} & GIVEN & a fiók törlésének megerősítő kérdésének űrlapján vagyok \\
+		\cline{2-3}
+		& WHEN & a "Vissza" gombra kattintok \\
+		\cline{2-3}
+		& THEN & az előző oldalra leszek navigálva \\
+		\hline
+		\end{longtable}
+	\label{tab:sim_user_delete}
+\end{center}

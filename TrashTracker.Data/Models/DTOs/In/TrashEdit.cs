@@ -4,6 +4,9 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models.DTOs.In
 {
+    /// <summary>
+    /// DTO meant to contain every editable property of a <see cref="Trash"/> object.
+    /// </summary>
     public class TrashEdit : TrashFromUser
     {
         public Int32 Id { get; set; }

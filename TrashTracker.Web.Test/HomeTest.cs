@@ -60,5 +60,11 @@ namespace TrashTracker.Web.Test
             Assert.Equal(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, "").Location, content.Location);
             Assert.Equal(TrashMapDetails.Create((await _context.Trashes.FindAsync(id))!, "").Note, content.Note);
         }
+
+        [Fact]
+        public async Task GetTrashCsvTest()
+        {
+
+        }
     }
 }

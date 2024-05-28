@@ -155,7 +155,7 @@ Egy ilyen vezérlőhöz érkező kéréskor a program példányosítja a megfele
 \label{subsec:persistence}
 
 Ennek a rétegnek, mint neve is sugallja, az adatok tárolása a célja, mely nem hagyja elveszni azokat a program leállítása esetén. Ehhez egy MSSQL-adatbázis áll a rendelkezésre, melyet az alkalmazás implementációjához használt Entity Framework Core (röviden EF) objektum-relációs leképzőrendszer hoz létre ún. migráció alkalmával, illetve létesít kapcsolatot a program és az adatbázis között. Ez a rendszer a programban definiált osztályokat felelteti meg az adatbázis tábláinak oly módon, hogy egy osztály tulajdonsága lesz a relációs tábla egy-egy oszlopa (vagy más néven attribútuma), illetve az osztály példányai (azaz objektumai) az adatbázis egy-egy sora (vagy más néven rekordja).\\
-Az adatbázis felépítése \textit{code-first}\todo{Angol kifejezéseket érdemes tipográfiailag, pl. dőlttel szedve kiemelni.} megközelítéssel történik, ami azt jelenti, hogy a program C\# nyelvű forráskódjából áll elő az adatbázis. A leképzőrendszer nem csak az osztályok tulajdonságait veszi figyelembe, hanem azoknak adattípusait, illetve egyedi megszorításait is megfelelteti MSSQL-oldalon. Emellett felismeri az osztályok tulajdonságainak neve alapján a táblák közötti relációkat is (egy az egyhez, egy a többhöz és több a többhöz kapcsolatokat).\\
+Az adatbázis felépítése \textit{code-first} megközelítéssel történik, ami azt jelenti, hogy a program C\# nyelvű forráskódjából áll elő az adatbázis. A leképzőrendszer nem csak az osztályok tulajdonságait veszi figyelembe, hanem azoknak adattípusait, illetve egyedi megszorításait is megfelelteti MSSQL-oldalon. Emellett felismeri az osztályok tulajdonságainak neve alapján a táblák közötti relációkat is (egy az egyhez, egy a többhöz és több a többhöz kapcsolatokat).\\
 Emellett ilyen kapcsolatok esetén lehetőség van ún. navigációs tulajdonságok deklarálására is, mely az idegen kulcs forráskód oldali használata helyett közvetlen a kapcsolatban álló objektumra mutat (melyek értelemszerűen nem jelennek meg az adatbázisban, ott továbbra is csak az idegen kulcs található meg), ezzel megkönnyítve annak fejlesztését. A legjobb teljesítmény érdekében ezek a navigációs tulajdonságok lusta kiértékeléssel vannak ellátva, mely azt jelenti, hogy csak akkor lesz beletöltve valós érték, amikor arra szükség van és/vagy explicit kérjük azokat. Amíg ezek nem kerülnek betöltésre, addig ezek helyén egy helyettes (idegen szóval proxy) tervezési minta által készített leszármaztatott proxy lesz.\\
 Azt, hogy mely osztályok definiálnak egy-egy táblát, azt egy adatbázis-kontextus osztályban kell felsorolni, melyen keresztül lehetőség lesz az adatbázissal való kommunikációra is. Emellett nem csak a táblák felsorolása, hanem az azokra vonatkozó megszorítások is itt szerepel. A programkódban történő adatmódosítások perzisztálását külön eljárás meghívásával kell elérni, mely tulajdonképpen a követett módosításokat menti az adatbázisba.\\
 Nem csak táblákat, hanem lekérdezéseket is lehet C\# kódról SQL-re fordítani, mivel a programnyelv támogatja az abba beágyazott lekérdezéseket (LINQ-et) is. Ilyen lekérdezések a kontextuson való meghívásával a rendszer automatikusan SQL-re fordítva hajtja végre azokat.
@@ -189,13 +189,13 @@ A szemétpontokon található címkéknek (pl. típus, méret) külön felsorol�
 \begin{figure}[H]
 	\centering
 	\subcaptionbox{Az adatbázis osztályai forráskód oldalon}{
-		\includegraphics[width=0.7\textwidth]{database_cs}}
+		\includegraphics[width=0.85\textwidth]{database_cs}}
 	\vspace{5pt}
 	\subcaptionbox{Az adatbázis sémája SQL oldalon}{
-		\includegraphics[width=0.7\linewidth]{database_sql}}
+		\includegraphics[width=0.85\linewidth]{database_sql}}
 	\caption{Az adatbázis sémája leképzés előtt és után}
 	\label{fig:database_scheme}
-\end{figure}\todo{Olyan méretűek legyenek a képek, hogy ha A4-es méretben nyomtatásra kerülne, olvasható legyen.}
+\end{figure}
 
 \subsection{DTO-réteg}
 
@@ -230,6 +230,7 @@ Minden vezérlőt az ASP.NET Core keretrendszer példányosít, mely a HTTP-kér
 \begin{compactitem}
 	\item \texttt{/OnMap}: az összes pont koordinátáit és szűrési tulajdonságait adja vissza \texttt{TrashMap} objektumokban
 	\item \texttt{/OnMapDetails}: egy, a térképen való pontra kattintáskor megjelenő ablakban szereplő adatok adja vissza egy \texttt{TrashMapDetails} objektumban
+	\item \texttt{/TrashCsv}: a térképen található pontokat .csv formátumban adja vissza \texttt{FileResult}-ként
 \end{compactitem}
 \texttt{TrashesController}: Az összes ponttal kapcsolatos, nem térképen megjelenő adatok nézeteinek szolgáltatásáért felelős
 \begin{compactitem}
@@ -251,7 +252,7 @@ Minden vezérlőt az ASP.NET Core keretrendszer példányosít, mely a HTTP-kér
 \subsection{Nézet-réteg}
 
 Ez a réteg felel az egyes akciók által visszaadott nézetek definiálásáért. A \texttt{TrashTracker.Web.Views} névtérben található osztályok nem a C\# hagyományos szintaxisával, hanem a Razor-ével íródtak, mely tulajdonképpen egy \texttt{.html} formátumú fájl, benne C\# kódrészletekkel, ebből is adódik ezen fájlok kiterjesztésének a \texttt{.cshtml} neve.\\
-Minden nézet kontrollerenként\todo{controller vagy vezérlő, de ez a "kontroller" inkább ne legyen} van csoportosítva, és minden nézetet visszaadó akciónak pontosan egy \texttt{.cshtml} formátumú nézetfájlja van. Ezek mellett a vannak ún. parciális nézetek is, melyek az egyes oldalakon szereplő, több helyen is ismétlődő tartalmat emelik ki külön fájlba, ezzel elkerülve az önismétlést. Ezen parciális nézetek fájljainak nevei az "\texttt{\_}" karakterrel kezdődnek, melyeknek többsége a Shared mappában található (pl. navigációs sáv, illetve az abban lévő fiók menüje).\\
+Minden nézet vezérlőnként van csoportosítva, és minden nézetet visszaadó akciónak pontosan egy \texttt{.cshtml} formátumú nézetfájlja van. Ezek mellett a vannak ún. parciális nézetek is, melyek az egyes oldalakon szereplő, több helyen is ismétlődő tartalmat emelik ki külön fájlba, ezzel elkerülve az önismétlést. Ezen parciális nézetek fájljainak nevei az "\texttt{\_}" karakterrel kezdődnek, melyeknek többsége a Shared mappában található (pl. navigációs sáv, illetve az abban lévő fiók menüje).\\
 \texttt{Home}
 \begin{compactitem}
 	\item \texttt{Index}: A főoldalon található térkép, illetve az ahhoz tartozó szűrési menüt tartalmazó nézet. A térkép viselkedése nem itt, hanem a \texttt{../../wwwroot/js/home.js} fájlban van definiálva, mivel a térképes megjelenítés dinamikája nem szerver-, hanem kilensoldalon történik a JavaScript nyelven íródott OpenLayers könyvtárcsomag segítségével.
@@ -295,14 +296,19 @@ A webalkalmazás forráskódja túlnyomó részben C\# nyelven, az ASP.NET Core 
 A forráskód rétegekre bontása jelentősen elősegíti a jövőbeli továbbfejleszthetőségét a programnak, pl. egy perzisztencia- és DTO-rétegre épülő webszolgáltatással (Rest API-val) lehetőség van akár egy asztali alkalmazás fejlesztésére is, az előbb említett rétegek minimális módosításával, illetve azok redundanciája nélkül. Emellett a már meglévő funkciók is úgy lettek implementálva, hogy lehetőség szerint azokhoz a legkevesebb refaktorálásra legyen szükség (pl. új attribútumok-, új szerepkörök hozzáadása).
 
 \subsection{Projektek szervezése}
+\label{subsec:component}
 
-A megvalósított forráskód két projektben kapott helyet.\\
+A megvalósított program forráskódja két projektben kapott helyet.\\
 Az első a \texttt{TrashTracker.Data}, mely tartalmazza a perzisztencia- és DTO-rétegeket, ezzel egy adatszolgáltatási projektként leszeparálva. Ennek oka, hogy az előző \ref{sec:implementation} szakaszban említett továbbfejlesztési lehetőség esetén ez a projekt akár módosítás nélkül is képes feladatának az ellátására.\\
 A második a \texttt{TrashTracker.Web}, mely tartalmazza magát a webalkalmazást, az előzőleg említett projekten keresztül kinyert adatok kontrollerekkel való továbbítását a nézeteknek. Ennek oka, hogy az előbb említett továbbfejlesztés esetén ezek a kódrészek nem relevánsak, illetve ehhez a projekthez akár fejleszthető saját adatszolgáltatási projekt, mely kompatibilis ezzel az alkalmazással.
+Ezek a projektek megfeleltethetőek a program komponenseinek, ahol az adatbázis komponense által biztosított SQL interfészen keresztül kommunikál a webalkalmazás komponensével.
 
-\subsubsection{Adatszolgáltatás}
-
-
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\linewidth]{component}
+	\caption{Komponensek diagramja}
+	\label{fig:component}
+\end{figure}
 
 \subsubsection{Webalkalmazás}
 
@@ -313,6 +319,32 @@ Ezután történik a vezérlők és az azokhoz tartozó nézetek regisztrációj
 Az "összeszedett" szolgáltatások itt \textit{build}-elésre kerülnek, mely a \texttt{WebApplicationBuilder}-ből egy \texttt{WebApplication} objektumot hoz létre. Itt történik meg a TrashOut-tal való kapcsolat létrehozása, a HTTP kérések HTTPS-re való átirányításának-, a végpontok \textit{routing}-jának-, az autentikációnak és autorizációnak a bekapcsolása, illetve a főoldal útvonalának megadása. A forráskód fájljának végén kerül az adatbázis inicializálásra, mely "éles" környezetben az adatbázis migrációját, teszt környezetben pedig annak alapértelmezett- és minta adatokkal való ellátását biztosítja. Emellett a már előbb említett szerepkörök létrehozásra/frissítésre kerülnek, illetve minden szerepkörhöz (melyhez addig nem volt) egy alapértelmezett fiók is regisztrálásra kerül.\\
 A \texttt{Program} osztály lefutását követően a legutolsó sorban található eljárás blokkolja az azt végrehajtó szálat (a leállításig), mellyel ténylegesen elindítja a webalkalmazást.
 
+\subsection{Telepítési terv}
+
+Az előző, \ref{subsec:component} alszakaszban tárgyaltak szerint az alkalmazás két komponensből áll, az adatbázisból, illetve a webalkalmazásból. Ezek futtathatóak (pl. fejlesztéshez, teszteléshez) egy-, viszont "élesben" ezek két különböző eszközön futnak. Az alábbi, \ref{fig:install} ábrán  is látható, az előbbi rész egy SQL Server-re, míg az utóbbi rész egy .NET Core Runtime-ra támaszkodik, mint futtatási környezetre.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{install}
+	\caption{Telepítési terv diagramja}
+	\label{fig:install}
+\end{figure}
+
+\subsection{Fordítás és futtatás}
+
+A forráskód fordításához a .NET Core keretrendszer mellett szükség van a NodeJS Runtime csomagkezelőjére, az npm-re. Ennek telepítése után a \texttt{./TrashTracker.Web} könyvtárban kell a \texttt{npm clean install} parancsot futtatni, mely telepíteni fogja a kilensoldalon futó szkriptek csomagjait. Ezek után a gyökérkönyvtárban kell a \texttt{dotnet build}, majd ismét a \texttt{./TrashTracker.Web} könyvtárban a \texttt{dotnet run} parancsokat futtatni, mely rendre a forráskódot fordítja, illetve futtatja.
+\begin{note}
+	Lehetőség van a Visual Studio-ban való futtatásra is, viszont itt ügyelni kell arra, hogy a kiinduló projekt a \texttt{./TrashTracker.Web} legyen.
+\end{note}
+
+\subsection{Kihelyezés}
+
+A fordítást követően az így előállított állományok a \texttt{dotnet publish} parancs futtatásával azok kihelyezhetők, mely egy szerveren való futtatással "éles" környezetben használhatóak. Ennek bizonyításaképp a Microsoft Azure \textit{cloud computing} platformjára is kihelyezésre került, mely korlátozott ideig elérhető a \texttt{\url{https://ttracker.azurewebsites.net/}} URL-el elérhető weboldalon.
+
+\subsection{Dokumentáció}
+
+A forráskód legtöbb metódusa XML formátumú dokumentációs kommenttel lett ellátva, melyeket egy integrált fejlesztési környezetben (pl. Visual Studio) automatikusan felhasználásra kerülnek (pl. intelligens kódkiegészítés), illetve generálható belőle dokumentáció is (pl. Docfx C\# kódhoz, mely statikus weboldalakat állít elő).
+
 \section{Tesztelés}
 
 A vezérlő-rétegben található végpontok egy, a \texttt{TrashTracker.Web.Test} nevű XUnit projektben található automatikus egységtesztekkel lett tesztelve. Ezek az egységtesztek a legtöbb végpont bemeneti és kimeneti specifikációja szerint teszteli azok helyes viselkedését, illetve a perzisztenciában bekövetkezett változások helyességét.\\
@@ -320,7 +352,42 @@ A nézet-rétegben található nézetek manuálisan, a \ref{ch:user} fejezetben 
 
 \subsection{Vezérlő-réteg automatikus tesztesetei}
 
-\subsection{Nézet-réteg manuális tesztelése}
+A projektben a tesztek metódusai vezérlőnként vannak osztályokba szervezve. Minden osztály tartalmaz egy példányt az adatbázis-kontextusból és a releváns vezérlőből, mely utóbbinak végpontjait (azaz metódusait) meghívva figyelik a tesztek az adatbázisban bekövetkezett változásokat. A vezérlők valamennyi adatot és nézetet szolgáltató végpontjaira legalább egy teszteset készült, melyek az alábbiak:
+\texttt{HomeTest}:
+\begin{compactitem}
+	\item \texttt{GetPointsOnMapTest}: A térképen megjelenő pontok formátumának és számának helyességét ellenőrzi.
+	\item \texttt{GetPointByIdOnMapDetailsTest}: A térképen levő pontra kattintáskor megjelenő adatok formátumának és számának helyességét ellenőrzi.
+	\item \texttt{GetTrashCsvTest}: A térképen megjelenített pontok .csv formátumban történő letöltése esetén generált fájl formátumát és teljességét ellenőrzi.
+\end{compactitem}
+\texttt{TrashesTest}
+\begin{compactitem}
+	\item \texttt{IndexNoArgTest}: A bejelentett pontok listanézetének alapértelmezett (paraméter nélküli) meghívása esetén kapott adatok mennyiségét ellenőrzi, azaz valóban annyi elem van, ahányat az adatbázis tartalmaz, vagy amennyi kifér egy oldalra.
+	\item \texttt{IndexSmallPageSizeTest}: A bejelentett pontok listanézetének oldalméret megadása esetén az összes oldal hosszának helyességét ellenőrzi.
+	\item \texttt{IndexSearchStringTest}: A bejelentett pontok listanézetének keresési szöveg megadása esetén csak az annak megfelelő adatok visszaadásra kerülését ellenőrzi.
+	\item \texttt{IndexNoCleanedTest}: A bejelentett pontok listanézetének csak a még nem tisztított elemek megadása esetén valóban csak azok a pontok visszaadásra kerülését ellenőrzi.
+	\item \texttt{IndexMultipleConditionsTest}: A bejelentett pontok listanézetének valamennyi lehetséges paraméterének nem alapértelmezett megadása esetén valóban csak azoknak a paramétereknek megfelelő pontok helyes formátumban való visszaadásra kerülését ellenőrzi.
+	\item \texttt{DetailsTest}: Egy bejelentett pont azonosítója alapján kért adatlapon levő adatainak az adatbázisban szereplő adatokhoz hasonlítva helyesen való visszaadását ellenőrzi.
+	\item \texttt{DetailsWithWrongIdTest}: Egy nem létező azonosítójú pont adatlapjának kérése esetén a végpont helyesen, 404-es \textit{Not Found} HTTP-státuszkóddal tér vissza.
+	\item \texttt{CreateGetTest}: Egy pont létrehozásához tartozó űrlap mögötti modell formátumának helyessége, azaz az valóban az űrlaphoz készített típusú objektum, amely még kitöltetlen.
+	\item \texttt{CreatePostTest}: Egy pont létrehozásához tartozó űrlap helyes adatokkal való kitöltés utáni beadásakor az azt tartalmazó adatok valóban (helyesen) megjelennek az adatbázisban.
+	\item \texttt{EditGetTest}: Egy pont szerkesztéséhez tartozó űrlap mögötti modell formátumának helyessége, azaz az valóban az űrlaphoz készített típusú objektum, amely adatai a szerkesztendő pont adatait tartalmazza.
+	\item \texttt{EditPostTest}: Egy pont szerkesztéséhez tartozó űrlap helyes adatokkal való kitöltés utáni beadásakor az azt tartalmazó adatok valóban (helyesen) módosulnak az adatbázisban.
+	\item \texttt{DeleteGetTest}: Egy pont törléséhez tartozó űrlap mögötti modell formátumának helyessége, azaz az valóban az űrlaphoz készített típusú objektum, amely adatai a törlendő pont adatait tartalmazza.
+	\item \texttt{DeleteGetWrongIdTest}: Egy pont törléséhez tartozó űrlap helytelen azonosítóval való meghívás után a végpont helyesen, 404-es \textit{Not Found} HTTP-státuszkóddal tér vissza.
+	\item \texttt{DeletePostTest}: Egy pont szerkesztéséhez tartozó űrlap helyes adatokkal (azaz azonosítóval) való "kitöltés utáni" beadásakor az azt hivatkozó pont valóban törlődik az adatbázisból.
+	\item \texttt{DeletePostWrongIdTest}: Egy pont törléséhez tartozó űrlap helytelen azonosítóval való meghívás után a végpont helyesen, 404-es \textit{Not Found} HTTP-státuszkóddal tér vissza.
+\end{compactitem}
+
+\subsection{Kliensoldal manuális tesztelése}
 \label{subsec:manual_test}
 
+A vezérlők működésének helyessége mellett szükség van az azok által szolgáltatott adatokhoz társuló, kliensoldalon megjelenő nézetek tesztjére is. A tesztek menete a már \ref{ch:sum} fejezetben tárgyalt felhasználói esetekhez hasonlóan, szerepkör, illetve "funkciócsoportonként" szedve történt meg. Ezek felhasználói történetek formájában tekinthetőek meg a \ref{appx:simulation} függelékben.
+
 \section{Fejlesztési lehetőségek}
+
+Az alkalmazás implementálásakor több továbbfejlesztési lehetőség is felmerült. Első sorban a már többször említett komponensekké választása a forráskódnak lehetővé tenné egy, az adatszolgáltatáshoz fejlesztett webszolgáltatás megírását, melyhez bárki fejleszthet pl. saját asztali grafikus felületet is. Emellett a felhasználókezelés még kezdetleges, számos már megszokott funkció adható még hozzá:
+\begin{compactitem}
+	\item Elfelejtett jelszó esetén e-mail címes visszaigazolással új megadásának lehetősége
+	\item Minden regisztrált fióknak, illetve azok e-mail címének megváltozása esetén azok visszaigazolásának kötelessége
+	\item Saját felhasználói fiók törlésének lehetősége
+\end{compactitem}

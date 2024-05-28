@@ -23,11 +23,13 @@ namespace TrashTracker.Web.Utils
             return options;
         });
 
+        /// <inheritdoc cref="JsonSerializer.Serialize"/>
         public static String Serialize(Object value)
         {
             return JsonSerializer.Serialize(value, _options.Value);
         }
 
+        /// <inheritdoc cref="JsonSerializer.SerializeAsync"/>
         public static async Task<String> SerializeAsync(Object toSerialize)
         {
             MemoryStream stream = new MemoryStream();
@@ -35,11 +37,13 @@ namespace TrashTracker.Web.Utils
             return stream.ToString() ?? "{}";
         }
 
+        /// <inheritdoc cref="JsonSerializer.Deserialize{T}"/>
         public static T Deserialize<T>(String json)
         {
             return JsonSerializer.Deserialize<T>(json, _options.Value)!;
         }
 
+        /// <inheritdoc cref="JsonSerializer.DeserializeAsync{T}"/>
         public static async Task<T> DeserializeAsync<T>(String json)
         {
             return (await JsonSerializer.DeserializeAsync<T>(
@@ -47,6 +51,9 @@ namespace TrashTracker.Web.Utils
         }
     }
 
+    /// <summary>
+    /// Determines the naming policy used to convert a string-based name to a lower-case format.
+    /// </summary>
     public class LowerCaseNamingPolicy : JsonNamingPolicy
     {
         public override String ConvertName(String name)

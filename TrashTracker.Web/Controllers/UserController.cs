@@ -15,15 +15,46 @@ namespace TrashTracker.Web.Controllers
 {
     public class UserController : Controller
     {
+        /// <summary>
+        /// <inheritdoc cref="IAuthorizationService"/>
+        /// </summary>
         private readonly IAuthorizationService _authorizationService;
+
+        /// <summary>
+        /// <inheritdoc cref="TrashTrackerDbContext"/>
+        /// </summary>
         private readonly TrashTrackerDbContext _context;
+
+        /// <summary>
+        /// <inheritdoc cref="SignInManager{TrashTrackerUser}"/>
+        /// </summary>
         private readonly SignInManager<TrashTrackerUser> _signInManager;
+
+        /// <summary>
+        /// <inheritdoc cref="UserManager{TrashTrackerUser}"/>
+        /// </summary>
         private readonly UserManager<TrashTrackerUser> _userManager;
 
-        private string ImageURL => Url
-            .Action(action: "Image", controller: "User",
-            values: new { id = "0" }, protocol: Request.Scheme)![0..^2];
+        /// <summary>
+        /// The base of the images' download URL,
+        /// defined by <see cref="ImageAsync"/>'s routing.
+        /// </summary>
+        private String ImageURL => Url != null
+            ? Url.Action(action: "Image", controller: "User",
+                values: new { id = "0" }, protocol: Request.Scheme)![0..^2]
+            : "";
 
+        /// <summary>
+        /// Creates an instance of <see cref="HomeController"/>.
+        /// </summary>
+        /// <param name="authorizationService">
+        /// Reference to an authorization service to check policy based permissions for users.
+        /// </param>
+        /// <param name="context">Reference to the database's context to access data with.</param>
+        /// <param name="signInManager">Reference to a sign-in manager for users.</param>
+        /// <param name="userManager">
+        /// Reference to a user manager for managing them in the database.
+        /// </param>
         public UserController(IAuthorizationService authorizationService,
             TrashTrackerDbContext context,
             SignInManager<TrashTrackerUser> signInManager,
@@ -37,6 +68,11 @@ namespace TrashTracker.Web.Controllers
 
         #region Authorization
 
+        /// <summary>
+        /// Endpoint method to get the login form's view.
+        /// </summary>
+        /// <param name="returnUrl">The return URL to return to after posting the form.</param>
+        /// <returns><inheritdoc cref="Controller.View"/></returns>
         [HttpGet]
         public IActionResult Login(String? returnUrl = null)
         {
@@ -44,6 +80,19 @@ namespace TrashTracker.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Endpoint method to post a login form,
+        /// making the user to log in to a matching account (if any).
+        /// </summary>
+        /// <param name="login"><inheritdoc cref="UserLogin" path="/summary"/></param>
+        /// <param name="returnUrl">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// if the model's state is valid, then containing a <see cref="RedirectResult"/>
+        /// with the <paramref name="returnUrl"/> as its URL,
+        /// otherwise containing a <see cref="ViewResult"/>
+        /// with the <see cref="TrashEdit"/> object sent as its model.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(UserLogin login, String? returnUrl = null)
@@ -73,6 +122,11 @@ namespace TrashTracker.Web.Controllers
             return View(login);
         }
 
+        /// <summary>
+        /// Endpoint method to get the registration form's view.
+        /// </summary>
+        /// <param name="returnUrl">The return URL to return to after posting the form.</param>
+        /// <returns><inheritdoc cref="Controller.View"/></returns>
         [HttpGet]
         public IActionResult Register(String? returnUrl = null)
         {
@@ -80,6 +134,12 @@ namespace TrashTracker.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Endpoint method to post a registration form.
+        /// </summary>
+        /// <param name="register"><inheritdoc cref="UserRegister" path="/summary"/></param>
+        /// <param name="returnUrl">The return URL to return to after posting the form.</param>
+        /// <returns><inheritdoc cref="Controller.View"/></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(UserRegister register, String? returnUrl = null)
@@ -103,6 +163,15 @@ namespace TrashTracker.Web.Controllers
             return View(register);
         }
 
+        /// <summary>
+        /// Endpoint method to post a logout form, making the user to log out.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="RedirectResult"/>
+        /// defined by <see cref="HomeController.Index"/> as its URL.
+        /// </returns>
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
@@ -115,6 +184,24 @@ namespace TrashTracker.Web.Controllers
 
         #region Queries
 
+        /// <summary>
+        /// Endpoint method that returns the view of <see cref="TrashTrackerUser"/> object's list,
+        /// given how many and which page should be viewed.
+        /// </summary>
+        /// <param name="searchString">
+        /// The <see cref="String"/> that should be searched by in usernames and e-mail addresses.
+        /// </param>
+        /// <param name="currentFilter">
+        /// The current <see cref="String"/> that was used to searched by in usernames and notes.
+        /// </param>
+        /// <param name="pageNumber">Number of page to be viewed (defaults to 1).</param>
+        /// <param name="pageSize">Size of page to be viewed (defaults to 100).</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// with the <see cref="PaginatedList{Trash}"/> object
+        /// containing its relevant <see cref="Trash"/> objects as its model.
+        /// </returns>
         [Authorize("Admin")]
         [HttpGet]
         public async Task<ActionResult<PaginatedList<UserIndex>>> Index(String? searchString,
@@ -154,6 +241,18 @@ namespace TrashTracker.Web.Controllers
             return View(paginatedUsersOnList);
         }
 
+        /// <summary>
+        /// Endpoint method
+        /// that returns the view of <see cref="TrashTrackerUser"/> object's details.
+        /// </summary>
+        /// <param name="userName">
+        /// The username of the <see cref="TrashTrackerUser"/> of which details should be returned.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// with a <see cref="UserDetails"/> object with the user's details as its model.
+        /// </returns>
         [HttpGet]
         public async Task<ActionResult<UserDetails>> Details(String userName)
         {
@@ -171,7 +270,18 @@ namespace TrashTracker.Web.Controllers
                     1, 100)));
         }
 
-        // GET: Trashes/Edit/5
+        /// <summary>
+        /// Endpoint method to get a user modification form's view,
+        /// only available for non-admin users, if editing their own account.
+        /// </summary>
+        /// <param name="userName">
+        /// The username of the <see cref="TrashTrackerUser"/> of which details should be modified.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>,
+        /// with a <see cref="TrashEdit"/> object containing the user's details as its model.
+        /// </returns>
         [Authorize]
         public async Task<IActionResult> Edit(String userName)
         {
@@ -195,7 +305,24 @@ namespace TrashTracker.Web.Controllers
             }
         }
 
-        // POST: Trashes/Edit/5
+        /// <summary>
+        /// Endpoint method to post a user modification's form, modifying it
+        /// if user by its username is found and the submitted model's state is valid.
+        /// </summary>
+        /// <param name="userName">
+        /// The username of the <see cref="TrashTrackerUser"/> to modify.
+        /// </param>
+        /// <param name="userEdit">
+        /// The details of the user to edit the one referred by its username.
+        /// </param>
+        /// <param name="previousPage">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// if the model's state is valid, then a containing <see cref="RedirectResult"/>
+        /// with the <paramref name="previousPage"/> as its URL,
+        /// otherwise containing a <see cref="ViewResult"/>
+        /// with the <see cref="TrashEdit"/> object sent as its model.
+        /// </returns>
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -253,7 +380,17 @@ namespace TrashTracker.Web.Controllers
             return View(userEdit);
         }
 
-        // GET: User/Delete/UserName
+        /// <summary>
+        /// Endpoint method to get a user deletion form's view.
+        /// </summary>
+        /// <param name="userName">
+        /// The username of the <see cref="TrashTrackerUser"> to delete.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// containing a <see cref="TrashTrackerUser"/> object as its model.
+        /// </returns>
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Delete(String userName)
         {
@@ -268,7 +405,18 @@ namespace TrashTracker.Web.Controllers
             return View(user);
         }
 
-        // POST: User/Delete/UserName
+        /// <summary>
+        /// Endpoint method to post a user deletion's form.
+        /// </summary>
+        /// <param name="userName">
+        /// The username of the <see cref="TrashTrackerUser"/> of which should be deleted.
+        /// </param>
+        /// <param name="previousPage">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="RedirectResult"/>
+        /// with the <paramref name="previousPage"/> as its URL.
+        /// </returns>
         [Authorize(Policy = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -289,6 +437,16 @@ namespace TrashTracker.Web.Controllers
             return BadRequest(result.Errors);
         }
 
+        /// <summary>
+        /// Gets the profile picture with the given id.
+        /// </summary>
+        /// <param name="id"> The id of the profile picture. </param>
+        /// <response code="200">The profile picture was returned successfully</response>
+        /// <response code="404">The trash profile picture was not found.</response>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="FileContentResult"/> with the profile picture's file.
+        /// </returns>
         [HttpGet("[controller]/Image/{id}")]
         public async Task<IActionResult> ImageAsync(Int32 id)
         {

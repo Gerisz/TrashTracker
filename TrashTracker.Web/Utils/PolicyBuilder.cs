@@ -21,7 +21,7 @@ namespace TrashTracker.Web.Utils
                 List<string> superiorRoles = [];
 
                 foreach (var otherRole in Enum.GetValues(typeof(TRoles)))
-                    if ((int)role <= (int)otherRole)
+                    if ((Int32)role <= (Int32)otherRole)
                         superiorRoles.Add(otherRole.ToString()!);
 
                 if (!superiorRoles.IsNullOrEmpty())

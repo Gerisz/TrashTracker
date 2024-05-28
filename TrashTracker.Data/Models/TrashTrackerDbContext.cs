@@ -5,10 +5,26 @@ using TrashTracker.Data.Models.Tables;
 
 namespace TrashTracker.Data.Models
 {
+    /// <summary>
+    /// The definition of the database's tables, derived from
+    /// <see cref="IdentityDbContext{TrashTrackerUser, TrashTrackerIdentityRole, String}"/>,
+    /// making it contain some extra default tables used for user-, role- and sign-in management.
+    /// </summary>
     public class TrashTrackerDbContext : IdentityDbContext<TrashTrackerUser, TrashTrackerIdentityRole, String>
     {
+        /// <summary>
+        /// Table containing <see cref="Trash"/> objects.
+        /// </summary>
         public DbSet<Trash> Trashes { get; set; } = null!;
+
+        /// <summary>
+        /// Table containing <see cref="TrashImage"/> objects.
+        /// </summary>
         public DbSet<TrashImage> TrashImages { get; set; } = null!;
+
+        /// <summary>
+        /// Table containing <see cref="UserImage"/> objects.
+        /// </summary>
         public DbSet<UserImage> UserImages { get; set; } = null!;
 
         public TrashTrackerDbContext() : base(new DbContextOptions<TrashTrackerDbContext>()) { }

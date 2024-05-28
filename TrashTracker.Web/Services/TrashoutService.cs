@@ -46,11 +46,11 @@ namespace TrashTracker.Web.Services
 
         /// <summary>
         /// Get the list of trash since the last update from Trashout API
-        /// and filter them by countries in CountryEnum
+        /// and filter them by countries in <see cref="Country"/>.
         /// </summary>
-        /// <param name="token">Token for Trashout API</param>
-        /// <param name="limit">Maximum number of places to get</param>
-        /// <returns>List of trash filtered by countries in CountryEnum</returns>
+        /// <param name="token">Token for TrashOut API.</param>
+        /// <param name="limit">Maximum number of points to get.</param>
+        /// <returns> List of trash filtered by countries in <see cref="Country"/>.</returns>
         public async Task<List<TrashFromTrashout>> GetPlaceListFromTrashoutAsync(String token, Int32? limit)
         {
             // add token to header from parameter

@@ -22,10 +22,11 @@ namespace TrashTracker.Data.Models.DTOs.Out
                         : trash.Locality + ", " + trash.SubLocality,
                 Note = trash.Note,
                 Images = trash.Images
+                    .ToList()
                     .Select(i => i.Url ?? new Uri($"{imageUrlBase}/{i.Id}"))
             };
 
-        public static TrashMapDetails Create(Trash place, String imageUrlBase)
-            => Projection(imageUrlBase).Compile().Invoke(place);
+        public static TrashMapDetails Create(Trash trash, String imageUrlBase)
+            => Projection(imageUrlBase).Compile().Invoke(trash);
     }
 }

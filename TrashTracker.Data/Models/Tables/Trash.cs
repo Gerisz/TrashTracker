@@ -3,54 +3,127 @@ using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 using TrashTracker.Data.Models.DTOs.In;
 using TrashTracker.Data.Models.Enums;
 
 namespace TrashTracker.Data.Models.Tables
 {
+    /// <summary>
+    /// Definition of the table named Trashes, 
+    /// containing points downloaded from Trashout or created by users.
+    /// </summary>
     [Index(nameof(TrashoutId), IsUnique = true)]
     public class Trash
     {
+        /// <summary>
+        /// The id of the point in the database.
+        /// </summary>
         public Int32 Id { get; set; }
+
+        /// <summary>
+        /// The id of the point in the TrashOut database (if from there, otherwise it's null).
+        /// </summary>
         public Int32? TrashoutId { get; set; }
+
+
+        /// <summary>
+        /// The user's id of the point's creator (if created by a user, otherwise it's null).
+        /// </summary>
         public String? UserId { get; set; }
+
+        /// <summary>
+        /// The user of the point's creator (if created by a user, otherwise it's null).
+        /// </summary>
         public virtual TrashTrackerUser? User { get; set; }
 
+        /// <summary>
+        /// <inheritdoc cref="Point"/>
+        /// </summary>
         [DisplayName("Koordináták")]
         public Point Location { get; set; } = null!;
 
+        /// <summary>
+        /// The country of the location (possible values defined by <see cref="Enums.Country"/>).
+        /// </summary>
         [DisplayName("Ország")]
         public Country? Country { get; set; }
+
+        /// <summary>
+        /// Locality of the location, typically in which settlement's borders is the point is in.
+        /// </summary>
         [DisplayName("Település")]
         public String? Locality { get; set; }
+
+        /// <summary>
+        /// Sublocality of the location, typically in which district is the point is in.
+        /// </summary>
         [DisplayName("Településrész")]
         public String? SubLocality { get; set; }
 
+        /// <summary>
+        /// Date and time when the point was created.
+        /// </summary>
         [DisplayName("Bejelentés ideje")]
         public DateTime? CreateTime { get; set; }
+
+        /// <summary>
+        /// Date and time when the point was last updated.
+        /// </summary>
         [DisplayName("Legutóbbi frissítés ideje")]
         public DateTime? UpdateTime { get; set; }
+
+        /// <summary>
+        /// Logical value of the point is in need of update.
+        /// </summary>
         [DisplayName("Frissítésre szorul-e")]
         public Boolean? UpdateNeeded { get; set; }
 
+        /// <summary>
+        /// Additional information given about the trash.
+        /// </summary>
         [DataType(DataType.MultilineText)]
         [DisplayName("Megjegyzés")]
         public String? Note { get; set; } = null!;
 
+        /// <summary>
+        /// Current status of the trash (possible values defined by <see cref="Enums.Status"/>).
+        /// </summary>
         [DisplayName("Állapot")]
         public Status Status { get; set; }
+
+        /// <summary>
+        /// Size of the trash (possible values defined by <see cref="Enums.Size"/>).
+        /// </summary>
         [DisplayName("Mennyiség")]
         public Size Size { get; set; }
+
+        /// <summary>
+        /// Logical values of different types of waste found at the point
+        /// (possible values defined by <see cref="Enums.TrashType"/>).
+        /// </summary>
         [DisplayName("Szeméttípusok")]
         public TrashType Types { get; set; }
+
+        /// <summary>
+        /// Logical values of different accessibilities of the trash
+        /// (possible values defined by <see cref="Enums.Accessibility"/>).
+        /// </summary>
         [DisplayName("Hozzáférhetőség")]
         public Accessibility Accessibilities { get; set; }
 
-        public virtual IEnumerable<TrashImage> Images { get; set; } = [];
+        /// <summary>
+        /// A list of images linked to the point, made about the trash.
+        /// </summary>
+        public virtual List<TrashImage> Images { get; set; } = [];
 
         public Trash() { }
 
+        /// <summary>
+        /// Creates a <see cref="Trash"/> from the given <see cref="TrashFromTrashout"/>.
+        /// </summary>
+        /// <param name="trashFromTrashout">
+        /// The <see cref="TrashFromTrashout"/> object to copy values from.
+        /// </param>
         public Trash(TrashFromTrashout trashFromTrashout)
         {
             var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID);
@@ -96,6 +169,13 @@ namespace TrashTracker.Data.Models.Tables
                 .ToList();
         }
 
+        /// <summary>
+        /// Creates a <see cref="Trash"/> from the given <see cref="TrashFromTrashout"/>.
+        /// </summary>
+        /// <param name="trashFromUser">
+        /// The <see cref="TrashFromUser"/> object to copy values from.
+        /// </param>
+        /// <param name="userId">The user's id to create the point with.</param>
         public Trash(TrashFromUser trashFromUser, String userId)
         {
             var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(WGS_SRID);

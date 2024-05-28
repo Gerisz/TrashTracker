@@ -11,7 +11,7 @@ namespace TrashTracker.Data.Models.Enums
         /// <summary>
         /// Already cleaned up
         /// </summary>
-        [Display(Name = "Megtisztíva",
+        [Display(Name = "Megtisztítva",
             ShortName = "fa-solid fa-circle-check")]
         Cleaned = 1,
 

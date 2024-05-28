@@ -52,8 +52,8 @@
                          new { @class = "text-danger" })
             </div>
         </div>
-        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Id
-       || (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
+        @if (User.FindFirstValue(ClaimTypes.NameIdentifier) != Model.Id
+       && (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded)
         {
             <div class="form-group m-3">
                 @Html.DropDownListFor(m => m.Role,

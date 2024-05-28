@@ -67,18 +67,19 @@ Ha a felhasználó nem egy széles képernyőn (pl. asztali számítógép vagy 
 \begin{figure}[H]
 	\centering
 	\subcaptionbox{Nagy méretű kijelző}{
-		\includegraphics[width=0.45\linewidth]{map}}
+		\includegraphics[width=0.7\linewidth]{map}}
 	\hspace{5pt}
 	\subcaptionbox{Kis méretű kijelző}{
-		\includegraphics[width=0.2\linewidth]{map_phone}}
+		\includegraphics[width=0.3\linewidth]{map_phone}}
 		\hspace{5pt}
 	\subcaptionbox{Kis méretű kijelző (lenyitott navigációs sávval)}{
-		\includegraphics[width=0.2\linewidth]{map_phone_menu}}
+		\includegraphics[width=0.3\linewidth]{map_phone_menu}}
 	\caption{A felület kinézete a kezdőoldalon különböző méretű kijelzők esetén}
 	\label{fig:map_guest}
-\end{figure}\todo{Ezeket a képet célszerűbb lenne nagyobb méretben beszúrni. A b) és c) még mehet együtt, de az a) lehetne külön.}
+\end{figure}
 
 \subsection{Térkép (kezdőoldal)}
+\label{subsec:map_guest}
 
 A navigációs sávon a weboldal nevére, illetve a "Térkép" feliratra kattintva azonnal a bejelentett pontok térképére navigálhatunk. Ennek kezelése a már jól ismert térképes alkalmazásokéhoz hasonló. A bal felső sarokban található \hspace{0.1cm}\boldmath\(+\)\hspace{0.1cm}, illetve \hspace{0.1cm}\boldmath\(-\)\hspace{0.1cm} ikonra kattintva nagyítani, illetve kicsinyíteni lehet, emellett egérrel a görgő görgetésével és érintőképernyőn két ujj összehúzásával/széttolásával is lehetőség van. A jobb felső sarokban a térképet teljes képernyős módba is lehet helyezni, melynek ismételt megnyomásával, vagy billentyűzeten az Esc gombbal ki lehet lépni. A bal alsó sarokban található a szűrés gomb, melynek segítségével különböző, a felhasználók által jelentett tulajdonságok szerint van lehetőség.
 
@@ -90,7 +91,7 @@ A szemét mennyisége szerint a pont mérete lehet
 	\item[\large\textbullet] kicsi (8 pixel), azaz "elfér egy zsákban",
 	\item[\Large\textbullet] közepes (10 pixel), azaz "elfér egy talicskában" és
 	\item[\LARGE\textbullet] nagy (12 pixel), azaz "autóra van szükség".
-\end{compactitem}\newpage
+\end{compactitem}
 A szemét első bejelentés óta levő állapota szerint a pont színe lehet
 \begin{compactitem}
 	\item[\textcolor{tt_green}{\Large\textbullet}] zöld, azaz "megtisztítva",
@@ -149,7 +150,6 @@ A pontokat nem csak térképen, hanem listaként is megtekinthetjük. Ennek cél
 	\label{fig:trash_index}
 \end{figure}
 
-
 \subsection{Színséma választása}
 
 Minden oldal navigációs sávjának jobb szélén található egy kapcsoló mellyel könnyedén állítható az adott oldal színsémája, melynek bal- (\faIcon{moon}) állása sötét, illetve jobb oldali (\faIcon{sun}) állása világos módot jelent. Alapértelmezetten ez az előbbi állapotban van az energiatakarékosabb működés és a szemet jobban kímélő megjelenés miatt. Ez a beállítás szabadon állítható, mely megmarad minden aloldalon a böngészés idejére.
@@ -162,6 +162,7 @@ Minden oldal navigációs sávjának jobb szélén található egy kapcsoló mel
 \end{figure}
 
 \subsection{Regisztráció}
+\label{subsec:register}
 
 További funkciók használatáért (pontok bejelentése és frissítése) a felhasználónak egy felhasználói fiókra van szüksége, mely utóbbija ha nincs, akkor regisztrálnia kell hozzá. Ezt a navigációs sáv jobb oldalán található "Nincs bejelentkezve" feliratra kattintva lenyíló menüben szereplő "Regisztráció" menüpontra nyomva érheti el. Ha az előbbi helyett egy \faIcon{user} ikonnal társulva egy felhasználó neve szerepel, akkor az már be van jelentkezve, ezzel kapcsolatosan nincsen teendője.\par
 A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívánt felhasználónevet, e-mail címet (elérhetőségként), jelszavat, illetve opcionálisan egy profilképet. Az adatok kitöltése után az űrlap alján található "Regisztráció" gombra kattintva lehet beadni az adatokat, melyek ha megfelelnek a követelményeknek, akkor a felhasználó a főoldalon találja magát, az új fiókjával bejelentkezve.
@@ -176,7 +177,7 @@ A regisztrációs felületen egy űrlap található, ahol meg kell adni a kívá
 \subsubsection{Hibaüzenetek}
 \label{subsubsec:user_register_errors}
 
-A regisztrációkor megadott adatok több követelménynek is meg kell hogy feleljenek, melyek "megsértésekor" hibaüzenetek jelenhetnek meg az űrlap kitöltése közben vagy után. Az első ilyen követelmény, hogy minden felhasználónévnek egyedinek kell lennie. Ezt az űrlap helyes kitöltése és elküldése után egy "\textcolor{red}{Ez a felhasználónév már foglalt!}"\todo{A szövegben ez és a hasonlók ne legyenek pirosak, inkább pl. dőlttel szedd, ha ki akarod emelni.} felirat jelzi.
+A regisztrációkor megadott adatok több követelménynek is meg kell hogy feleljenek, melyek "megsértésekor" hibaüzenetek jelenhetnek meg az űrlap kitöltése közben vagy után. Az első ilyen követelmény, hogy minden felhasználónévnek egyedinek kell lennie. Ezt az űrlap helyes kitöltése és elküldése után egy "\textit{Ez a felhasználónév már foglalt!}" felirat jelzi.
 
 \begin{figure}[H]
 	\centering
@@ -185,7 +186,7 @@ A regisztrációkor megadott adatok több követelménynek is meg kell hogy fele
 	\label{fig:register_form_duplicate_username}
 \end{figure}
 
-Ha a megadott e-mail cím nem érvényes (azaz nem felel meg annak formai követelményeihez, pl. legyen benne "@" és egy "."), azt az űrlap kitöltése közben jelzi egy "\textcolor{red}{Érvénytelen e-mail cím!}" feliratú üzenet.
+Ha a megadott e-mail cím nem érvényes (azaz nem felel meg annak formai követelményeihez, pl. legyen benne "@" és egy "."), azt az űrlap kitöltése közben jelzi egy "\textit{Érvénytelen e-mail cím!}" feliratú üzenet.
 
 \begin{figure}[H]
 	\centering
@@ -194,7 +195,7 @@ Ha a megadott e-mail cím nem érvényes (azaz nem felel meg annak formai követ
 	\label{fig:register_form_invalid_email}
 \end{figure}
 
-A legtöbb követelmény a jelszavakat érinti, itt több hibaüzenettel is találkozhat a felhasználó. Biztonsági okokból, egy jelszó 6-32 db karakterből kell álljon, melynek tartalmaznia kell legalább egy-egy kis- és nagybetűt, illetve számjegyet is. Ha ennek mégsem felelne meg a megadott jelszó, akkor azt az e-mail címhez hasonlóan egy "\textcolor{red}{A jelszó nem lehet rövidebb 6 és hosszabb 32 karakternél!}" vagy "\textcolor{red}{Jelszónak tartalmaznia kell legalább egy kis- és nagybetűt illetve számjegyet!}" üzenet jelenik meg, annak függvényében, hogy melyik pontján nem megy át az ellenőrzésen (tehát ha túl rövid a jelszó és pl. nem tartalmaz nagybetűt, akkor csak az előbbi jelenik meg, az utóbbi csak ha a hossz javítása után sem felel meg). Emellett a jelszó megerősítésére is szükség van, azaz meg kell adni a beírt jelszót egy második alkalommal is. Ha ezek nem egyeznének meg, azt is egy hibaüzenet jelzi a felhasználó számára.
+A legtöbb követelmény a jelszavakat érinti, itt több hibaüzenettel is találkozhat a felhasználó. Biztonsági okokból, egy jelszó 6-32 db karakterből kell álljon, melynek tartalmaznia kell legalább egy-egy kis- és nagybetűt, illetve számjegyet is. Ha ennek mégsem felelne meg a megadott jelszó, akkor azt az e-mail címhez hasonlóan egy "\textit{A jelszó nem lehet rövidebb 6 és hosszabb 32 karakternél!}" vagy "\textit{Jelszónak tartalmaznia kell legalább egy kis- és nagybetűt illetve számjegyet!}" üzenet jelenik meg, annak függvényében, hogy melyik pontján nem megy át az ellenőrzésen (tehát ha túl rövid a jelszó és pl. nem tartalmaz nagybetűt, akkor csak az előbbi jelenik meg, az utóbbi csak ha a hossz javítása után sem felel meg). Emellett a jelszó megerősítésére is szükség van, azaz meg kell adni a beírt jelszót egy második alkalommal is. Ha ezek nem egyeznének meg, azt is egy hibaüzenet jelzi a felhasználó számára.
 
 \begin{figure}[H]
 	\centering
@@ -211,6 +212,7 @@ A legtöbb követelmény a jelszavakat érinti, itt több hibaüzenettel is tal�
 \end{figure}
 
 \subsection{Bejelentkezés}
+\label{subsec:login}
 
 Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció helyett beléphet abba, az előző bekezdésben tárgyaltak szerint a "Bejelentkezés" gombra kattintva. Az űrlap hasonló, viszont itt elég csak a felhasználónév (vagy e-mail cím tetszőlegesen), illetve a hozzátartozó jelszó egyszeri megadására. Ha az adatok egyeznek a regisztrációkor megadottakkal, akkor az űrlap alján található "Bejelentkezés" gombra kattintva a felhasználó a főoldalra lesz átirányítva, a felhasználói fiókjába bejelentkezve. Ellenben, ha nem jár sikerrel, akkor üzenetek tájékoztatják a klienst erről. Ha többszöri próbálkozásra sem jár sikerrel, akkor lehetősége van bejelentkezés helyett újabb felhasználó regisztrálására, vagy egy adminisztrátort megkérve bejelentkezési adatainak megváltoztatására is.
 
@@ -223,7 +225,7 @@ Ha a felhasználónak már van saját fiókja, akkor ismételt regisztráció he
 
 \subsubsection{Hibaüzenetek}
 
-Sikertelen bejelentkezés esetén, azaz nem megfelelő felhasználónév (vagy e-mail cím) és jelszó páros megadásakor biztonsági okok miatt csak egy, a regisztráláskor látottaknál általánosabb "\textcolor{red}{Sikertelen bejelentkezés!}" felirat szerepel.
+Sikertelen bejelentkezés esetén, azaz nem megfelelő felhasználónév (vagy e-mail cím) és jelszó páros megadásakor biztonsági okok miatt csak egy, a regisztráláskor látottaknál általánosabb "\textit{Sikertelen bejelentkezés!}" felirat szerepel.
 
 \begin{figure}[H]
 	\centering
@@ -244,6 +246,7 @@ Sikeres bejelentkezést (vagy regisztrációt) követően a felhasználó vendé
 \end{figure}
 
 \subsection{Pont bejelentése}
+\label{subsec:trash_create}
 
 Új pont bejelentésére a listanézet tetején található \faIcon{plus} ikonra kattintva van lehetőség, mely elnavigál annak az űrlapjára. Ezen az űrlapon meg kell adni a szemét pontos helyzetét koordinátákként, amely megadásának segítségül szolgál a szöveges mezőjük melletti "Jelenlegi hely meghatározása", mely megnyomásával a böngésző meghatározza a bejelentőnek a lehető legpontosabb koordinátáit. A méret jellemzése mellett ajánlott a szemét típusát és hozzáférhetőségét is megadni, melynek kezelése hasonló a térképen való szűrés gombjaihoz. Az utolsó, többsoros szöveges mezőben megjegyzést lehet írni, mely segíti a listanézetben való keresését a pontnak. Az űrlap alján a "Vissza" gombbal lehet az előbb meglátogatott oldalra navigálni, illetve a "Bejelentés" gombra kattintva is ide lesz átirányítva a felhasználó
 
@@ -257,9 +260,10 @@ Sikeres bejelentkezést (vagy regisztrációt) követően a felhasználó vendé
 \subsubsection{Hibaüzenetek}
 \label{subsubsec:trash_create_errors}
 
-Egy pont bejelentésekor egyedül a koordináták megadása kötelező, de erősen ajánlott további adatok leírása, illetve fénykép csatolása is. Ha a felhasználó nem ad meg egy kötelező adatot vagy beküldés előtt törli azt, akkor az űrlap egy "\textcolor{red}{<adat> megadása kötelező!}" hibaüzenettel jelzi azt az adott mező alatt. A koordinátákkal kapcsolatosan vannak triviális követelmények is, mely szerint nem lehet kevesebb, mint -180 és több, mint 180, mely megsértésekor egy "\textcolor{red}{A koordináta nem lehet kevesebb, mint -180° és több, mint 180°.}". Emellett az elfogadott formátum a tizedesvessző (tehát nem a -pont) használata. A megjegyzésbe bármit lehet írni, viszont biztonsági okokból az nem lehet több, mint 2000 karakter, mely túllépése esetén egy "\textcolor{red}{2000 karakternél nem lehet hosszabb a megjegyzés!}". A képekkel kapcsolatosan van a legtöbb technikai követelmény, melyek kizárólag fájlok, azon belül is kép, ahol csak ".jpg" (vagy ".jpeg"), illetve ".png" formátumúak lehetnek, amelyek nem léphetik túl az 1 MB méretet. Ezen pontok megsértésekor rendre "\textcolor{red}{Az objektum nem fájl!}", "\textcolor{red}{A fájl nem egy kép!}", "\textcolor{red}{Ez a kép formátuma nem támogatott! Támogatott formátumok: ".jpg", ".jpeg", ".png".}", illetve "\textcolor{red}{Ez a kép túl nagy! Maximális méret: 1024KB.}" hibaüzenetekkel találkozhat a felhasználó. \textbf{A bejelentés csak akkor véglegesedik, ha hiba nélkül sikerül megadni az adatokat!}
+Egy pont bejelentésekor egyedül a koordináták megadása kötelező, de erősen ajánlott további adatok leírása, illetve fénykép csatolása is. Ha a felhasználó nem ad meg egy kötelező adatot vagy beküldés előtt törli azt, akkor az űrlap egy "\textit{<adat> megadása kötelező!}" hibaüzenettel jelzi azt az adott mező alatt. A koordinátákkal kapcsolatosan vannak triviális követelmények is, mely szerint nem lehet kevesebb, mint -180 és több, mint 180, mely megsértésekor egy "\textit{A koordináta nem lehet kevesebb, mint -180° és több, mint 180°.}". Emellett az elfogadott formátum a tizedesvessző (tehát nem a -pont) használata. A megjegyzésbe bármit lehet írni, viszont biztonsági okokból az nem lehet több, mint 2000 karakter, mely túllépése esetén egy "\textit{2000 karakternél nem lehet hosszabb a megjegyzés!}". A képekkel kapcsolatosan van a legtöbb technikai követelmény, melyek kizárólag fájlok, azon belül is kép, ahol csak ".jpg" (vagy ".jpeg"), illetve ".png" formátumúak lehetnek, amelyek nem léphetik túl az 1 MB méretet. Ezen pontok megsértésekor rendre "\textit{Az objektum nem fájl!}", \textit{A fájl nem egy kép!}", "\textit{Ez a kép formátuma nem támogatott! Támogatott formátumok: ".jpg", ".jpeg", ".png".}", illetve "\textit{Ez a kép túl nagy! Maximális méret: 1024KB.}" hibaüzenetekkel találkozhat a felhasználó. \textbf{A bejelentés csak akkor véglegesedik, ha hiba nélkül sikerül megadni az adatokat!}
 
 \subsection{Pont módosítása}
+\label{subsec:trash_edit}
 
 Egy már meglévő pont adatainak módosítására az azt részletező adatlap alján található "Módosítás", vagy a listanézet egyes soraiban található \faIcon{edit} ikonra kattintva érhető el. Az ezen az oldalon található űrlap hasonló, a pont létrehozáskor használtéhoz, a szemét állapotának lenyíló menüjét leszámítva, melynek megadása létrehozáskor még értelmetlen lenne. Emellett a meglevő képek felülírása helyett az itt megadottak (a hozzátartozó mező leírásához hűen) a ponthoz hozzáadásra kerülnek, a régieket megtartva.
 
@@ -310,7 +314,7 @@ A saját profil megtekintésekor (\ref{subsec:user_details} bekezdés) a "Profil
 \subsubsection{Hibaüzenetek}
 
 Az űrlap elküldésekor van lehetőség, hogy sikeres módosítás helyett hibaüzenetet kapunk (ilyenkor az adatok nem módosulnak  még). Mivel minden felhasználónévnek és e-mail címnek egyedinek kell lennie, így ha azok mégsem lennének a módosítás után, 
-akkor rendre "\textcolor{red}{A felhasználónév már foglalt!}", illetve "\textcolor{red}{Az e-mail cím már foglalt!}" üzenetekkel találkozhat a felhasználó. Emellett ez e-mail címnek érvényes formátumúnak kell lennie, és a profilképnek is meg kell felelnie a regisztráláskor definiáltakkal, mely a \ref{subsubsec:user_register_errors} bekezdésben van tárgyalva.
+akkor rendre "\textit{A felhasználónév már foglalt!}", illetve "\textit{Az e-mail cím már foglalt!}" üzenetekkel találkozhat a felhasználó. Emellett ez e-mail címnek érvényes formátumúnak kell lennie, és a profilképnek is meg kell felelnie a regisztráláskor definiáltakkal, mely a \ref{subsubsec:user_register_errors} bekezdésben van tárgyalva.
 
 \begin{figure}[H]
 	\centering
@@ -318,6 +322,19 @@ akkor rendre "\textcolor{red}{A felhasználónév már foglalt!}", illetve "\tex
 	\caption{Profil szerkesztésének űrlapja}
 	\label{fig:user_edit_errors}
 \end{figure}
+
+\subsection{Kijelentkezés}
+\label{subsec:logout}
+
+Egy felhasználói fiókba való bejelentkezést követően természetesen lehetőség van az abból való kijelentkezésre is. A bejelentkezés státusza minden oldal navigációs sávján, annak jobb szélén található. A bejelentkezett fiók nevére kattintva lenyílik egy, a bejelentkezés/regisztrációnál megismert almenü, melyben a saját profil megtekintése mellett itt van lehetőség kijelentkezni, a "Kijelentkezés" pontra kattintva. Ekkor a felhasználó a főoldalra lesz navigálva, illetve újra vendégnek fog számítani, egy újabb bejelentkezésig.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\textwidth]{logout}
+	\caption{Bejelentkezett állapotban megváltozó almenü}
+	\label{fig:logout}
+\end{figure}
+
 
 \section{Funkciók moderátorként}
 
@@ -359,6 +376,7 @@ Az adminisztrátori szintű fiókok mindenre jogosultak, tehát az előbb említ
 A \ref{subsec:nav_guest} bekezdésben tárgyalt navigációs felületen adminisztrátorként egy újabb hivatkozás válik elérhetővé "Felhasználók" névvel. Erre való kattintással elérhető az összes felhasználói fiók listázása.
 
 \subsection{Felhasználói fiókok listázása}
+\label{subsec:user_index}
 
 Ez a felület a \ref{subsec:nav_admin} bekezdésben tárgyalt navigációs sávban található menüponttal érhető el, ha adminisztrátori szintű fiókkal van a felhasználó bejelentkezve. Kezelése hasonló a \ref{subsec:trash_index} bekezdésben tárgyalt szemétpontok listanézetével. A lista tetején ugyanúgy megtalálható a már megismert szűrő beállítások, ahol felhasználó vagy e-mail cím alapján lehet keresni, illetve a találatok lapszámát állítani. Ez alatt található a lista, ahol minden fiók felhasználónevét, e-mail címét és regisztrálási idejét (ha alapértelmezetten generált fiók, akkor az érték "0001. 01. 01. 0:00:00") lehet megtalálni, regisztrálás ideje szerint sorrendben (azaz a legfrissebb fiókok vannak előbb). Emellett minden rekord végén található három gomb, mely rendre az adott fiókhoz tartozó profil megtekintésére, -szerkesztésére és törlésére szolgál.
 
@@ -370,6 +388,7 @@ Ez a felület a \ref{subsec:nav_admin} bekezdésben tárgyalt navigációs sávb
 \end{figure}
 
 \subsection{Felhasználói fiókok módosítása}
+\label{subsec:user_edit_admin}
 
 A módosítás űrlapja hasonló, a \ref{subsec:user_edit} bekezdésben tárgyaltakkal, viszont itt lehetőség van egy adott felhasználói fiók hozzáférési szintjét állítani egy lenyíló lista segítségével. Biztonsági okok miatt a saját felhasználó jogosultsági köre nem módosítható, az erre való lista nem jelenik meg az űrlapon.
 
@@ -381,6 +400,7 @@ A módosítás űrlapja hasonló, a \ref{subsec:user_edit} bekezdésben tárgyal
 \end{figure}
 
 \subsection{Felhasználói fiókok törlése}
+\label{subsec:user_delete}
 
 A törlés folyamata is megegyezik a \ref{subsec:trash_delete} bekezdésben tárgyalt pontéval. Biztonsági okok miatt, a saját felhasználót törölni nem lehet, a listában is az erre mutató gombhivatkozás nem kattintható.
 

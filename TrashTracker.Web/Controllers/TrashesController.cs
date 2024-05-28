@@ -12,21 +12,58 @@ using TrashTracker.Web.Utils;
 
 namespace TrashTracker.Web.Controllers
 {
+    /// <summary>
+    /// A <see cref="Controller"/> <see cref="class"/>,
+    /// containing endpoint behaviors provided for views associated with <see cref="Trash"> objects.
+    /// </summary>
     public class TrashesController : Controller
     {
+        /// <summary>
+        /// Reference to the database's context to access data with.
+        /// </summary>
         private readonly TrashTrackerDbContext _context;
 
+        /// <summary>
+        /// The base of the images' download URL,
+        /// defined by <see cref="ImageAsync"/>'s routing.
+        /// </summary>
         private String ImageURL => Url != null
             ? Url.Action(action: "Image", controller: "Trashes",
                 values: new { id = "0" }, protocol: Request.Scheme)![0..^2]
             : "";
 
+        /// <summary>
+        /// Creates an instance of <see cref="HomeController"/>.
+        /// </summary>
+        /// <param name="context">
+        /// Reference to the database's context to access data with.
+        /// </param>
         public TrashesController(TrashTrackerDbContext context)
         {
             _context = context;
         }
 
-        // GET: Trashes/5
+        /// <summary>
+        /// Endpoint method that returns the view of <see cref="Trash"/> object's list,
+        /// given how many and which page should be viewed.
+        /// </summary>
+        /// <param name="searchString">
+        /// The <see cref="String"/> that should be searched by in usernames and notes.
+        /// </param>
+        /// <param name="currentFilter">
+        /// The current <see cref="String"/> that was used to searched by in usernames and notes.
+        /// </param>
+        /// <param name="pageNumber">Number of page to be viewed (defaults to 1).</param>
+        /// <param name="pageSize">Size of page to be viewed (defaults to 100).</param>
+        /// <param name="showCleaned">
+        /// Logical value if cleaned points should be included in the list.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// containing the <see cref="PaginatedList{Trash}"/> object
+        /// with its relevant <see cref="Trash"/> objects as its model.
+        /// </returns>
         public async Task<IActionResult> Index(String? searchString,
             String currentFilter, Int32? pageNumber, Int32? pageSize, Boolean? showCleaned)
         {
@@ -72,7 +109,18 @@ namespace TrashTracker.Web.Controllers
             return View(paginatedTrashes);
         }
 
-        // GET: Trashes/Details/5
+        /// <summary>
+        /// Endpoint method
+        /// that returns the view of a <see cref="Trash"/> object's details page by id.
+        /// </summary>
+        /// <param name="id">
+        /// The id of the <see cref="Trash"/> of which details should be returned.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// containing a <see cref="TrashDetails"/> object with the point's details as its model.
+        /// </returns>
         public async Task<IActionResult> Details(Int32? id)
         {
             if (id == null)
@@ -92,7 +140,13 @@ namespace TrashTracker.Web.Controllers
                 .Create(trash, ImageURL));
         }
 
-        // GET: Trashes/Create
+        /// <summary>
+        /// Endpoint method to get a point creation form's view.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ViewResult"/>
+        /// containing a default <see cref="TrashFromUser"/> object as its model.
+        /// </returns>
         [Authorize]
         public IActionResult Create()
         {
@@ -102,9 +156,21 @@ namespace TrashTracker.Web.Controllers
             return View(new TrashFromUser());
         }
 
-        // POST: Trashes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Endpoint method to post a point creation's form,
+        /// creating a point, if the submitted model's state is valid.
+        /// </summary>
+        /// <param name="trashFromUser">
+        /// The details of the point to create the <see cref="Trash"/> object by.
+        /// </param>
+        /// <param name="previousPage">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing if the model's state is valid,
+        /// then a <see cref="RedirectResult"/> with the <paramref name="previousPage"/> as its URL,
+        /// otherwise a <see cref="ViewResult"/>
+        /// containing the <see cref="TrashFromUser"/> object sent as its model.
+        /// </returns>
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -125,7 +191,17 @@ namespace TrashTracker.Web.Controllers
             return View(trashFromUser);
         }
 
-        // GET: Trashes/Edit/5
+        /// <summary>
+        /// Endpoint method to get a point modification form's view.
+        /// </summary>
+        /// <param name="id">
+        /// The id of the <see cref="Trash"/> of which details should be modified.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>,
+        /// containing a <see cref="TrashEdit"/> object with the trash's details as its model.
+        /// </returns>
         [Authorize]
         public async Task<IActionResult> Edit(Int32 id)
         {
@@ -140,9 +216,24 @@ namespace TrashTracker.Web.Controllers
             return View(new TrashEdit(trash));
         }
 
-        // POST: Trashes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Endpoint method to post a point modification's form, modifying it
+        /// if trash by its id is found and the submitted model's state is valid.
+        /// </summary>
+        /// <param name="id">
+        /// The id of the <see cref="Trash"/> of which details should be modified.
+        /// </param>
+        /// <param name="trashEdit">
+        /// The details of the trash to edit the one referred by its id.
+        /// </param>
+        /// <param name="previousPage">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// if the model's state is valid, then a containing <see cref="RedirectResult"/>
+        /// with the <paramref name="previousPage"/> as its URL,
+        /// otherwise containing a <see cref="ViewResult"/>
+        /// with the <see cref="TrashEdit"/> object sent as its model.
+        /// </returns>
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -177,7 +268,15 @@ namespace TrashTracker.Web.Controllers
             return View(trashEdit);
         }
 
-        // GET: Trashes/Delete/5
+        /// <summary>
+        /// Endpoint method to get a point deletion's form's view.
+        /// </summary>
+        /// <param name="id">The id of the <see cref="Trash"> to delete.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="ViewResult"/>
+        /// containing a <see cref="Trash"/> object as its model.
+        /// </returns>
         [Authorize(Policy = "Moderator")]
         public async Task<IActionResult> Delete(Int32? id)
         {
@@ -197,7 +296,16 @@ namespace TrashTracker.Web.Controllers
             return View(trash);
         }
 
-        // POST: Trashes/Delete/5
+        /// <summary>
+        /// Endpoint method to post a point deletion's form.
+        /// </summary>
+        /// <param name="id">The id of the <see cref="Trash"> to delete.</param>
+        /// <param name="previousPage">The return URL to return to after posting the form.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="RedirectResult"/>
+        /// with the <paramref name="previousPage"/> as its URL.
+        /// </returns>
         [Authorize(Policy = "Moderator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -214,11 +322,15 @@ namespace TrashTracker.Web.Controllers
         }
 
         /// <summary>
-        /// Gets the place image with the given id.
+        /// Gets the trash image with the given id.
         /// </summary>
         /// <param name="id"> The id of the image. </param>
         /// <response code="200">The image was returned successfully</response>
-        /// <response code="404">The place image was not found.</response>
+        /// <response code="404">The trash image was not found.</response>
+        /// <returns>
+        /// The <see cref="Task"/> that represents an asynchronous operation,
+        /// containing a <see cref="FileContentResult"/> with the image's file.
+        /// </returns>
         [HttpGet("[controller]/Image/{id}")]
         public async Task<IActionResult> ImageAsync(Int32 id)
         {
