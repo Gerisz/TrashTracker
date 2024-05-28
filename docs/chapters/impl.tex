@@ -143,22 +143,20 @@ A weboldal használatakor négy típusú felhasználó különböztethető meg: 
 \end{compactitem}
 
 \subsection{Rendszer-architektúra}
-\todo{Kellene pár szakirodalmi hivatkozás azért ide.}
 
-A weboldal elsősorban C\# nyelven, az ASP.NET Core keretrendszer használatával ún. MVC (Model-View-Controller, azaz Modell-Nézet-Vezérlő) architektúrában van megvalósítva. Másodsorban JavaScript nyelven is, egyes oldalak kliensoldali dinamikusságáért, túlnyomó részt a térképes megjelenítés esetében. Maguk, a statikus oldalak tartalmai C\# segítségével összeállított HTML oldalakból állnak, melynek stílusbeli megjelenéséért a CSS stílusleíró nyelvben írt Bootstrap 5.3 keretrendszer felel.\\
-A felhasználó egy webböngészőben létesít kapcsolatot az MVC architektúra vezérlő-rétegével, mely segítségével a model-réteg bizonyos műveleteit meghívva az adatokban állapotváltozást ér el. Ezen változásokat a nézet-réteg közvetlen, vagy közvetve egy nézetmodell (vagy DTO, azaz Data Transfer Object, magyarul adatátviteli objektum) segítségével nézetet (jelen esetben egy weboldalt) szolgáltat vissza.\\
-Egy ilyen vezérlőhöz érkező kéréskor a program példányosítja a megfelelő vezérlő-osztályt és az ahhoz szükséges egyéb objektumokat, majd a nézet elkészítése és visszaküldése után ezek megsemmisítésre kerülnek. Emellett előfordul, hogy nem egy nézet lesz a válasz, hanem egy akció eredmény, mely kiegészülhet egy eredménnyel.
+A weboldal elsősorban C\# nyelven, az ASP.NET Core keretrendszer használatával ún. MVC (Model-View-Controller, azaz modell-nézet-vezérlő) architektúrában van megvalósítva. \cite{aspnet-overview} Másodsorban JavaScript nyelven is, egyes oldalak kliensoldali dinamikusságáért, túlnyomó részt a térképes megjelenítés esetében, melyhez az OpenLayers nevű könyvtárcsomag áll a rendelkezésre. \cite{javascript-overview} \cite{openlayers-concepts} Maguk, a statikus oldalak tartalmai C\# segítségével összeállított HTML oldalakból állnak, melynek stílusbeli megjelenéséért a CSS stílusleíró nyelvben írt Bootstrap 5.3 keretrendszer felel. \cite{bootstrap-introduction} \par
+A felhasználó egy webböngészőben létesít kapcsolatot az MVC architektúra vezérlő-rétegével, mely segítségével a model-réteg bizonyos műveleteit meghívva az adatokban állapotváltozást ér el. Ezen változásokat a nézet-réteg közvetlen, vagy közvetve egy nézetmodell (vagy DTO, azaz Data Transfer Object, magyarul adatátviteli objektum) segítségével nézetet (jelen esetben egy weboldalt) szolgáltat vissza. Egy ilyen vezérlőhöz érkező kéréskor a program példányosítja a megfelelő vezérlő-osztályt és az ahhoz szükséges egyéb objektumokat, majd a nézet elkészítése és visszaküldése után ezek megsemmisítésre kerülnek. Emellett előfordul, hogy nem egy nézet lesz a válasz, hanem egy akció eredmény, mely kiegészülhet egy eredménnyel. \cite{mvc-behavior}
 
 \section{Rétegek}
 
 \subsection{Perzisztencia-réteg}
 \label{subsec:persistence}
 
-Ennek a rétegnek, mint neve is sugallja, az adatok tárolása a célja, mely nem hagyja elveszni azokat a program leállítása esetén. Ehhez egy MSSQL-adatbázis áll a rendelkezésre, melyet az alkalmazás implementációjához használt Entity Framework Core (röviden EF) objektum-relációs leképzőrendszer hoz létre ún. migráció alkalmával, illetve létesít kapcsolatot a program és az adatbázis között. Ez a rendszer a programban definiált osztályokat felelteti meg az adatbázis tábláinak oly módon, hogy egy osztály tulajdonsága lesz a relációs tábla egy-egy oszlopa (vagy más néven attribútuma), illetve az osztály példányai (azaz objektumai) az adatbázis egy-egy sora (vagy más néven rekordja).\\
+Ennek a rétegnek, mint neve is sugallja, az adatok tárolása a célja, mely nem hagyja elveszni azokat a program leállítása esetén. Ehhez egy MSSQL-adatbázis áll a rendelkezésre, melyet az alkalmazás implementációjához használt Entity Framework Core (röviden EF) objektum-relációs leképzőrendszer hoz létre ún. migráció alkalmával, illetve létesít kapcsolatot a program és az adatbázis között. Ez a rendszer a programban definiált osztályokat felelteti meg az adatbázis tábláinak oly módon, hogy egy osztály tulajdonsága lesz a relációs tábla egy-egy oszlopa (vagy más néven attribútuma), illetve az osztály példányai (azaz objektumai) az adatbázis egy-egy sora (vagy más néven rekordja). \\
 Az adatbázis felépítése \textit{code-first} megközelítéssel történik, ami azt jelenti, hogy a program C\# nyelvű forráskódjából áll elő az adatbázis. A leképzőrendszer nem csak az osztályok tulajdonságait veszi figyelembe, hanem azoknak adattípusait, illetve egyedi megszorításait is megfelelteti MSSQL-oldalon. Emellett felismeri az osztályok tulajdonságainak neve alapján a táblák közötti relációkat is (egy az egyhez, egy a többhöz és több a többhöz kapcsolatokat).\\
 Emellett ilyen kapcsolatok esetén lehetőség van ún. navigációs tulajdonságok deklarálására is, mely az idegen kulcs forráskód oldali használata helyett közvetlen a kapcsolatban álló objektumra mutat (melyek értelemszerűen nem jelennek meg az adatbázisban, ott továbbra is csak az idegen kulcs található meg), ezzel megkönnyítve annak fejlesztését. A legjobb teljesítmény érdekében ezek a navigációs tulajdonságok lusta kiértékeléssel vannak ellátva, mely azt jelenti, hogy csak akkor lesz beletöltve valós érték, amikor arra szükség van és/vagy explicit kérjük azokat. Amíg ezek nem kerülnek betöltésre, addig ezek helyén egy helyettes (idegen szóval proxy) tervezési minta által készített leszármaztatott proxy lesz.\\
 Azt, hogy mely osztályok definiálnak egy-egy táblát, azt egy adatbázis-kontextus osztályban kell felsorolni, melyen keresztül lehetőség lesz az adatbázissal való kommunikációra is. Emellett nem csak a táblák felsorolása, hanem az azokra vonatkozó megszorítások is itt szerepel. A programkódban történő adatmódosítások perzisztálását külön eljárás meghívásával kell elérni, mely tulajdonképpen a követett módosításokat menti az adatbázisba.\\
-Nem csak táblákat, hanem lekérdezéseket is lehet C\# kódról SQL-re fordítani, mivel a programnyelv támogatja az abba beágyazott lekérdezéseket (LINQ-et) is. Ilyen lekérdezések a kontextuson való meghívásával a rendszer automatikusan SQL-re fordítva hajtja végre azokat.
+Nem csak táblákat, hanem lekérdezéseket is lehet C\# kódról SQL-re fordítani, mivel a programnyelv támogatja az abba beágyazott lekérdezéseket (LINQ-et) is. Ilyen lekérdezések a kontextuson való meghívásával a rendszer automatikusan SQL-re fordítva hajtja végre azokat. \cite{ef-behavior}
 
 \subsubsection{Adatbázis}
 
@@ -225,7 +223,7 @@ A \texttt{TrashTracker.Data.DTOs} névtérben találhatóak az ún. DTO-k, magya
 Ez a réteg felel minden beérkező kérés kiszolgálásáért, melyre több vezérlőosztály és a bennük található akció metódusok állnak rendelkezésre. Ezek az akciók általában a vezérlő és annak akciójából, illetve (ha van) paramétereiből összeállított "\texttt{/kontroller/akcio?param1=ertek1\&param2=ertek2}" formájú útvonalon érthetőek el.\\
 Minden akcióhoz tartozik egy annotáció, mely megmondja mely HTTP-kérésre fussanak le. Ha egy akciót csak bizonyos szerepkörrel lehet elérni, akkor ahhoz is szerepel egy annotáció, mely megmondja melyik az a legalacsonyabb szerepkör, mellyel hozzáférhető az.\\
 A kérés típusától független minden akció ad vissza valamilyen választ, mely lehet egy nézet, HTTP-állapotkód vagy egy JSON formátumú objektum, mely utóbbi a térképnek szolgáltatott adatokhoz szükséges.\\
-Minden vezérlőt az ASP.NET Core keretrendszer példányosít, mely a HTTP-kérés beérkezésekor történik meg, mely példányon a megfelelő akciót futtatja le. A létrehozáshoz szükséges konstruktor paramétereit (pl. adatbázis-kontextus vagy felhasználó-kezelő) szintén ez a keretrendszer szolgáltatja ún. függőségi befecskendezéssel.\\
+Minden vezérlőt az ASP.NET Core keretrendszer példányosít, mely a HTTP-kérés beérkezésekor történik meg, mely példányon a megfelelő akciót futtatja le. A létrehozáshoz szükséges konstruktor paramétereit (pl. adatbázis-kontextus vagy felhasználó-kezelő) szintén ez a keretrendszer szolgáltatja ún. függőségi befecskendezéssel. \cite{dependency-injection} \\
 \texttt{HomeController}: A főoldal, azaz a térképen található adatok szolgáltatásáért felelős.
 \begin{compactitem}
 	\item \texttt{/OnMap}: az összes pont koordinátáit és szűrési tulajdonságait adja vissza \texttt{TrashMap} objektumokban
@@ -337,17 +335,38 @@ A forráskód fordításához a .NET Core keretrendszer mellett szükség van a 
 	Lehetőség van a Visual Studio-ban való futtatásra is, viszont itt ügyelni kell arra, hogy a kiinduló projekt a \texttt{./TrashTracker.Web} legyen.
 \end{note}
 
-\subsection{Kihelyezés}
+\subsubsection{Kihelyezés}
 
-A fordítást követően az így előállított állományok a \texttt{dotnet publish} parancs futtatásával azok kihelyezhetők, mely egy szerveren való futtatással "éles" környezetben használhatóak. Ennek bizonyításaképp a Microsoft Azure \textit{cloud computing} platformjára is kihelyezésre került, mely korlátozott ideig elérhető a \texttt{\url{https://ttracker.azurewebsites.net/}} URL-el elérhető weboldalon.
+A fordítást követően az így előállított állományok a \texttt{dotnet publish} parancs futtatásával azok kihelyezhetők, mely egy szerveren való futtatással "éles" környezetben használhatóak. Ehhez például ajánlott a Microsoft Azure \textit{cloud computing} platformjára is való kihelyezés, mely kifejezetten támogatja azokat a technológiákat, mellyel a program készült. Ebben az esetben az alkalmazás egy Azure SQL adatbázist fog használni, melyet egy \textit{connection string} megadásával lehet felkonfigurálni. Emellett tetszés szerint módosítható az \texttt{appsettings.json} konfigurációs fájl tartalma. \cite{publish-aspnet-on-azure}
 
-\subsection{Dokumentáció}
+\subsubsection{Dokumentáció}
 
-A forráskód legtöbb metódusa XML formátumú dokumentációs kommenttel lett ellátva, melyeket egy integrált fejlesztési környezetben (pl. Visual Studio) automatikusan felhasználásra kerülnek (pl. intelligens kódkiegészítés), illetve generálható belőle dokumentáció is (pl. Docfx C\# kódhoz, mely statikus weboldalakat állít elő).
+A forráskód legtöbb metódusa XML formátumú dokumentációs kommenttel lett ellátva, melyeket egy integrált fejlesztési környezetben (pl. Visual Studio) automatikusan felhasználásra kerülnek (pl. intelligens kódkiegészítés), illetve generálható belőle dokumentáció is (pl. Docfx C\# kódhoz, mely statikus weboldalakat állít elő). \cite{xml-documentation}
+
+\lstset{caption={Egy metódus dokumentációjára példa C\# nyelven}, label=src:csharp}
+\begin{lstlisting}[language={[Sharp]C}]
+	/// <summary>
+	/// Ide kerul a metodus rovid leirasa annak folyamatarol.
+	/// </summary>
+	/// <param name="parameterNev1">
+	/// Ide kerul a name attributumban
+	/// megadott nevu parameter rovid leirasa.
+	/// </param>
+	/// <param name="parameterNev2">Folytatva a tobbivel.</param>
+	/// <returns>
+	/// Ide kerul visszateresi ertek rovid leirasa.
+	/// </returns>
+	VisszateresiTipus FuggvenyNev(ParameterTipus1 parameterNev1, ParameterTipus2 parameterNev2)
+	{...}
+\end{lstlisting}
+
+\begin{note}
+	Egy osztály, vagy tulajdonságának dokumentációjában annak csak rövid leírása szerepel, mivel ezek nem rendelkeznek visszatérési értékkel vagy paraméter(ek)kel.
+\end{note}
 
 \section{Tesztelés}
 
-A vezérlő-rétegben található végpontok egy, a \texttt{TrashTracker.Web.Test} nevű XUnit projektben található automatikus egységtesztekkel lett tesztelve. Ezek az egységtesztek a legtöbb végpont bemeneti és kimeneti specifikációja szerint teszteli azok helyes viselkedését, illetve a perzisztenciában bekövetkezett változások helyességét.\\
+A vezérlő-rétegben található végpontok egy, a \texttt{TrashTracker.Web.Test} nevű XUnit projektben található automatikus egységtesztekkel lett tesztelve. Ezek az egységtesztek a legtöbb végpont bemeneti és kimeneti specifikációja szerint teszteli azok helyes viselkedését, illetve a perzisztenciában bekövetkezett változások helyességét. \cite{xunit-overview}\\
 A nézet-rétegben található nézetek manuálisan, a \ref{ch:user} fejezetben szereplő felhasználói eseteket figyelembe véve lettek tesztelve, mely folyamata a \ref{subsec:manual_test} alszakaszban van naplózva.
 
 \subsection{Vezérlő-réteg automatikus tesztesetei}
@@ -391,3 +410,4 @@ Az alkalmazás implementálásakor több továbbfejlesztési lehetőség is felm
 	\item Minden regisztrált fióknak, illetve azok e-mail címének megváltozása esetén azok visszaigazolásának kötelessége
 	\item Saját felhasználói fiók törlésének lehetősége
 \end{compactitem}
+A program jelenleg csak a Magyarországon elhelyezkedő pontokat támogatja (bár adható meg tetszőleges koordináta, azok mindig magyarországiként jelennek meg egy adatlapon). Az országok kibővítéséhez szükség van egy statikus, földrajzi adatokat tartalmazó (pl. .geojson) fájlra, melyek tartalmazzák az adott országok területeit. Ehhez azért van szükség, mert egy pont létrehozásakor/szerkesztésekor megadott koordinátákról automatikusan megállapítható, hogy az mely ország közigazgatási területén található.

@@ -8,16 +8,16 @@
 Magának webalkalmazás szerveroldalának a futtatásához a ASP.NET Core Runtime 8.0-ra van szükség, amelyhez
 szükséges az alábbi operációs rendszerek valamelyike:
 \begin{compactitem}
-	\item Windows 10, 11 vagy Server 2012+
-	\item 64-bites Ubuntu 20.04+ vagy Debian 11+
-	\item macOS 10.15+ (csak külső, hosztolt szerver esetén támogatott)
+	\item Windows 10, 11 vagy Server 2012+ \cite{install-dotnet-windows}
+	\item 64-bites Ubuntu 20.04+ vagy Debian 11+ \cite{install-dotnet-linux}
+	\item macOS 10.15+ (csak külső, hosztolt szerver esetén támogatott) \cite{install-dotnet-mac}
 \end{compactitem} 
-A memóriahasználat a felhasználóktól nagyban függ, így 0,5 GB-tól akár 4 GB RAM-ra is szüksége lehet a szervernek a zökkenőmentes futáshoz. A merevlemezen történő tárhelyhasználat nagyban függ az éppen bejelentett pontok méretétől és legfőképp az azokhoz csatolt fényképektől. Magához a futtatáshoz elegendő 0,5 GB tárhely is (az ehhez szükséges szoftvereket nem bele értve), viszont az alkalmazás használtat közben ez nagy mértékben fog növekedni az előbb említett okok miatt, így érdemes akár saját, nagy kapacitású merevlemezre telepíteni a szerveroldalt.
-Az szerver által használt SQL Server adatbázishoz (későbbiekben MSSQL-adatbázis) a Microsoft SQL Server szoftver valamelyik, de lehetőség szerint a legfrissebb, 2019-es verziójára van szükség, melyet a fentebb említett operációs rendszerek bármelyike képes futtatni.
+A memóriahasználat a felhasználóktól nagyban függ, így 1 GB-tól akár 4 GB RAM-ra is szüksége lehet a szervernek a zökkenőmentes futáshoz. A merevlemezen történő tárhelyhasználat nagyban függ az éppen bejelentett pontok méretétől és legfőképp az azokhoz csatolt fényképektől. Magához a futtatáshoz elegendő 6 GB tárhely is (az ehhez szükséges szoftvereket nem bele értve), viszont az alkalmazás használtat közben ez nagy mértékben fog növekedni az előbb említett okok miatt, így érdemes akár saját, nagy kapacitású merevlemezre telepíteni a szerveroldalt.
+Az szerver által használt SQL Server adatbázishoz (későbbiekben MSSQL-adatbázis) a Microsoft SQL Server lehetőség szerinti legfrissebb, 2022-es verziójára van szükség, melyet a fentebb említett operációs rendszerek bármelyike képes futtatni. \cite{sqlserver-requirements}
 Az első üzembe helyezést követően nincsen szükség további rendszergazdai feladatokra.
 \subsection{Használat}
 
-A program felhasználói felülete egy weboldal. Ennek meglátogatásához elsősorban szükség van egy olyan operációs rendszer telepítésére, majd futtatására, melyre elérhető bármilyen friss, Chromium-alapú webböngésző. Egy ilyen böngésző a Google Chrome, amellyel ajánlott a weboldal látogatása. Hardver- és szoftver követelményei az alábbiak:
+A program felhasználói felülete egy weboldal. Ennek meglátogatásához elsősorban szükség van egy olyan operációs rendszer telepítésére, majd futtatására, melyre elérhető bármilyen friss, Chromium-alapú webböngésző. Egy ilyen böngésző a Google Chrome, amellyel ajánlott a weboldal látogatása. Hardver- és szoftver követelményei \cite{chrome-requirements} az alábbiak:
 \begin{compactitem}
 	\item Operációs rendszerek valamelyike:
 	\begin{compactitem}
